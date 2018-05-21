@@ -4,8 +4,8 @@ This document shuold describe the interactions between the different components,
 
 ## Brief
 
-1. **API** *Python* <br>
-API Framework written in Python, using SymPy as mathematical backend, MongoDB for large scale storage. This stage includes:<br>
+1. **API** *Python*
+API Framework written in Python, using SymPy as mathematical backend, MongoDB for large scale storage. This stage includes:
     - Generation of questions
     - Generation of answers
     - Evaluation of answers
@@ -13,7 +13,7 @@ API Framework written in Python, using SymPy as mathematical backend, MongoDB fo
 
     Future; the API will record information from exam entries and use in Machine Learning.
 
-2. **Web/Admin Backend** *Flask / MongoDB* <br>
+2. **Web/Admin Backend** *Flask / MongoDB*
 The web and administration backend runs on Flask for hosting, and MongoDB for databasing. This stage includes:
     - Creation, deletion, modification, and storage of;
         - Users
@@ -24,7 +24,7 @@ The web and administration backend runs on Flask for hosting, and MongoDB for da
     - Web-hosting
     - Accessing and calling API functions
 
-3. **Web Frontend** *HTTP / AngularJS* <br>
+3. **Web Frontend** *HTTP / AngularJS*
 The Web Frontend is the 'website' that users expirence. This stage includes:
     - Desktop and Mobile compatibility
     - Landing Page
