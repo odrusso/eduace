@@ -135,8 +135,11 @@ class Question():
                     return [False, "Partially Correct", "Your answer was not fully simplified"]
                 else:
                     return [False, "Incorrect"]
-            except:
+            except SyntaxError:
                 return [False, "Invalid entry"]
+            except:
+                return [False, "An Error has occurred"]
+
 
 
 def testing():
