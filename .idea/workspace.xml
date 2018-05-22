@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bea63286-7790-4d4e-8c7c-db9256215eef" name="Default" comment="Deleted old documentation files">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/maths.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,15 +22,24 @@
     <splitter split-orientation="horizontal" split-proportion="0.5358275">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="structure.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="structure.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/enviroment/src/structure.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="825">
-                  <caret line="68" column="38" lean-forward="true" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
+                <state relative-caret-position="600">
+                  <caret line="53" column="32" lean-forward="true" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
                   <folding>
                     <element signature="e#0#19#0" expanded="true" />
                     <element signature="e#241#599#0" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="75">
+                  <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
                 </state>
               </provider>
             </entry>
@@ -259,7 +264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1526954415296</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Deleted old documentation files">
+      <created>1526955019727</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1526955019727</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -281,8 +293,8 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.28370044" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32951543" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32971016" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.18237886" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14525746" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.18237886" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14525746" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -370,21 +382,21 @@
     <entry file="file://$PROJECT_DIR$/docs/tech.md" />
     <entry file="file://$PROJECT_DIR$/docs/style.md" />
     <entry file="file://$PROJECT_DIR$/docs/planning.md" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/enviroment/src/structure.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="68" column="38" lean-forward="true" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
+        <state relative-caret-position="600">
+          <caret line="53" column="32" lean-forward="true" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#241#599#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
         </state>
       </provider>
     </entry>
