@@ -2,6 +2,8 @@ from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
 from data import Data
 from math import sqrt
+from lat2sym.process_latex import process_sympy
+
 import random
 
 data = Data()
@@ -139,7 +141,6 @@ class Question():
                 return [False, "Invalid entry"]
             except:
                 return [False, "An Error has occurred"]
-
 
 
 def testing():
