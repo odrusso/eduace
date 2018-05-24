@@ -1,12 +1,10 @@
 from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
 from math import sqrt
-
+from random import randint, shuffle
 from lat2sym.process_latex import process_sympy
 
-import random
 
-from random import randint
 
 class Data():
     def __init__(self):
@@ -44,78 +42,81 @@ class MathsQuestion():
     def __init__(self):
         self.question_aspects = []
         self.answer_aspects = []
-        self.question_raw = None
-        self.answer_raw = None
+        self.question_raw = 0
+        self.answer_raw = 0
 
-    def generate_question(self, question_type):
-        eval("self.generate_question_mcat_" + question_type + "()")
-
-    def return_latex(self, valueable):
-        return latex(valueable)
-
-    def random_co(self, minimum, maximum, number, zero=False):
-        co_range = list(range(minimum, maximum))
-        random.shuffle(co_range)
-        if zero:
-            return co_range[:number]
+    def generate_question(self, question_type, route=None):
+        if route is None:
+            eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "()")
         else:
+            eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "(" + str(route) + ")")
+
+    def random_co(self, minimum, maximum, number, zero=False, one=True):
+        co_range = list(range(minimum, maximum+1))
+        shuffle(co_range)
+
+        if not one and not zero:
+            if 1 in co_range:
+                co_range.remove(1)
+            if -1 in co_range:
+                co_range.remove(-1)
             if 0 in co_range:
                 co_range.remove(0)
-            return co_range[:number]
 
-    def generate_question_factor_1(self):
-        x, y = symbols("x y")
-        xa, xb = self.random_co(-8, 8, 2)
-        self.answer_raw = (x+xa)*(x+xb)
-        self.question_raw = expand(self.answer_raw)
-        line1 = ["A", data.choose(data.context_options), "has an area of", str(self.question_raw)]
-        line2 = ["What are the lengths of the sides in terms of x?"]
-        self.question_aspects = [line1, line2]
+        elif not one:
+            if 1 in co_range:
+                co_range.remove(1)
+            if -1 in co_range:
+                co_range.remove(-1)
 
-    def generate_question_factor_2(self):
-        x, y = symbols("x y")
-        xa, xb = self.random_co(-8, 8, 2)
-        self.answer_raw = (x+xa)*(x+xb)
-        self.question_raw = expand(self.answer_raw)
-        self.answer_raw = (x+xb)
-        line1 = ["A", data.choose(data.context_options), "has an area of", str(self.question_raw)]
-        line2 = ["One side can be described as", str((x+xa))]
-        line3 = ["What are the lengths of the sides in terms of x?"]
-        self.question_aspects = [line1, line2, line3]
+        elif not zero:
+            if 0 in co_range:
+                co_range.remove(0)
 
-    def generate_question_quadratic_solve(self):
-        x, y = symbols("x y")
-        xa, xb = self.random_co(-8, 8, 2)
-        xc = self.random_co(2, 4, 1)[0]
-        answer_backwards = (xc*x+xa)*(x+xb)
-        self.question_raw = expand(answer_backwards)
-        self.answer_raw = solve(self.question_raw)
-        self.question_aspects = [["Solve", self.question_raw]]
-        self.answer_aspects = [answer_backwards, self.answer_raw]
+        while len(co_range) < number:
+            co_range += co_range
+            shuffle(co_range)
 
-    def generate_question_quote_sim(self):
-        x = symbols("x")
-        xa, xb, xc, xd = self.random_co(-5, 5, 4)
-        self.answer_raw = (x + xa) / (xb*x)
-        self.question_raw = expand((x + xa)*(x + xc)) / expand((x + xc)*(xb*x))
-        self.question_aspects = [["Simplify", self.question_raw]]
-        self.answer_aspects = [["Factorise", str((x + xa)*(x + xc)/(x + xc)*(xb*x))], [self.answer_raw]]
+        return co_range[:number]
 
-    def generate_question_quote_solve(self):
-        """WARNING: HIGHLY UNOPTIMISED"""
-        x = symbols("x")
+    def ppm(self, tester):
+        """fucking logic"""
 
-        xa, xb = self.random_co(-10, 10, 2)
-        xc, xd = self.random_co(0, 6, 2)
+        valid_sympy_types = [type(symbols('x') * 2), type(symbols('x')**2)]
+        valid_sympy_numbers = [type(0), type(sympify(0)), type(sympify(10)), type(sympify(-1))]
 
-        while sqrt(xc*xd).is_integer():
-            xc, xd = self.random_co(0, 6, 2)
+        if tester == 0:
+            return sympify(None)
 
-        xb, xc, xd, xe = self.random_co(-7, 7, 4)
-        self.question_raw = Eq(expand((x + xa) * (x + xb)) / ((x + xa) * (x + xc)), (x / xd))
-        self.answer_raw = solve(self.question_raw)
-        self.answer_aspects = [["x =", str(self.answer_raw)]]
-        self.question_aspects = [["Solve", self.question_raw]]
+        elif type(tester) == type(0):
+            if tester > 0:
+                return " + " + latex(tester)
+            else:
+                return latex(tester)
+
+        elif type(tester) == type(symbols("x")):
+            if len(tester.args) > 0:
+                if type(tester.args[0]) in valid_sympy_numbers:
+                    if tester.args[0] > 0:
+                        return " + " + latex(tester)
+                    else:
+                        return latex(tester)
+                else:
+                    return " + " + latex(tester)
+            else:
+                return " + " + latex(tester)
+
+        elif type(tester) in valid_sympy_types:
+            if type(tester.args[0]) in valid_sympy_numbers:
+                if tester.args[0] > 0:
+                    return " + " + latex(tester)
+                else:
+                    return latex(tester)
+            else:
+                return " + " + latex(tester)
+
+        else:
+            return " + " + latex(tester)
 
     def evaluate_answer(self, user_input):
         """evaluates the equivlence of a plaintext answer input"""
@@ -144,15 +145,159 @@ class MathsQuestion():
             except:
                 return [False, "An Error has occurred"]
 
+    def generate_question_mcat_1_1_1(self, route=None):
+
+        if route is None:
+            route = self.random_co(1, 3, 1)[0]
+
+        self.route = route
+
+        # TESTING
+        # route = 3
+
+        if route == 1:
+            x, y = symbols("x y")
+
+            xa, xb = self.random_co(-5, 5, 2, zero=False, one=False)
+            ca, cb = self.random_co(-10, 10, 2)
+
+            self.question_raw = Add(xa*x, ca, xb*x, cb, evaluate=False)
+            question_order = '&' + str(xa) + 'x ' + "%+d" % (ca) + " %+dx" % (xb) + " %+d" % (cb)
+            self.question_aspects = [r'&\text{Simplify: }', question_order]
+
+            self.answer_raw = self.question_raw.simplify()
+
+        elif route == 2:
+            a = symbols("a")
+
+            xa, xb, xc, xd = self.random_co(-8, 8, 4, zero=False, one=False)
+
+            self.question_raw = Add(xa*a**2 + xb*a, + xc*a**2 + xd*a, evaluate=False)
+
+            self.question_aspects = [r'&\text{Simplify: }', '&' + latex(self.question_raw)]
+
+            self.answer_raw = self.question_raw.simplify().expand()
+
+        elif route == 3:
+            a, b = symbols("a b")
+
+            xa, xb, xc, xd, xe, xf = self.random_co(-8, 8, 6, zero=True, one=True)
+
+            ca, cb = self.random_co(-10, 10, 2, zero=False)
+
+            question_elements = [xa*a, xb*b, xc*a*b, xd*a, xe*b, xf*a*b, ca, cb]
+            shuffle(question_elements)
+            deletions = self.random_co(0, 2, 1, True, True)
+            question_elements = question_elements[deletions[0]:]
+
+            for element in question_elements:
+                self.question_raw = Add(self.question_raw, element, evaluate=False)
+
+            if question_elements[0] != 0:
+                question_latex = "&" + latex(question_elements.pop(0))
+            else:
+                while question_elements[0] == 0:
+                    shuffle(question_elements)
+                else:
+                    question_latex = "&" + latex(question_elements.pop(0))
+
+            for item in question_elements:
+                insertable = self.ppm(item)
+                if insertable != None:
+                    question_latex += insertable
+
+            self.question_aspects = [r'&\text{Simplify: }', question_latex]
+
+            self.answer_raw = latex(self.question_raw.simplify().expand())
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
+
+
 
 def testing():
     """Testing for program structure and question types"""
 
     new_question = MathsQuestion()
-    new_question.generate_question('factor_2')
+    new_question.generate_question(input("Enter question number: "))
     init_printing()
-    print(latex(new_question.question_raw))
+
+    print()
+
+    print("Question Raw: ")
+    print(new_question.question_raw)
+
+    print()
+
+    print("Question Aspects: ")
+
+    for line in new_question.question_aspects:
+        print(line)
+
+    print()
+
+    print("Answer Raw: ")
     print(latex(new_question.answer_raw))
 
+    print()
+
+    print("Answer Aspects: ")
+
+    for line in new_question.answer_aspects:
+        print(line)
+
+def ppm_testing():
+
+    x, y = symbols("x y")
+
+    foo = MathsQuestion()
+
+    print(foo.ppm(6))
+
+    print(foo.ppm(x))
+
+    print(foo.ppm(x * y))
+
+    print(foo.ppm(2))
+
+    print(foo.ppm(2 * x))
+
+    print(foo.ppm(2 * x * y))
+
+    print(foo.ppm(y * y))
+
+
+    print(foo.ppm(-x))
+
+    print(foo.ppm(-x * y))
+
+    print(foo.ppm(-2))
+
+    print(foo.ppm(-1))
+
+    print("printing 0")
+    print(foo.ppm(0))
+
+    print(foo.ppm(-2 * x))
+
+    print(foo.ppm(-2 * x * y))
+
+    print(foo.ppm(-y * y))
+
+
+def testing111():
+
+    while True:
+        new_question = MathsQuestion()
+        new_question.generate_question("1.1.1")
+        print(new_question.route)
+        print(new_question.question_raw)
+        print(new_question.question_aspects)
+        print(new_question.answer_raw)
+        print(new_question.answer_aspects)
+
+        input()
+
+
 if __name__ == "__main__":
-    testing()
+    testing111()
