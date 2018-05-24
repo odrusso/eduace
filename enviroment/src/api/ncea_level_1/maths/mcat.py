@@ -1,9 +1,12 @@
+# utf-8
+# Python 3.6, SymPy 1.1.1
+# http://github.com/odrusso/eduace
+
 from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
-from math import sqrt
 from random import randint, shuffle
+from math import sqrt
 from lat2sym.process_latex import process_sympy
-
 
 
 class Data():
@@ -40,18 +43,21 @@ class MathsQuestion():
     """
 
     def __init__(self):
+        """Initalised the basic vairables required for the class"""
         self.question_aspects = []
         self.answer_aspects = []
         self.question_raw = 0
         self.answer_raw = 0
 
     def generate_question(self, question_type, route=None):
+        """Takes the question number inputed and executes the generation function"""
         if route is None:
             eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "()")
         else:
             eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "(" + str(route) + ")")
 
     def random_co(self, minimum, maximum, number, zero=False, one=True):
+        """Generates random numbers between 2 bounds, with extra features"""
         co_range = list(range(minimum, maximum+1))
         shuffle(co_range)
 
@@ -80,7 +86,7 @@ class MathsQuestion():
         return co_range[:number]
 
     def ppm(self, tester):
-        """fucking logic"""
+        """Takes a sympy value and returns a latex string sutiable for usage in a summation style question"""
 
         valid_sympy_types = [type(symbols('x') * 2), type(symbols('x')**2)]
         valid_sympy_numbers = [type(0), type(sympify(0)), type(sympify(10)), type(sympify(-1))]
@@ -146,6 +152,7 @@ class MathsQuestion():
                 return [False, "An Error has occurred"]
 
     def generate_question_mcat_1_1_1(self, route=None):
+        """Question MACT 1.1.1"""
 
         if route is None:
             route = self.random_co(1, 3, 1)[0]
@@ -300,4 +307,4 @@ def testing111():
 
 
 if __name__ == "__main__":
-    testing111()
+    testing()
