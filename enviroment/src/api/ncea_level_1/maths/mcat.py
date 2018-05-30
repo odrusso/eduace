@@ -160,7 +160,7 @@ class MathsQuestion():
         self.route = route
 
         # TESTING
-        # route = 3
+        route = 1
 
         if route == 1:
             x, y = symbols("x y")
@@ -219,6 +219,33 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_1_1_2(self, route=None):
+        """Question MACT 1.1.2"""
+
+        if route is None:
+            route = self.random_co(1, 1, 1)[0]
+
+        self.route = route
+
+        # TESTING
+        route = 2
+
+        if route == 1:
+            a, b = symbols("a b")
+            xa, xb = self.random_co(-2, 4, 2, zero=False, one=False)
+            self.question_raw = Mul(xa*a**2, xb*a, evaluate=False)
+            self.question_aspects = [r'&\text{Simplify: }', "&" + latex(xa*a**2) + r'\times ' + latex(xb*a)]
+            self.answer_raw = self.question_raw.simplify()
+
+        elif route == 2:
+            t, s = symbols("t s")
+            xa, xb = self.random_co(-3, 4, 2)
+            pa, pb, pc, pd = self.random_co(0, 8, 4, one=True)
+            self.question_raw = Mul(xa*t**pa*s**pb, xb*t**pc*s**pd, evaluate=False)
+            self.question_aspects = [r'&\text{Simplify: }', "&" + latex(xa) + "s^{" + latex(pa) + '} t^{' + latex(pb) + r"} \times " + latex(xb) + "s^{" + latex(pc) + "}t^{" + latex(pd) + '}']
+            self.answer_raw = self.question_raw.simplify()
+
+        self.answer_aspects = [latex(self.answer_raw)]
 
 
 
