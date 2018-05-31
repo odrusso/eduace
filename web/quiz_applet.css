@@ -1,0 +1,31 @@
+html {
+    font-family: 'Source Sans Pro'
+}
+
+#quiz-applet-background {
+    background-color: #246AA3;
+}
+
+.quiz-container {
+    background-color: white;
+    border-radius: 5px 5px 5px 5px;
+    padding: 16px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.18)
+}
+
+.question_latex {
+    margin-top: 36px;
+    margin-bottom: 36px;
+}
+
+#applet-row {
+    padding: 32px;
+}
+
+.centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.katex { font-size: 2em !important; }
