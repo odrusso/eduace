@@ -251,7 +251,7 @@ class MathsQuestion():
         """Question MCAT 1.3.4"""
 
         if route is None:
-            route = self.random_co(1, 1, 1)[0]
+            route = self.random_co(1, 3, 1)[0]
 
         self.route = route
 
@@ -279,6 +279,29 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_4_2_2(self, route=None):
+        """Question MCAT 4.2.2"""
+
+        if route is None:
+            route = self.random_co(1,1,1)[0]
+
+        self.route = route
+
+        if route == 1:
+            x = symbols("x")
+            pow = self.random_co(3, 5, 1)[0]
+            if pow == 5:
+                a = self.random_co(3, 3, 1)[0]
+            else:
+                a = self.random_co(3, pow, 1)[0]
+            self.question_raw = Eq(x ** pow, a ** pow)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = a
+
+        elif route == 2:
+
+
+        self.answer_aspects = [latex(self.answer_raw)]
 
 
 
