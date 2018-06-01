@@ -287,6 +287,9 @@ class MathsQuestion():
 
         self.route = route
 
+        # testing
+        route = 5
+
         if route == 1:
             x = symbols("x")
             pow = self.random_co(3, 5, 1)[0]
@@ -299,6 +302,14 @@ class MathsQuestion():
             self.answer_raw = a
 
         elif route == 2:
+            return
+
+        else:
+            x = symbols("x")
+            c, pow, soln = self.random_co(2, 6, 3)
+            self.question_raw = Eq(c * (soln ** pow), c * (x ** pow))
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = soln
 
 
         self.answer_aspects = [latex(self.answer_raw)]
