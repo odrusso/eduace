@@ -220,7 +220,7 @@ class MathsQuestion():
         self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_1_1_2(self, route=None):
-        """Question MACT 1.1.2"""
+        """Question MCAT 1.1.2"""
 
         if route is None:
             route = self.random_co(1, 1, 1)[0]
@@ -246,6 +246,39 @@ class MathsQuestion():
             self.answer_raw = self.question_raw.simplify()
 
         self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_1_3_4(self, route=None):
+        """Question MCAT 1.3.4"""
+
+        if route is None:
+            route = self.random_co(1, 1, 1)[0]
+
+        self.route = route
+
+        if route == 1:
+            a, b = symbols("a b")
+            xb = self.random_co(2, 10, 1)[0]
+            self.question_raw = a ** 2 - (xb) ** 2
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = (a - xb) * (a + xb)
+
+        elif route == 2:
+            a, b = symbols("a b")
+            xa = self.random_co(2,10,1)[0]
+            self.question_raw = (xa * a) ** 2 - 1
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = (xa - 1) * (xa + 1)
+
+        else:
+            a, b = symbols("a b")
+            xa, xb = self.random_co(2,10,2)
+            self.question_raw = (xa * a) ** 2 - xb ** 2
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = (xa * a - xb) * (xa * a + xb)
+
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
 
 
 
