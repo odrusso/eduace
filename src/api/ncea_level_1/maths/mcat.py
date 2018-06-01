@@ -238,7 +238,6 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-
     def generate_question_mcat_1_1_3(self):
         """Question MCAT 1.1.3"""
 
@@ -269,7 +268,19 @@ class MathsQuestion():
             self.question_aspects = [r'\text{Simplify: }', latex(self.question_raw)]
             self.answer_aspects = [r' \times '.join([latex(a * x ** b * y **c)] * b), latex(self.answer_raw)]
 
+    def generate_question_mcat_1_1_4(self):
+        """Question MCAT 1.1.4"""
 
+        x, y = symbols('x y')
+
+        a, b, c = self.random_co(2, 5, 3)
+
+        self.question_raw = Pow((a**2)*x**(b*2)*y**(c*2), 0.5, evaluate=False)
+        self.question_aspects = [r'\text{Simplify: }', r'\sqrt{' + latex((a**2)*x**(b*2)*y**(c*2)) + "}"]
+
+        self.answer_raw = a*x**b*y**c
+        self.answer_aspects = [r"\sqrt{" + latex(a**2) + r"} \times x ^ \frac{" + latex(b*2) + r'}{2} \times y ^ \frac{'
+                                + latex(c*2) + r"}{2}" , latex(self.answer_raw)]
 
 
     def generate_question_mcat_1_3_4(self):
@@ -333,7 +344,6 @@ class MathsQuestion():
             self.answer_raw = soln
 
         self.answer_aspects = [latex(self.answer_raw)]
-
 
 
 def testing():
@@ -405,8 +415,8 @@ def ppm_testing():
 
     print(foo.ppm(-y * y))
 
-
 def testing_repetition(question):
+    init_printing()
 
     while True:
         new_question = MathsQuestion()
@@ -419,4 +429,5 @@ def testing_repetition(question):
         input()
 
 if __name__ == "__main__":
-    testing()
+    #testing()
+    testing_repetition('1.1.4')
