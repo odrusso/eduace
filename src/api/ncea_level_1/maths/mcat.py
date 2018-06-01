@@ -282,6 +282,38 @@ class MathsQuestion():
         self.answer_aspects = [r"\sqrt{" + latex(a**2) + r"} \times x ^ \frac{" + latex(b*2) + r'}{2} \times y ^ \frac{'
                                 + latex(c*2) + r"}{2}" , latex(self.answer_raw)]
 
+    def generate_question_mcat_1_2_1(self):
+        """Question MCAT 1.2.1"""
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        #testing
+        self.route = 2
+
+        if self.route == 1:
+            x = symbols('x')
+
+            a = self.random_co(2, 6, 1)[0]
+            b, c = self.random_co(-5, 5, 2, one=False)
+
+            self.question_raw = Mul(a*x, b*x + c, evaluate=False)
+            self.question_aspects = [r"\text{Simplify: ", latex(self.question_raw)]
+
+            self.answer_raw = a*x*b*x + a*x*c
+            self.answer_aspects = [latex(self.answer_raw)]
+
+        elif self.route == 2:
+            a, b = symbols('a b')
+
+            a1 = self.random_co(2, 6, 1)[0]
+            b1, c1, d1 = self.random_co(-5, 5, 3, one=False)
+
+            self.question_raw = Mul(a*a1, a*b1 + b*c1 + d1, evaluate=False)
+            self.question_aspects = [r"\text{Simplify: ", latex(self.question_raw)]
+
+            self.answer_raw = a*a1*a*b1 + a*a1*b*c1 + a*a1*d1
+            self.answer_aspects = [latex(self.answer_raw)]
+
 
     def generate_question_mcat_1_3_4(self):
         """Question MCAT 1.3.4"""
@@ -429,5 +461,5 @@ def testing_repetition(question):
         input()
 
 if __name__ == "__main__":
-    #testing()
-    testing_repetition('1.1.4')
+    testing()
+    #testing_repetition('1.1.4')
