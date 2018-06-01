@@ -48,10 +48,11 @@ class MathsQuestion():
         self.answer_aspects = []
         self.question_raw = 0
         self.answer_raw = 0
+        self.route = None
 
-    def generate_question(self, question_type, route=None):
+    def generate_question(self, question_type):
         """Takes the question number inputed and executes the generation function"""
-        if route is None:
+        if self.route is None:
             eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "()")
         else:
             eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "(" + str(route) + ")")
@@ -151,18 +152,13 @@ class MathsQuestion():
             except:
                 return [False, "An Error has occurred"]
 
-    def generate_question_mcat_1_1_1(self, route=None):
+    def generate_question_mcat_1_1_1(self):
         """Question MACT 1.1.1"""
 
-        if route is None:
-            route = self.random_co(1, 3, 1)[0]
+        if self.route is None:
+            self.route = self.random_co(1, 3, 1)[0]
 
-        self.route = route
-
-        # TESTING
-        route = 1
-
-        if route == 1:
+        if self.route == 1:
             x, y = symbols("x y")
 
             xa, xb = self.random_co(-5, 5, 2, zero=False, one=False)
@@ -174,7 +170,7 @@ class MathsQuestion():
 
             self.answer_raw = self.question_raw.simplify()
 
-        elif route == 2:
+        elif self.route == 2:
             a = symbols("a")
 
             xa, xb, xc, xd = self.random_co(-8, 8, 4, zero=False, one=False)
@@ -185,7 +181,7 @@ class MathsQuestion():
 
             self.answer_raw = self.question_raw.simplify().expand()
 
-        elif route == 3:
+        elif self.route == 3:
             a, b = symbols("a b")
 
             xa, xb, xc, xd, xe, xf = self.random_co(-8, 8, 6, zero=True, one=True)
@@ -219,25 +215,20 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_1_1_2(self, route=None):
+    def generate_question_mcat_1_1_2(self):
         """Question MCAT 1.1.2"""
 
-        if route is None:
-            route = self.random_co(1, 1, 1)[0]
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
 
-        self.route = route
-
-        # TESTING
-        route = 2
-
-        if route == 1:
+        if self.route == 1:
             a, b = symbols("a b")
             xa, xb = self.random_co(-2, 4, 2, zero=False, one=False)
             self.question_raw = Mul(xa*a**2, xb*a, evaluate=False)
             self.question_aspects = [r'&\text{Simplify: }', "&" + latex(xa*a**2) + r'\times ' + latex(xb*a)]
             self.answer_raw = self.question_raw.simplify()
 
-        elif route == 2:
+        elif self.route == 2:
             t, s = symbols("t s")
             xa, xb = self.random_co(-3, 4, 2)
             pa, pb, pc, pd = self.random_co(0, 8, 4, one=True)
@@ -247,29 +238,61 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_1_3_4(self, route=None):
+
+    def generate_question_mcat_1_1_3(self):
+        """Question MCAT 1.1.3"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        if self.route == 1:
+            x = symbols('x')
+
+            a, b = self.random_co(2, 5, 2)
+            c = self.random_co(2, 3, 1)[0]
+
+            self.question_raw = Pow(c * x ** a, b, evaluate=False)
+            self.answer_raw = self.question_raw.simplify()
+
+            self.question_aspects = [r'\text{Simplify: }', latex(self.question_raw)]
+            self.answer_aspects = [r' \times '.join([latex(c * x ** a)]*b), latex(self.answer_raw)]
+
+        elif self.route == 2:
+            x, y = symbols('x y')
+
+            a, b, c = self.random_co(2, 5, 3)
+            d = self.random_co(2, 3, 1)[0]
+
+            self.question_raw = Pow(a * x ** b * y ** c, d, evaluate=False)
+            self.answer_raw = self.question_raw.simplify()
+
+            self.question_aspects = [r'\text{Simplify: }', latex(self.question_raw)]
+            self.answer_aspects = [r' \times '.join([latex(a * x ** b * y **c)] * b), latex(self.answer_raw)]
+
+
+
+
+    def generate_question_mcat_1_3_4(self):
         """Question MCAT 1.3.4"""
 
-        if route is None:
-            route = self.random_co(1, 3, 1)[0]
+        if self.route is None:
+            self.route = self.random_co(1, 3, 1)[0]
 
-        self.route = route
-
-        if route == 1:
+        if self.route == 1:
             a, b = symbols("a b")
             xb = self.random_co(2, 10, 1)[0]
             self.question_raw = a ** 2 - (xb) ** 2
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = (a - xb) * (a + xb)
 
-        elif route == 2:
+        elif self.route == 2:
             a, b = symbols("a b")
             xa = self.random_co(2,10,1)[0]
             self.question_raw = (xa * a) ** 2 - 1
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = (xa - 1) * (xa + 1)
 
-        else:
+        elif self.route == 3:
             a, b = symbols("a b")
             xa, xb = self.random_co(2,10,2)
             self.question_raw = (xa * a) ** 2 - xb ** 2
@@ -279,18 +302,16 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_4_2_2(self, route=None):
+    def generate_question_mcat_4_2_2(self):
         """Question MCAT 4.2.2"""
 
-        if route is None:
-            route = self.random_co(1,1,1)[0]
-
-        self.route = route
+        if self.route is None:
+            self.route = self.random_co(1,1,1)[0]
 
         # testing
-        route = 5
+        self.route = 5
 
-        if route == 1:
+        if self.route == 1:
             x = symbols("x")
             pow = self.random_co(3, 5, 1)[0]
             if pow == 5:
@@ -301,7 +322,7 @@ class MathsQuestion():
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = a
 
-        elif route == 2:
+        elif self.route == 2:
             return
 
         else:
@@ -310,7 +331,6 @@ class MathsQuestion():
             self.question_raw = Eq(c * (soln ** pow), c * (x ** pow))
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = soln
-
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -386,19 +406,17 @@ def ppm_testing():
     print(foo.ppm(-y * y))
 
 
-def testing111():
+def testing_repetition(question):
 
     while True:
         new_question = MathsQuestion()
-        new_question.generate_question("1.1.1")
+        new_question.generate_question(question)
         print(new_question.route)
         print(new_question.question_raw)
         print(new_question.question_aspects)
         print(new_question.answer_raw)
         print(new_question.answer_aspects)
-
         input()
-
 
 if __name__ == "__main__":
     testing()
