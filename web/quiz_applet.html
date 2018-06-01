@@ -28,11 +28,8 @@
 </head>
 
 <body>
-
     <div class="container" id="quiz-applet-background" >
-
         <div class="row" id="applet-row">
-
             <div class="col-md-10">
                 <div class="quiz-container big-top-padding">
                     <span id="latex_1" class="question_latex centering question_latex">...</span>
@@ -50,34 +47,25 @@
                 </div>
             </div>
         </div>
-
         <div class="row" id="applet-row">
-
             <div class="col-md-12">
-
                 <div class="quiz-container">
-
                     <p><span id="answer" class="container-fluid"></span></p>
-
                     <script>
                         var answerSpan = document.getElementById('answer');
                         var answerMathField = MQ.MathField(answerSpan, {
+                            spaceBehavesLikeTab: true, // configurable
                             handlers: {
                                 edit: function() {
-                                    var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
-                                    checkAnswer(enteredMath);
+                                    latexSpan.textContent = mathField.latex(); // simple API
                                 }
                             }
                         });
                     </script>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </body>
+
 </html>
