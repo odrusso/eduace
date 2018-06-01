@@ -19,7 +19,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
-
+    <link rel="stylesheet" href="mathquill.css">
+    <script src="mathquill.min.js"></script>
+    <script>
+        var MQ = MathQuill.getInterface(2);
+    </script>
 
 </head>
 
@@ -31,8 +35,8 @@
 
             <div class="col-md-10">
                 <div class="quiz-container big-top-padding">
-                    <center><span id="latex_1" class="question_latex centering question_latex">...</span></center>
-                    <center><span id="latex_2" class="question_latex centering question_latex">...</span></center>
+                    <span id="latex_1" class="question_latex centering question_latex">...</span>
+                    <span id="latex_2" class="question_latex centering question_latex">...</span>
                     <script>
                         katex.render("\\text{Solve: }", latex_1);
                         katex.render("z \\left ( 1 + \\sqrt{\\omega_{i+1} + \\zeta - \\frac{x+1}{\\theta + 1} y + 1 } \\ \\right )", latex_2);
@@ -53,8 +57,19 @@
 
                 <div class="quiz-container">
 
-                    <p>Test</p>
+                    <p><span id="answer" class="container-fluid"></span></p>
 
+                    <script>
+                        var answerSpan = document.getElementById('answer');
+                        var answerMathField = MQ.MathField(answerSpan, {
+                            handlers: {
+                                edit: function() {
+                                    var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+                                    checkAnswer(enteredMath);
+                                }
+                            }
+                        });
+                    </script>
 
                 </div>
 
