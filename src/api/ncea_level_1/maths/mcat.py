@@ -287,30 +287,55 @@ class MathsQuestion():
 
         self.route = route
 
-        # testing
-        route = 5
+        #testing
+        route = 2
 
         if route == 1:
             x = symbols("x")
-            pow = self.random_co(3, 5, 1)[0]
-            if pow == 5:
-                a = self.random_co(3, 3, 1)[0]
+            power = self.random_co(3, 5, 1)[0]
+            if power == 5:
+                a = self.random_co(3, 3, 1)[0] #needs revision, produces too many of the same questions.
             else:
-                a = self.random_co(3, pow, 1)[0]
-            self.question_raw = Eq(x ** pow, a ** pow)
+                a = self.random_co(3, power, 1)[0]
+            self.question_raw = Eq(x ** power, a ** power)
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
-            self.answer_raw = a
+            if power % 2 == 0:
+                self.answer_raw = [a, -1 * a]
+            else:
+                self.answer_raw = a
 
         elif route == 2:
-            return
+            x = symbols("x")
+            soln = self.random_co(2, 5, 1)[0]
+            power, multiple = self.random_co(3, 6, 2)
+            adder = self.random_co(3, 20, 1)[0]
+            self.question_raw = Eq(multiple * (x ** power) + adder, (soln ** power) * multiple + adder)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            if power % 2 == 0:
+                self.answer_raw = [soln, -1 * soln]
+            else:
+                self.answer_raw = soln
 
         else:
             x = symbols("x")
-            c, pow, soln = self.random_co(2, 6, 3)
-            self.question_raw = Eq(c * (soln ** pow), c * (x ** pow))
+            c, power, soln = self.random_co(2, 6, 3)
+            self.question_raw = Eq(c * (soln ** power), c * (x ** power))
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
-            self.answer_raw = soln
+            if power % 2 == 0:
+                self.answer_raw = [soln, -1 * soln]
+            else:
+                self.answer_raw = soln
 
+        self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_1_3_2(self):
+        """Question MCAT 1.3.2"""
+
+        x = symbols("x")
+        a, b = self.random_co(-4, 4, 2)
+        self.question_raw = expand((x + a) * (x + b))
+        self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+        self.answer_raw = (x + a) * (x + b)
 
         self.answer_aspects = [latex(self.answer_raw)]
 
