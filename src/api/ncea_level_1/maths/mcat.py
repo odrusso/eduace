@@ -287,9 +287,6 @@ class MathsQuestion():
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
 
-        #testing
-        self.route = 2
-
         if self.route == 1:
             x = symbols('x')
 
@@ -314,6 +311,17 @@ class MathsQuestion():
             self.answer_raw = a*a1*a*b1 + a*a1*b*c1 + a*a1*d1
             self.answer_aspects = [latex(self.answer_raw)]
 
+        elif self.route == 3:
+            x, y = symbols('x y ')
+
+            a, b = self.random_co(2, 5, 2, one=False)
+            c, d = self.random_co(-1, 1, 2)
+
+            self.question_raw = Mul(a*x + c*y, b*x + d*y, evaluate=False)
+            self.question_aspects = [r"\text{Simplify: }", latex(self.question_raw)]
+
+            self.answer_raw = a*b*x*x + a*x*d*y + c*y*b*x + c*y*d*y
+            self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_1_3_4(self):
         """Question MCAT 1.3.4"""
