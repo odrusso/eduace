@@ -347,10 +347,6 @@ class MathsQuestion():
 
         self.route = route
 
-        #testing
-
-        route = 2
-
         if route == 1:
             x = symbols("x")
             a, b, mult = self.random_co(-7, 7, 3, zero=False) # != 0, negatives an issue?
@@ -360,13 +356,63 @@ class MathsQuestion():
 
         elif route == 2:
             x = symbols("x")
-            a, b, c = self.random_co(-7, 7, 3, zero=False) #as above, zeros?
+            a, b = (2, 4)
+            while gcd(a, b) != 1:
+                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) #as above, zeros?
             self.question_raw = expand((a*x + b) * (x + c))
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = Mul((a*x + b), (x + c)) #a way to make gcd(a, b, c) = 1?
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_3_1_1(self,route=None):
+        """Question MCAT 1.3.3"""
+
+        if route is None:
+            route = self.random_co(1, 1, 1)[0]
+
+        self.route = route
+
+        route = 5
+
+        if route == 1:
+            x = symbols("x")
+            adder, soln = self.random_co(-8, 8, 2, zero=False)
+            self.question_raw = Eq(x + adder, soln + adder)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = soln
+
+        elif route == 2:
+            x = symbols("x")
+            multiple = self.random_co(3, 9, 1)[0]
+            soln = self.random_co(-8, 8, 1, zero=False)[0]
+            self.question_raw = Eq(multiple * x, multiple * soln)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = soln
+
+        elif route == 3:
+            x = symbols("x")
+            a, b = self.random_co(3, 9, 2)
+            self.question_raw = Eq(x / a, b)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = a * b
+
+        elif route == 4:
+            x = symbols("x")
+            multiple, adder, soln = self.random_co(-10, 10, 3, zero=False)
+            self.question_raw = Eq(multiple * x + adder, multiple * soln + adder)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = soln
+
+        else:
+            x = symbols("x")
+            divisor = self.random_co(2, 9, 1)[0]
+            adder, soln = self.random_co(-9, 9, 2, zero=False)
+            self.question_raw = Eq(x / divisor + adder, Rational(soln, divisor) + adder)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = soln
+
+        self.answer_aspects = [latex(self.answer_raw)]
 
 
 def testing():
@@ -443,7 +489,7 @@ def testing111():
 
     while True:
         new_question = MathsQuestion()
-        new_question.generate_question("1.1.1")
+        new_question.generate_question("3.1.1")
         print(new_question.route)
         print(new_question.question_raw)
         print(new_question.question_aspects)
@@ -454,4 +500,5 @@ def testing111():
 
 
 if __name__ == "__main__":
-    testing()
+    #testing()
+    testing111()
