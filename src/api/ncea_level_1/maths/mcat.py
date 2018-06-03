@@ -385,6 +385,41 @@ class MathsQuestion():
 
             self.answer_raw = Mul(c*a*b, d*a + e, evaluate=False)
 
+    def generate_question_mcat_1_3_2(self):
+        """Question MCAT 1.3.2"""
+
+        x = symbols("x")
+        a, b = self.random_co(-4, 4, 2)
+        self.question_raw = expand((x + a) * (x + b))
+        self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+        self.answer_raw = (x + a) * (x + b)
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_1_3_3(self):
+        """Question MCAT 1.3.3"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        if self.route == 1:
+            x = symbols("x")
+            a, b, mult = self.random_co(-7, 7, 3, zero=False)  # != 0, negatives an issue?
+            self.question_raw = expand(mult * (x + a) * (x + b))
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = Mul(mult, (x + a), (x + b))
+
+        elif self.route == 2:
+            x = symbols("x")
+            a, b = (2, 4)
+            while gcd(a, b) != 1:
+                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False)  # as above
+            self.question_raw = expand((a * x + b) * (x + c))
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = Mul((a * x + b), (x + c))
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
     def generate_question_mcat_1_3_4(self):
         """Question MCAT 1.3.4"""
 
@@ -412,85 +447,6 @@ class MathsQuestion():
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = (xa * a - xb) * (xa * a + xb)
 
-
-        self.answer_aspects = [latex(self.answer_raw)]
-
-    def generate_question_mcat_4_2_2(self):
-        """Question MCAT 4.2.2"""
-
-        if self.route is None:
-            self.route = self.random_co(1, 3, 1)[0]
-
-        if self.route == 1:
-            x = symbols("x")
-            power = self.random_co(3, 5, 1)[0]
-            if power == 5:
-                a = self.random_co(3, 3, 1)[0] #needs revision, produces too many of the same questions.
-            else:
-                a = self.random_co(3, power, 1)[0]
-            self.question_raw = Eq(x ** power, a ** power)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
-            if power % 2 == 0:
-                self.answer_raw = [a, -1 * a]
-            else:
-                self.answer_raw = a
-
-        elif self.route == 2:
-            x = symbols("x")
-            soln = self.random_co(2, 5, 1)[0]
-            power, multiple = self.random_co(3, 6, 2)
-            adder = self.random_co(3, 20, 1)[0]
-            self.question_raw = Eq(multiple * (x ** power) + adder, (soln ** power) * multiple + adder)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
-            if power % 2 == 0:
-                self.answer_raw = [soln, -1 * soln]
-            else:
-                self.answer_raw = soln
-
-        else:
-            x = symbols("x")
-            c, power, soln = self.random_co(2, 6, 3)
-            self.question_raw = Eq(c * (soln ** power), c * (x ** power))
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
-            if power % 2 == 0:
-                self.answer_raw = [soln, -1 * soln]
-            else:
-                self.answer_raw = soln
-
-        self.answer_aspects = [latex(self.answer_raw)]
-
-    def generate_question_mcat_1_3_2(self):
-        """Question MCAT 1.3.2"""
-
-        x = symbols("x")
-        a, b = self.random_co(-4, 4, 2)
-        self.question_raw = expand((x + a) * (x + b))
-        self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
-        self.answer_raw = (x + a) * (x + b)
-
-        self.answer_aspects = [latex(self.answer_raw)]
-
-    def generate_question_mcat_1_3_3(self):
-        """Question MCAT 1.3.3"""
-        
-        if self.route is None:
-            self.route = self.random_co(1, 2, 1)[0]
-
-        if self.route == 1:
-            x = symbols("x")
-            a, b, mult = self.random_co(-7, 7, 3, zero=False) # != 0, negatives an issue?
-            self.question_raw = expand(mult * (x + a) * (x + b))
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
-            self.answer_raw = Mul(mult, (x + a), (x + b))
-
-        elif self.route == 2:
-            x = symbols("x")
-            a, b = (2, 4)
-            while gcd(a, b) != 1:
-                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) #as above
-            self.question_raw = expand((a*x + b) * (x + c))
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
-            self.answer_raw = Mul((a*x + b), (x + c))
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -647,6 +603,49 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_4_2_2(self):
+        """Question MCAT 4.2.2"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 3, 1)[0]
+
+        if self.route == 1:
+            x = symbols("x")
+            power = self.random_co(3, 5, 1)[0]
+            if power == 5:
+                a = self.random_co(3, 3, 1)[0]  # needs revision, produces too many of the same questions.
+            else:
+                a = self.random_co(3, power, 1)[0]
+            self.question_raw = Eq(x ** power, a ** power)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            if power % 2 == 0:
+                self.answer_raw = [a, -1 * a]
+            else:
+                self.answer_raw = a
+
+        elif self.route == 2:
+            x = symbols("x")
+            soln = self.random_co(2, 5, 1)[0]
+            power, multiple = self.random_co(3, 6, 2)
+            adder = self.random_co(3, 20, 1)[0]
+            self.question_raw = Eq(multiple * (x ** power) + adder, (soln ** power) * multiple + adder)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            if power % 2 == 0:
+                self.answer_raw = [soln, -1 * soln]
+            else:
+                self.answer_raw = soln
+
+        else:
+            x = symbols("x")
+            c, power, soln = self.random_co(2, 6, 3)
+            self.question_raw = Eq(c * (soln ** power), c * (x ** power))
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            if power % 2 == 0:
+                self.answer_raw = [soln, -1 * soln]
+            else:
+                self.answer_raw = soln
+
+        self.answer_aspects = [latex(self.answer_raw)]
 
 def testing():
     """Testing for program structure and question types"""
