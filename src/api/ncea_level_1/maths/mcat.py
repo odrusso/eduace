@@ -603,6 +603,29 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_4_1_4(self):
+        """Question MCAT 4.1.4"""
+
+        if self.route == None:
+            self.route = self.random_co(1, 2, 2)
+
+        if self.route == 1:
+            x = symbols("x")
+            a, b = self.random_co(-9, 9, 2, zero=False)
+            self.question_raw = Eq((x + a) ** 2, b ** 2)
+            self.question_aspects = [r'&\text{Sovle: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        else:
+            x = symbols("x")
+            a = self.random_co(-9, 9, 1, zero=False)[0]
+            b = self.random_co(2, 20, 1)[0]
+            self.question_raw = Eq((x + a) ** 2, b)
+            self.question_aspects = [r'&\text{Sovle: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
     def generate_question_mcat_4_2_2(self):
         """Question MCAT 4.2.2"""
 
@@ -693,5 +716,4 @@ def testing_repetition(question):
 
 if __name__ == "__main__":
     testing()
-    #testing_repetition('4.1.3')
-
+    #testing_repetition('4.1.4')
