@@ -287,6 +287,8 @@ class MathsQuestion():
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
 
+        self.route = 3
+
         if self.route == 1:
             x = symbols('x')
 
@@ -294,7 +296,7 @@ class MathsQuestion():
             b, c = self.random_co(-5, 5, 2, one=False)
 
             self.question_raw = Mul(a*x, b*x + c, evaluate=False)
-            self.question_aspects = [r"\text{Simplify: ", latex(self.question_raw)]
+            self.question_aspects = [r"\text{Expand: ", latex(self.question_raw)]
 
             self.answer_raw = a*x*b*x + a*x*c
             self.answer_aspects = [latex(self.answer_raw)]
@@ -306,13 +308,48 @@ class MathsQuestion():
             b1, c1, d1 = self.random_co(-5, 5, 3, one=False)
 
             self.question_raw = Mul(a*a1, a*b1 + b*c1 + d1, evaluate=False)
-            self.question_aspects = [r"\text{Simplify: ", latex(self.question_raw)]
+            self.question_aspects = [r"\text{Expand: ", latex(self.question_raw)]
 
             self.answer_raw = a*a1*a*b1 + a*a1*b*c1 + a*a1*d1
             self.answer_aspects = [latex(self.answer_raw)]
 
         elif self.route == 3:
-            x, y = symbols('x y ')
+            x = symbols('x')
+
+            a, b, c, d, e = self.random_co(-5, 5, 5)
+            pom = self.random_co(-1, 1, 1)[0]
+
+            self.question_raw = Add(Mul(a, b*x+c, evaluate=False), pom*(d*x + e), evaluate=False)
+
+            self.question_aspects = [r"\text{Expand: }", latex(Mul(a, b*x+c, evaluate=False)) + self.ppm(pom)[0] + r'\left(' + latex(pom*(d*x + e)) + r"\right)"]
+
+    def generate_question_mcat_1_2_2(self):
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        if self.route == 1:
+            x = symbols('x')
+            a, b = self.random_co(-5, 5, 2, one=False)
+
+            self.question_raw = Mul(x + a, x + b, evaluate=False)
+            self.question_aspects = [r'\text{Expand: }', latex(self.question_raw)]
+
+            self.answer_raw = self.question_raw.expand()
+            self.answer_aspects = [latex(self.answer_raw)]
+
+        elif self.route == 2:
+            x = symbols('x')
+            a, b = self.random_co(-5, 5, 2, one=False)
+            c = self.random_co(2, 4, 1)[0]
+
+            self.question_raw = Mul(c*x + a, x + b, evaluate=False)
+            self.question_aspects = [r'\text{Expand: }', latex(self.question_raw)]
+
+            self.answer_raw = self.question_raw.expand()
+            self.answer_aspects = [latex(self.answer_raw)]
+
+        elif self.route == 3:
+            x, y = symbols('x y')
 
             a, b = self.random_co(2, 5, 2, one=False)
             c, d = self.random_co(-1, 1, 2)
@@ -322,6 +359,31 @@ class MathsQuestion():
 
             self.answer_raw = a*b*x*x + a*x*d*y + c*y*b*x + c*y*d*y
             self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_1_3_1(self):
+        """question mcat 1.3.1"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 3, 1)[0]
+
+        self.route = 2
+
+        if self.route == 1:
+            x = symbols('x')
+            a = self.random_co(3, 6, 1)[0]
+            b = self.random_co(-5, 5, 1, one=False)[0]
+
+            self.question_raw = a * x ** 2 + a * b * x
+            self.question_aspects = [r'\text{Expand: }', latex(self.question_raw)]
+
+            self.answer_raw = Mul(a, x + b, evaluate=False)
+            self.answer_aspects = [latex(self.answer_raw)]
+
+        elif self.route == 2:
+            a, b = symbols('a b')
+            c, d, e = self.random_co(2, 8, 3)
+
+            self.answer_raw = Mul(c*a*b, d*a + e, evaluate=False)
 
     def generate_question_mcat_1_3_4(self):
         """Question MCAT 1.3.4"""
@@ -416,44 +478,6 @@ def testing():
 
     for line in new_question.answer_aspects:
         print(line)
-
-def ppm_testing():
-
-    x, y = symbols("x y")
-
-    foo = MathsQuestion()
-
-    print(foo.ppm(6))
-
-    print(foo.ppm(x))
-
-    print(foo.ppm(x * y))
-
-    print(foo.ppm(2))
-
-    print(foo.ppm(2 * x))
-
-    print(foo.ppm(2 * x * y))
-
-    print(foo.ppm(y * y))
-
-
-    print(foo.ppm(-x))
-
-    print(foo.ppm(-x * y))
-
-    print(foo.ppm(-2))
-
-    print(foo.ppm(-1))
-
-    print("printing 0")
-    print(foo.ppm(0))
-
-    print(foo.ppm(-2 * x))
-
-    print(foo.ppm(-2 * x * y))
-
-    print(foo.ppm(-y * y))
 
 def testing_repetition(question):
     init_printing()
