@@ -419,7 +419,7 @@ class MathsQuestion():
         """Question MCAT 4.2.2"""
 
         if self.route is None:
-            self.route = self.random_co(1,1,1)[0]
+            self.route = self.random_co(1, 3, 1)[0]
 
         if self.route == 1:
             x = symbols("x")
@@ -474,7 +474,7 @@ class MathsQuestion():
         """Question MCAT 1.3.3"""
         
         if self.route is None:
-            self.route = self.random_co(1, 1, 1)[0]
+            self.route = self.random_co(1, 2, 1)[0]
 
         if self.route == 1:
             x = symbols("x")
@@ -498,7 +498,7 @@ class MathsQuestion():
         """Question MCAT 1.3.3"""
 
         if self.route is None:
-            self.route = self.random_co(1, 1, 1)[0]
+            self.route = self.random_co(1, 5, 1)[0]
 
         if self.route == 1:
             x = symbols("x")
@@ -531,8 +531,11 @@ class MathsQuestion():
 
         else:
             x = symbols("x")
-            divisor = self.random_co(2, 9, 1)[0]
-            adder, soln = self.random_co(-9, 9, 2, zero=False)
+            divisor, rhs = [1, 1]
+            while divisor == rhs:
+                divisor, rhs = self.random_co(3, 9, 2)
+            adder = self.random_co(-9, 9, 1, zero=False)[0]
+            soln = divisor * (rhs - adder)
             self.question_raw = Eq(x / divisor + adder, Rational(soln, divisor) + adder)
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = soln
@@ -585,5 +588,5 @@ def testing_repetition(question):
 
 if __name__ == "__main__":
     testing()
-    #testing_repetition('1.1.4')
+    #testing_repetition('3.1.1')
 
