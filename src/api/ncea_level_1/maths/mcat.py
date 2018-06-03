@@ -43,7 +43,7 @@ class MathsQuestion():
     """
 
     def __init__(self):
-        """Initalised the basic vairables required for the class"""
+        """Initialise the basic variables required for the class"""
         self.question_aspects = []
         self.answer_aspects = []
         self.question_raw = 0
@@ -336,6 +336,34 @@ class MathsQuestion():
         self.question_raw = expand((x + a) * (x + b))
         self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
         self.answer_raw = (x + a) * (x + b)
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_1_3_3(self, route=None):
+        """Question MCAT 1.3.3"""
+
+        if route is None:
+            route = self.random_co(1, 1, 1)[0]
+
+        self.route = route
+
+        #testing
+
+        route = 2
+
+        if route == 1:
+            x = symbols("x")
+            a, b, mult = self.random_co(-7, 7, 3, zero=False) # != 0, negatives an issue?
+            self.question_raw = expand(mult * (x + a) * (x + b))
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = Mul(mult, (x + a), (x + b))
+
+        elif route == 2:
+            x = symbols("x")
+            a, b, c = self.random_co(-7, 7, 3, zero=False) #as above, zeros?
+            self.question_raw = expand((a*x + b) * (x + c))
+            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.answer_raw = Mul((a*x + b), (x + c)) #a way to make gcd(a, b, c) = 1?
 
         self.answer_aspects = [latex(self.answer_raw)]
 
