@@ -487,10 +487,10 @@ class MathsQuestion():
             x = symbols("x")
             a, b = (2, 4)
             while gcd(a, b) != 1:
-                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) #as above, zeros?
+                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) #as above
             self.question_raw = expand((a*x + b) * (x + c))
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
-            self.answer_raw = Mul((a*x + b), (x + c)) #a way to make gcd(a, b, c) = 1?
+            self.answer_raw = Mul((a*x + b), (x + c))
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -618,6 +618,35 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_4_1_3(self):
+        """Question MCAT 4.1.3"""
+
+        if self.route == None:
+            self.route = self.random_co(1, 3, 1)[0]
+
+        if self.route == 1:
+            x = symbols("x")
+            b, c, adder = self.random_co(-8, 8, 3, zero=False)
+            self.question_raw = Eq(expand((x + b) * (x + c)) + adder, adder)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        elif self.route == 2:
+            x = symbols("x")
+            b, c = self.random_co(-8, 8, 2)
+            self.question_raw = Eq(expand((x + b) * (x + c)) - (b + c) * x - b * c, -1 * (b + c) * x - b * c)
+            self.question_aspects = [r'&\text{Sovle: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        else:
+            x = symbols("x")
+            b, c = self.random_co(-8, 8, 2, zero=False)
+            self.question_raw = Eq(x * (x + b + c), -1 * b * c)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
 
 def testing():
     """Testing for program structure and question types"""
@@ -665,5 +694,5 @@ def testing_repetition(question):
 
 if __name__ == "__main__":
     testing()
-    #testing_repetition('4.1.2')
+    #testing_repetition('4.1.3')
 
