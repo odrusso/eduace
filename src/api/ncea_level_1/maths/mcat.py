@@ -55,7 +55,7 @@ class MathsQuestion():
         if self.route is None:
             eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "()")
         else:
-            eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "(" + str(route) + ")")
+            eval("self.generate_question_mcat_" + question_type.replace(".", "_") + "(" + str(self.route) + ")")
 
     def random_co(self, minimum, maximum, number, zero=False, one=True):
         """Generates random numbers between 2 bounds, with extra features"""
@@ -470,13 +470,11 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_1_3_3(self, route=None):
+    def generate_question_mcat_1_3_3(self):
         """Question MCAT 1.3.3"""
         
         if self.route is None:
             self.route = self.random_co(1, 1, 1)[0]
-
-        self.route = route
 
         if self.route == 1:
             x = symbols("x")
@@ -496,24 +494,20 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_3_1_1(self,route=None):
+    def generate_question_mcat_3_1_1(self):
         """Question MCAT 1.3.3"""
 
-        if route is None:
-            route = self.random_co(1, 1, 1)[0]
+        if self.route is None:
+            self.route = self.random_co(1, 1, 1)[0]
 
-        self.route = route
-
-        route = 5
-
-        if route == 1:
+        if self.route == 1:
             x = symbols("x")
             adder, soln = self.random_co(-8, 8, 2, zero=False)
             self.question_raw = Eq(x + adder, soln + adder)
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = soln
 
-        elif route == 2:
+        elif self.route == 2:
             x = symbols("x")
             multiple = self.random_co(3, 9, 1)[0]
             soln = self.random_co(-8, 8, 1, zero=False)[0]
@@ -521,14 +515,14 @@ class MathsQuestion():
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = soln
 
-        elif route == 3:
+        elif self.route == 3:
             x = symbols("x")
             a, b = self.random_co(3, 9, 2)
             self.question_raw = Eq(x / a, b)
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = a * b
 
-        elif route == 4:
+        elif self.route == 4:
             x = symbols("x")
             multiple, adder, soln = self.random_co(-10, 10, 3, zero=False)
             self.question_raw = Eq(multiple * x + adder, multiple * soln + adder)
