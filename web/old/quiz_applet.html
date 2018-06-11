@@ -8,7 +8,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="quiz_applet.css">
+    <link rel="stylesheet" href="../templates/quiz_applet.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.js"></script>
@@ -31,12 +31,12 @@
 
             <div class="col-md-10">
                 <div class="quiz-container big-top-padding">
-                    <center><span id="latex_1" class="question_latex centering question_latex">...</span></center>
-                    <center><span id="latex_2" class="question_latex centering question_latex">...</span></center>
+                    {% for element in range(len(g.question)) %}
+                    <span id="latex_{{ element }}" class="question_latex centering question_latex">...</span>
                     <script>
-                        katex.render("\\text{Solve: }", latex_1);
-                        katex.render("z \\left ( 1 + \\sqrt{\\omega_{i+1} + \\zeta - \\frac{x+1}{\\theta + 1} y + 1 } \\ \\right )", latex_2);
+                        katex.render("{{ g.question[element] }}", latex_{{element}});
                     </script>
+                    {% endfor %}
                 </div>
             </div>
 
