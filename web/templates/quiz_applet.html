@@ -8,78 +8,90 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
+    {{ g.include_latex|safe }}
 
-        html {
-    font-family: 'Source Sans Pro'
-}
+    {{ g.include_bootstrap|safe }}
 
-#quiz-applet-background {
-    background-color: #246AA3;
-}
-
-.quiz-container {
-    background-color: white;
-    border-radius: 5px 5px 5px 5px;
-    padding: 16px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.18)
-}
-
-.question_latex {
-    margin-top: 36px;
-    margin-bottom: 36px;
-}
-
-#applet-row {
-    padding: 32px;
-}
-
-.centering {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.katex { font-size: 2em !important; }
-
-
-    </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-
+    {{ g.include_mathquill|safe }}
 
 
 </head>
 
-<body>
-
-    <div class="container" id="quiz-applet-background" >
-
-        <div class="row" id="applet-row">
-
-                    {% for element in g.question_len %}
-                        <span id="latex_{{ element }}" class="question_latex centering question_latex">...</span>
-                        <script>
-                            katex.render( String.raw`{{ g.question[element] }}`, latex_{{element}});
-                        </script>
-                    {% endfor %}
-
+<body class="container">
+    <br>
+        <div class="nav">
+            <a href="/question/">Return to selection...</a>
         </div>
 
-        <div class="row" id="applet-row">
+        <br>
 
-            <p>Answer entry</p>
+        <h5 class="h5 text-center">Question: {{ g.question_number }}  |  Route: {{ g.route }}</h5>
+
+        <div class="jumbotron">
+
+
+
+            {% for element in g.question_len %}
+
+                <span id="latex_{{ element }}" class="centering question_latex">...</span>
+                <script>katex.render( String.raw`{{ g.question[element] }}`, latex_{{element}});</script>
+                <br>
+
+            {% endfor %}
 
         </div>
+        <div class="jumbotron">
 
-    </div>
+            <div class="input-group mb-3">
+                <span class="form-control" width="200px" id="answer"></span>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="evaluate_answer" type="button">Submit</button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Feedback</span>
+                </div>
+                <p class="form-control" id="feedback" readonly>...</p>
+            </div>
+
+            <br>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Answer</span>
+                </div>
+                <span class="form-control"  id="latex_answer" class="centering question_latex">...</span>
+                <script>katex.render( String.raw`{{ g.answer }}`, latex_answer);</script>
+
+            </div>
+
+
+
+
+        </div>
 
 </body>
+<footer>
+    <script>
+            var answerSpan = document.getElementById('answer');
+            var MQ = MathQuill.getInterface(2);
+            var answerMathField = MQ.MathField(answerSpan);
+
+            $(function(){
+                $("#evaluate_answer").bind('click', function(){
+                    $.getJSON('_evaluate_answer', {
+                        entered_latex: MQ.MathField(answerSpan).latex(),
+                    }, function(data){
+                        $("#feedback").text(data.result)
+                    });
+                    return false
+                });
+            });
+
+    </script>
+</footer>
 </html>

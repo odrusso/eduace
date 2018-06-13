@@ -6,7 +6,7 @@ from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
 from random import randint, shuffle
 from math import sqrt
-# from lat2sym.process_latex import process_sympy
+from latex2sympy.process_latex import process_sympy
 
 
 class Data():
@@ -127,30 +127,28 @@ class MathsQuestion():
 
     def evaluate_answer(self, user_input):
         """evaluates the equivlence of a plaintext answer input"""
-        tfms = (standard_transformations + (implicit_multiplication_application,))
-        user_input.replace(" ", "")
+        user_input = process_sympy(user_input)
+
         if user_input == str(self.answer_raw):
             return [True, "Correct"]
         else:
             try:
-                user_parsed = parse_expr(user_input, transformations=tfms)
-
                 # Testing
                 # print("User answer: " +  str(user_parsed))
                 # print("Real answer: " + str(self.answer_raw))
 
-                if user_parsed == self.answer_raw:
+                if user_input == self.answer_raw:
                     return [True, "Correct"]
-                elif user_parsed - self.answer_raw == 0:
+                elif user_input - self.answer_raw == 0:
                     return [True, "Correct", "Your answer *may* not be fully simplified"]
-                elif simplify(simplify(user_parsed) - simplify(self.answer_raw)) == 0:
+                elif simplify(simplify(user_input) - simplify(self.answer_raw)) == 0:
                     return [False, "Partially Correct", "Your answer was not fully simplified"]
                 else:
                     return [False, "Incorrect"]
             except SyntaxError:
                 return [False, "Invalid entry"]
-            except:
-                return [False, "An Error has occurred"]
+            # except Exception as e:
+            #     print(e)
 
     def generate_question_mcat_1_1_1(self):
         """Question MACT 1.1.1"""
@@ -498,7 +496,7 @@ class MathsQuestion():
         """Question MCAT 1.3.3"""
 
         if self.route is None:
-            self.route = self.random_co(1, 1, 1)[0]
+            self.route = self.random_co(1, 5, 1)[0]
 
         if self.route == 1:
             x = symbols("x")
@@ -529,7 +527,7 @@ class MathsQuestion():
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = soln
 
-        else:
+        elif self.route == 5:
             x = symbols("x")
             divisor = self.random_co(2, 9, 1)[0]
             adder, soln = self.random_co(-9, 9, 2, zero=False)
