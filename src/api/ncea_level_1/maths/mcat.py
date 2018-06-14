@@ -451,7 +451,7 @@ class MathsQuestion():
         self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_3_1_1(self):
-        """Question MCAT 1.3.3"""
+        """Question MCAT 3.1.1"""
 
         if self.route is None:
             self.route = self.random_co(1, 5, 1)[0]
@@ -498,6 +498,29 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_3_1_3(self): #too hard
+        """Question MCAT 3.1.3"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        if self.route == 1:
+            x = symbols("x")
+            a, b, c, d = self.random_co(1, 8, 4)
+            self.question_raw = Eq(Add((x / a), (b * x) / c, evaluate=False), d)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        if self.route == 2:
+            x = symbols("x")
+            a, b, c, d = self.random_co(1, 8, 4)
+            self.question_raw = Eq((b + x) / c, Add(d, -1 * (x / a), evaluate=False))
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
     def generate_question_mcat_4_1_1(self):
         """Question MCAT 4.1.1"""
 
@@ -529,8 +552,6 @@ class MathsQuestion():
 
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
-
-        self.route = 4
 
         if self.route == 1:
             x = symbols("x")
@@ -670,6 +691,7 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+
 def testing():
     """Testing for program structure and question types"""
 
@@ -701,6 +723,7 @@ def testing():
     for line in new_question.answer_aspects:
         print(line)
 
+
 def testing_repetition(question):
     init_printing()
     
@@ -714,6 +737,7 @@ def testing_repetition(question):
         print(new_question.answer_aspects)
         input()
 
+
 if __name__ == "__main__":
-    testing()
-    #testing_repetition('4.1.4')
+    #testing()
+     testing_repetition('3.1.3')
