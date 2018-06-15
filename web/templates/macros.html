@@ -1,0 +1,59 @@
+{#
+ ___   ___    _   _     _      ___   ___
+| __| |   \  | | | |   /_\    / __| | __|
+| _|  | |) | | |_| |  / _ \  | (__  | _|
+|___| |___/   \___/  /_/ \_\  \___| |___|
+
+Macros and useful snippets
+
+Jinja2 + Flask + Python 3.6
+
+#}
+
+
+{# Navigation bar for the landing page #}
+    {% macro nav_bar_landing() %}
+    <div class="navbar bg-light">
+        <a href="/login"><button class="btn">Login</button></a>
+    </div>
+    <br>
+{% endmacro %}
+
+
+
+{# Navigation bar for user dashboard #}
+{% macro nav_bar_dash() %}
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a href="/_logout"><button class="btn">Logout</button></a></li>
+            <li class="nav-item"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Course selection</a>
+                <div class="dropdown-menu">
+                    <h6 class="dropdown-header">NCEA Level 1</h6>
+                    <a class="dropdown-item" href="#">MCAT</a>
+                    <a class="dropdown-item disabled" href="#">Accounting</a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="dropdown-header">NCEA Level 2</h6>
+                    <a class="dropdown-item disabled" href="#">Calculus</a>
+                    <a class="dropdown-item disabled" href="#">Algebra</a>
+                </div>
+            </li>
+        </ul>
+        <span class="navbar-text">Score: <strong>{{ g.score }}</strong></span>
+    </div>
+{% endmacro %}
+
+
+{# Inclusion of KaTeX #}
+{%  macro katex() %}
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.js"></script>
+{% endmacro %}
+
+
+{# Inclusion of MathQuill #}
+{%  macro katex() %}
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.js"></script>
+{% endmacro %}

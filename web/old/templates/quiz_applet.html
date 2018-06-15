@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Eduace Quiz Applet</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{ g.include_latex|safe }}
+
+    {{ g.include_bootstrap|safe }}
+
+    {{ g.include_mathquill|safe }}
+
+</head>
+
+<body class="container">
+    <br>
+        <div class="nav">
+            <a href="/question/">Return to selection...</a>
+        </div>
+
+        <br>
+
+        <h5 class="h5 text-center">Question: {{ g.question_number }}  |  Route: {{ g.route }}</h5>
+
+        <div class="jumbotron">
+
+            {% for element in g.question_len %}
+
+                <span id="latex_{{ element }}" class="centering question_latex">...</span>
+                <script>katex.render( String.raw`{{ g.question[element] }}`, latex_{{element}});</script>
+                <br>
+
+            {% endfor %}
+
+        </div>
+        <div class="jumbotron">
+
+            <div class="input-group mb-3">
+                <span class="form-control" width="200px" id="answer"></span>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="evaluate_answer" type="button">Submit</button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Feedback</span>
+                </div>
+                <p class="form-control" id="feedback" readonly>...</p>
+            </div>
+
+            <br>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Answer</span>
+                </div>
+                <span class="form-control"  id="latex_answer" class="centering question_latex">...</span>
+                <script>katex.render( String.raw`{{ g.answer }}`, latex_answer);</script>
+
+            </div>
+
+
+
+
+        </div>
+
+</body>
+<footer>
+    <script>
+            var answerSpan = document.getElementById('answer');
+            var MQ = MathQuill.getInterface(2);
+            var answerMathField = MQ.MathField(answerSpan);
+
+            $(function(){
+                $("#evaluate_answer").bind('click', function(){
+                    $.getJSON('_evaluate_answer', {
+                        entered_latex: MQ.MathField(answerSpan).latex(),
+                    }, function(data){
+                        $("#feedback").text(data.result)
+                    });
+                    return false
+                });
+            });
+
+    </script>
+</footer>
+</html>

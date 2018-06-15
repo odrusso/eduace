@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% from "macros.html" import nav_bar_landing %}
+
+{% block title %}EduAce{% endblock %}
+
+{% block body %}
+
+    {{ nav_bar_landing() }}
+
+    <div class="container jumbotron">
+        <h1 class="display-1 text-center">EduAce</h1>
+        <p class="lead text-center">We make you get learned</p>
+    </div>
+
+{% endblock %}
