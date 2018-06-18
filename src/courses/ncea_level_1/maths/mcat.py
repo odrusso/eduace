@@ -17,10 +17,11 @@ class Data():
         num = randint(0, len(full_list) - 1)
         return full_list[num]
 
+
 data = Data()
 
 
-class CATPaper():
+class CATPaper:
     """Class for storing entire data-strucute of a Level 1 C.A.T exam paper"""
     """
            - Define paper strucutre
@@ -36,19 +37,22 @@ class CATPaper():
         None
 
 
-class MathsQuestion():
+class MathsQuestion:
     """Class for storing data-structure of an indiviual question
             - Need a comprehensive list of types of questions possible in CAT.
             - Function appends items to question_aspects and answer_aspects (string, equation, diagram, table, etc)
     """
 
-    def __init__(self):
+    def __init__(self, question_number="0.0.0"):
         """Initialise the basic variables required for the class"""
         self.question_aspects = []
         self.answer_aspects = []
         self.question_raw = 0
         self.answer_raw = 0
         self.route = None
+
+        if question_number != "0.0.0":
+            self.generate_question(question_number)
 
     def generate_question(self, question_type):
         """Takes the question number inputed and executes the generation function"""
@@ -488,10 +492,10 @@ class MathsQuestion():
             x = symbols("x")
             a, b = (2, 4)
             while gcd(a, b) != 1:
-                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) #as above, zeros?
+                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) # as above, zeros?
             self.question_raw = expand((a*x + b) * (x + c))
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
-            self.answer_raw = Mul((a*x + b), (x + c)) #a way to make gcd(a, b, c) = 1?
+            self.answer_raw = Mul((a*x + b), (x + c)) # a way to make gcd(a, b, c) = 1?
 
         self.answer_aspects = [latex(self.answer_raw)]
 
