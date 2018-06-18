@@ -6,7 +6,7 @@ from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
 from random import randint, shuffle
 from math import sqrt
-# from lat2sym.process_latex import process_sympy
+from lat2sym.process_latex import process_sympy
 
 
 class Data():
@@ -42,13 +42,16 @@ class MathsQuestion():
             - Function appends items to question_aspects and answer_aspects (string, equation, diagram, table, etc)
     """
 
-    def __init__(self):
+    def __init__(self, question_number="0.0.0"):
         """Initialise the basic variables required for the class"""
         self.question_aspects = []
         self.answer_aspects = []
         self.question_raw = 0
         self.answer_raw = 0
         self.route = None
+
+        if question_number != "0.0.0":
+            self.generate_question(question_number)
 
     def generate_question(self, question_type):
         """Takes the question number inputed and executes the generation function"""
@@ -127,30 +130,28 @@ class MathsQuestion():
 
     def evaluate_answer(self, user_input):
         """evaluates the equivlence of a plaintext answer input"""
-        tfms = (standard_transformations + (implicit_multiplication_application,))
-        user_input.replace(" ", "")
+        user_input = process_sympy(user_input)
+
         if user_input == str(self.answer_raw):
             return [True, "Correct"]
         else:
             try:
-                user_parsed = parse_expr(user_input, transformations=tfms)
-
                 # Testing
                 # print("User answer: " +  str(user_parsed))
                 # print("Real answer: " + str(self.answer_raw))
 
-                if user_parsed == self.answer_raw:
+                if user_input == self.answer_raw:
                     return [True, "Correct"]
-                elif user_parsed - self.answer_raw == 0:
+                elif user_input - self.answer_raw == 0:
                     return [True, "Correct", "Your answer *may* not be fully simplified"]
-                elif simplify(simplify(user_parsed) - simplify(self.answer_raw)) == 0:
+                elif simplify(simplify(user_input) - simplify(self.answer_raw)) == 0:
                     return [False, "Partially Correct", "Your answer was not fully simplified"]
                 else:
                     return [False, "Incorrect"]
             except SyntaxError:
                 return [False, "Invalid entry"]
-            except:
-                return [False, "An Error has occurred"]
+            # except Exception as e:
+            #     print(e)
 
     def generate_question_mcat_1_1_1(self):
         """Question MACT 1.1.1"""
@@ -506,13 +507,13 @@ class MathsQuestion():
             ['Eq(d, Rational(1, 2)*(u + v) * t)', symbols('d, u, v, t')],
             ['Eq(A, pi * r ** 2)', symbols('A, r')],
             ['Eq(A, 4 * pi * r ** 2)', symbols('A, r')],
-            ['Eq(V, S(4) / 3 * pi * r ** 3)', symbols('V, r')],
+            ['Eq(V, (S(4) / 3) * pi * r ** 3)', symbols('V, r')],
             ['Eq(F, S(9) / 5 * C + 32)', symbols('F, C')],
-            ['Eq(C, S(5) / 9 * (F - 32))', symbols('C, F')],
+            ['Eq(C, Mul(S(5) / 9, (F - 32), evaluate=False))', symbols('C, F')],
             #['Eq(A, 2*pi*r*(h+r))', symbols('A, r, h')],
             #['Eq(R, (2*f*(n-1)) / (q + 1))', symbols('R, f, n, q')],
             #['Eq(p, (a - b) / (a + b))', symbols('p, a, b')],
-            ['Eq(E, Rational(1, 2) * m * v ** 2)', symbols('E, m, v')],
+            ['Eq(E, Rational(1, 2) * m * v ** 2)', symbols('E, m, v')], #behaves weirdly when rearranged for v
             ['Eq(E, Rational(1, 2) * k * x ** 2)', symbols('E, k, x')],
             ['Eq(F, (m * v ** 2) / r)', symbols('F, m, v, r')],
             ['Eq(T, 2*pi*sqrt(l / g))', symbols('T, l, g')],
@@ -527,11 +528,22 @@ class MathsQuestion():
 
         candidate_vars = list(variables)[1:]
 
+        shuffle(candidate_vars)
+
         variable = candidate_vars[0]
 
+        self.question_aspects = [r'\text{Rearrange }' + latex(self.question_raw) + r'\text{ for }' + latex(variable)]
 
+        if len(solve(self.question_raw, variable)) == 1:
+            self.answer_raw = solve(self.question_raw, variable)
 
-        print(variable)
+        elif len(solve(self.question_raw, variable)) == 2:
+            self.answer_raw = solve(self.question_raw, variable)[1]
+
+        else:
+            self.answer_raw = solve(self.question_raw, variable)[0]
+
+        #self.answer_aspects = [Eq(variable, self.answer_raw)] this line is broken
 
     def generate_question_mcat_3_1_1(self):
         """Question MCAT 3.1.1"""
@@ -864,5 +876,5 @@ def testing_repetition(question):
 
 
 if __name__ == "__main__":
-    #testing()
-    testing_repetition('2.1.2')
+    testing()
+    #testing_repetition('2.1.2')
