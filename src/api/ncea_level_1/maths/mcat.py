@@ -285,9 +285,7 @@ class MathsQuestion():
     def generate_question_mcat_1_2_1(self):
         """Question MCAT 1.2.1"""
         if self.route is None:
-            self.route = self.random_co(1, 2, 1)[0]
-
-        self.route = 3
+            self.route = self.random_co(1, 3, 1)[0]
 
         if self.route == 1:
             x = symbols('x')
@@ -324,8 +322,10 @@ class MathsQuestion():
             self.question_aspects = [r"\text{Expand: }", latex(Mul(a, b*x+c, evaluate=False)) + self.ppm(pom)[0] + r'\left(' + latex(pom*(d*x + e)) + r"\right)"]
 
     def generate_question_mcat_1_2_2(self):
+        """Question MCAT 1.2.2"""
+
         if self.route is None:
-            self.route = self.random_co(1, 2, 1)[0]
+            self.route = self.random_co(1, 3, 1)[0]
 
         if self.route == 1:
             x = symbols('x')
@@ -361,12 +361,10 @@ class MathsQuestion():
             self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_1_3_1(self):
-        """question mcat 1.3.1"""
+        """Question MCAT 1.3.1"""
 
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
-
-        self.route = 2
 
         if self.route == 1:
             x = symbols('x')
@@ -450,6 +448,91 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_2_1_1(self):
+        """Question MCAT 2.1.1"""
+
+        equations = [
+                        ['Eq(v, u + a*t)', symbols('v, u, a, t')],
+                        ['Eq(d, u*t + Rational(1, 2) * a * t ** 2)', symbols('d, u, t, a')],
+                        ['Eq(d, Rational(1, 2)*(u + v) * t)', symbols('d, u, v, t')],
+                        ['Eq(A, pi * r ** 2)', symbols('A, r')],
+                        ['Eq(A, 4 * pi * r ** 2)', symbols('A, r')],
+                        ['Eq(V, S(4) / 3 * pi * r ** 3)', symbols('V, r')],
+                        ['Eq(F, S(9) / 5 * C + 32)', symbols('F, C')],
+                        ['Eq(C, S(5) / 9 * (F - 32))', symbols('C, F')],
+                        ['Eq(A, 2*pi*r*(h+r))', symbols('A, r, h')],
+                        ['Eq(R, (2*f*(n-1)) / (q + 1))', symbols('R, f, n, q')],
+                        ['Eq(p, (a - b) / (a + b))', symbols('p, a, b')],
+                        ['Eq(E, Rational(1, 2) * m * v ** 2)', symbols('E, m, v')],
+                        ['Eq(E, Rational(1, 2) * k * x ** 2)', symbols('E, k, x')],
+                        ['Eq(F, (m * v ** 2) / r)', symbols('F, m, v, r')],
+                        ['Eq(T, 2*pi*sqrt(l / g))', symbols('T, l, g')],
+                        ['Eq(T, 2*pi*sqrt(m / k))', symbols('T, m, k')]
+                     ]
+
+        shuffle(equations)
+        equation, variables = equations[0]
+
+        self.question_raw = sympify(equation)
+        eqn = sympify(equation)
+
+        values = {}
+
+        for variable in variables[1:]:
+            values[variable] = self.random_co(1, 10, 1)[0]
+
+        subs_string = ""
+        for value in values.keys():
+            subs_string += latex(value)
+            subs_string += " = "
+            subs_string += latex(values[value])
+            subs_string += ", "
+
+        self.question_aspects = [[r"\text{ Substitute values }" + subs_string + r"\text{ into: }", latex(self.question_raw)]]
+
+        for value in values.keys():
+            eqn = eqn.subs(value, values[value])
+
+        self.answer_raw = solve(eqn)
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_2_1_2(self):
+        """Question MCAT 2.1.2"""
+
+        equations = [
+            ['Eq(v, u + a*t)', symbols('v, u, a, t')],
+            #['Eq(d, u*t + Rational(1, 2) * a * t ** 2)', symbols('d, u, t, a')],
+            ['Eq(d, Rational(1, 2)*(u + v) * t)', symbols('d, u, v, t')],
+            ['Eq(A, pi * r ** 2)', symbols('A, r')],
+            ['Eq(A, 4 * pi * r ** 2)', symbols('A, r')],
+            ['Eq(V, S(4) / 3 * pi * r ** 3)', symbols('V, r')],
+            ['Eq(F, S(9) / 5 * C + 32)', symbols('F, C')],
+            ['Eq(C, S(5) / 9 * (F - 32))', symbols('C, F')],
+            #['Eq(A, 2*pi*r*(h+r))', symbols('A, r, h')],
+            #['Eq(R, (2*f*(n-1)) / (q + 1))', symbols('R, f, n, q')],
+            #['Eq(p, (a - b) / (a + b))', symbols('p, a, b')],
+            ['Eq(E, Rational(1, 2) * m * v ** 2)', symbols('E, m, v')],
+            ['Eq(E, Rational(1, 2) * k * x ** 2)', symbols('E, k, x')],
+            ['Eq(F, (m * v ** 2) / r)', symbols('F, m, v, r')],
+            ['Eq(T, 2*pi*sqrt(l / g))', symbols('T, l, g')],
+            ['Eq(T, 2*pi*sqrt(m / k))', symbols('T, m, k')]
+        ]
+
+        shuffle(equations)
+
+        equation, variables = equations[0]
+
+        self.question_raw = sympify(equation)
+
+        candidate_vars = list(variables)[1:]
+
+        variable = candidate_vars[0]
+
+
+
+        print(variable)
+
     def generate_question_mcat_3_1_1(self):
         """Question MCAT 3.1.1"""
 
@@ -498,6 +581,28 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_3_1_2(self): #perfect? route 2 possibly too hard
+        """Question MCAT 3.1.2"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        if self.route == 1:
+            x = symbols("x")
+            multiple, adder, soln = self.random_co(-10, 10, 3, zero=False)
+            self.question_raw = Eq(multiple * x + adder, multiple * soln + adder + (multiple * adder) * x)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = solve(self.question_raw)
+
+        elif self.route == 2:
+            x = symbols("x")
+            a, b, c, d, e = self.random_co(-10, 10, 5, zero=False)
+            self.question_raw = Eq(a * (b * x + c) + d * x, e)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.answer_raw = Rational((e - a * c), (a * b + d))
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
     def generate_question_mcat_3_1_3(self): #too hard
         """Question MCAT 3.1.3"""
 
@@ -520,6 +625,26 @@ class MathsQuestion():
 
 
         self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_3_1_4(self): #too easy?
+        """MCAT question 3.1.4"""
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        if self.route == 1:
+            x = symbols("x")
+            a, b, c = self.random_co(1, 15, 3)
+            self.question_raw = Eq(factor(a * x + b), a * x - c, evaluate=False)
+            self.answer_raw = [r'&\text{No solution.}']
+
+        elif self.route == 2:
+            x = symbols("x")
+            a, b = self.random_co(1, 9, 2)
+            self.question_raw = Eq(Add(factor(a * x + a * b), -1 * a * x, evaluate=False), b, evaluate=False)
+            self.answer_raw = [r'&\text{Infinite solutions.}']
+
+        self.answer_aspects = latex(self.answer_raw)
 
     def generate_question_mcat_4_1_1(self):
         """Question MCAT 4.1.1"""
@@ -740,4 +865,4 @@ def testing_repetition(question):
 
 if __name__ == "__main__":
     #testing()
-     testing_repetition('3.1.3')
+    testing_repetition('2.1.2')
