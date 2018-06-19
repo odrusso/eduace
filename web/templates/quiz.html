@@ -7,6 +7,31 @@
 
     {{ nav_bar_dash() }}
 
-    fuck asss
+    <script>
+        function deploy_question(question_number) {
+            $('a.active').removeClass('active');
+            $('#question_sidebar_' + String(question_number)).addClass("active");
+        }
+
+    </script>
+
+    <div class="row">
+    <div class="col-3 bg-white"  style="height: 100vh; overflow-y: scroll">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            {% for question in sidebar_question_list %}
+                {%  if question[3] == "unanswered" %}
+                    <a class="nav-link" id="question_sidebar_{{ question[1] }}" href="#" onClick="deploy_question({{ question[1] }})">{{  question[2] }}</a>
+                {% else %}
+                    {% if question[3] == "correct" %}
+                        <a class="nav-link text-success" id="question_sidebar_{{ question[1] }}" href="#" onClick="deploy_question({{ question[1] }})">{{  question[2] }}</a>
+                    {% else %}
+                        <a class="nav-link text-danger" id="question_sidebar_{{ question[1] }}" href="#" onClick="deploy_question({{ question[1] }})">{{  question[2] }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+
 
 {% endblock %}

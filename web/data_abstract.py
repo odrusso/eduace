@@ -79,6 +79,15 @@ class DataQuestion(Base):
 
     answers = relationship("DataAnswer", lazy='dynamic')
 
+    def get_question_status(self):
+        print(self.answers.all())
+        if len(self.answers.all()) == 0:
+            return "unanswered"
+        elif self.time_completed != 0:
+            return "correct"
+        else:
+            return "incorrect"
+
     def __repr__(self):
         return "<Question(id='%s')>" % self.question_id
 
@@ -116,13 +125,15 @@ if __name__ == "__main__":
     print(test_user)
     print(test_user.question_structures.filter_by(question_structure_id=test_user.current_structure).first())
 
-    #entered_question = pickle.dumps(MathsQuestion("1.1.2"))
+    #from src.courses.ncea_level_1.maths.mcat import *
 
-    #q = DataQuestion(question_structure_id=1, question_structure_itt=1,# question_pointer="ncea_level_1.maths.mcat",
+    #entered_question = pickle.dumps(MathsQuestion("1.2.2"))
+    #q = DataQuestion(question_structure_id=1, question_structure_itt=5, question_pointer='ncea_level_1.maths.mcat.Question("1.2.2")',
     #             question_pickle=entered_question, time_init=0, time_completed=0, current_timer=0)
     #session.add(q)
     #session.commit()
 
-    question_data_testing = test_user.question_structures.first().questions[1]
-    question_testing = pickle.loads(question_data_testing.question_pickle)
+    question_data_testing = test_user.question_structures.first().questions.all()
+    print(question_data_testing)
+    question_testing = pickle.loads(question_data_testing[-1].question_pickle)
     print(question_testing.question_raw)
