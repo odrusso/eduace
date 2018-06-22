@@ -168,7 +168,7 @@ class MathsQuestion:
 
             self.question_raw = Add(xa*x, ca, xb*x, cb, evaluate=False)
             question_order = '&' + str(xa) + 'x ' + "%+d" % (ca) + " %+dx" % (xb) + " %+d" % (cb)
-            self.question_aspects = [r'&\text{Simplify: }', question_order]
+            self.question_aspects = [r'\text{Simplify: }', question_order]
 
             self.answer_raw = self.question_raw.simplify()
 
@@ -179,7 +179,7 @@ class MathsQuestion:
 
             self.question_raw = Add(xa*a**2 + xb*a, + xc*a**2 + xd*a, evaluate=False)
 
-            self.question_aspects = [r'&\text{Simplify: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Simplify: }', latex(self.question_raw)]
 
             self.answer_raw = self.question_raw.simplify().expand()
 
@@ -199,19 +199,19 @@ class MathsQuestion:
                 self.question_raw = Add(self.question_raw, element, evaluate=False)
 
             if question_elements[0] != 0:
-                question_latex = "&" + latex(question_elements.pop(0))
+                question_latex = latex(question_elements.pop(0))
             else:
                 while question_elements[0] == 0:
                     shuffle(question_elements)
                 else:
-                    question_latex = "&" + latex(question_elements.pop(0))
+                    question_latex = latex(question_elements.pop(0))
 
             for item in question_elements:
                 insertable = self.ppm(item)
                 if insertable != None:
                     question_latex += insertable
 
-            self.question_aspects = [r'&\text{Simplify: }', question_latex]
+            self.question_aspects = [r'\text{Simplify: }', question_latex]
 
             self.answer_raw = latex(self.question_raw.simplify().expand())
 
@@ -227,7 +227,7 @@ class MathsQuestion:
             a, b = symbols("a b")
             xa, xb = self.random_co(-2, 4, 2, zero=False, one=False)
             self.question_raw = Mul(xa*a**2, xb*a, evaluate=False)
-            self.question_aspects = [r'&\text{Simplify: }', "&" + latex(xa*a**2) + r'\times ' + latex(xb*a)]
+            self.question_aspects = [r'\text{Simplify: }', "" + latex(xa*a**2) + r'\times ' + latex(xb*a)]
             self.answer_raw = self.question_raw.simplify()
 
         elif self.route == 2:
@@ -235,7 +235,7 @@ class MathsQuestion:
             xa, xb = self.random_co(-3, 4, 2)
             pa, pb, pc, pd = self.random_co(0, 8, 4, one=True)
             self.question_raw = Mul(xa*t**pa*s**pb, xb*t**pc*s**pd, evaluate=False)
-            self.question_aspects = [r'&\text{Simplify: }', "&" + latex(xa) + "s^{" + latex(pa) + '} t^{' + latex(pb) + r"} \times " + latex(xb) + "s^{" + latex(pc) + "}t^{" + latex(pd) + '}']
+            self.question_aspects = [r'\text{Simplify: }', "" + latex(xa) + "s^{" + latex(pa) + '} t^{' + latex(pb) + r"} \times " + latex(xb) + "s^{" + latex(pc) + "}t^{" + latex(pd) + '}']
             self.answer_raw = self.question_raw.simplify()
 
         self.answer_aspects = [latex(self.answer_raw)]
@@ -400,21 +400,21 @@ class MathsQuestion:
             a, b = symbols("a b")
             xb = self.random_co(2, 10, 1)[0]
             self.question_raw = a ** 2 - (xb) ** 2
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Factorise: }', latex(self.question_raw)]
             self.answer_raw = (a - xb) * (a + xb)
 
         elif self.route == 2:
             a, b = symbols("a b")
             xa = self.random_co(2,10,1)[0]
             self.question_raw = (xa * a) ** 2 - 1
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Factorise: }', latex(self.question_raw)]
             self.answer_raw = (xa - 1) * (xa + 1)
 
         elif self.route == 3:
             a, b = symbols("a b")
             xa, xb = self.random_co(2,10,2)
             self.question_raw = (xa * a) ** 2 - xb ** 2
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Factorise: }', latex(self.question_raw)]
             self.answer_raw = (xa * a - xb) * (xa * a + xb)
 
 
@@ -434,7 +434,7 @@ class MathsQuestion:
             else:
                 a = self.random_co(3, power, 1)[0]
             self.question_raw = Eq(x ** power, a ** power)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             if power % 2 == 0:
                 self.answer_raw = [a, -1 * a]
             else:
@@ -446,7 +446,7 @@ class MathsQuestion:
             power, multiple = self.random_co(3, 6, 2)
             adder = self.random_co(3, 20, 1)[0]
             self.question_raw = Eq(multiple * (x ** power) + adder, (soln ** power) * multiple + adder)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             if power % 2 == 0:
                 self.answer_raw = [soln, -1 * soln]
             else:
@@ -456,7 +456,7 @@ class MathsQuestion:
             x = symbols("x")
             c, power, soln = self.random_co(2, 6, 3)
             self.question_raw = Eq(c * (soln ** power), c * (x ** power))
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             if power % 2 == 0:
                 self.answer_raw = [soln, -1 * soln]
             else:
@@ -470,7 +470,7 @@ class MathsQuestion:
         x = symbols("x")
         a, b = self.random_co(-4, 4, 2)
         self.question_raw = expand((x + a) * (x + b))
-        self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+        self.question_aspects = [r'\text{Factorise: }', latex(self.question_raw)]
         self.answer_raw = (x + a) * (x + b)
 
         self.answer_aspects = [latex(self.answer_raw)]
@@ -485,7 +485,7 @@ class MathsQuestion:
             x = symbols("x")
             a, b, mult = self.random_co(-7, 7, 3, zero=False) # != 0, negatives an issue?
             self.question_raw = expand(mult * (x + a) * (x + b))
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Factorise: }', latex(self.question_raw)]
             self.answer_raw = Mul(mult, (x + a), (x + b))
 
         elif self.route == 2:
@@ -494,7 +494,7 @@ class MathsQuestion:
             while gcd(a, b) != 1:
                 a, b, c = self.random_co(-7, 7, 3, zero=False, one=False) # as above, zeros?
             self.question_raw = expand((a*x + b) * (x + c))
-            self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Factorise: }', latex(self.question_raw)]
             self.answer_raw = Mul((a*x + b), (x + c)) # a way to make gcd(a, b, c) = 1?
 
         self.answer_aspects = [latex(self.answer_raw)]
@@ -509,7 +509,7 @@ class MathsQuestion:
             x = symbols("x")
             adder, soln = self.random_co(-8, 8, 2, zero=False)
             self.question_raw = Eq(x + adder, soln + adder)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             self.answer_raw = soln
 
         elif self.route == 2:
@@ -517,21 +517,21 @@ class MathsQuestion:
             multiple = self.random_co(3, 9, 1)[0]
             soln = self.random_co(-8, 8, 1, zero=False)[0]
             self.question_raw = Eq(multiple * x, multiple * soln)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             self.answer_raw = soln
 
         elif self.route == 3:
             x = symbols("x")
             a, b = self.random_co(3, 9, 2)
             self.question_raw = Eq(x / a, b)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             self.answer_raw = a * b
 
         elif self.route == 4:
             x = symbols("x")
             multiple, adder, soln = self.random_co(-10, 10, 3, zero=False)
             self.question_raw = Eq(multiple * x + adder, multiple * soln + adder)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             self.answer_raw = soln
 
         elif self.route == 5:
@@ -539,7 +539,7 @@ class MathsQuestion:
             divisor = self.random_co(2, 9, 1)[0]
             adder, soln = self.random_co(-9, 9, 2, zero=False)
             self.question_raw = Eq(x / divisor + adder, Rational(soln, divisor) + adder)
-            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'\text{Solve: }', latex(self.question_raw)]
             self.answer_raw = soln
 
         self.answer_aspects = [latex(self.answer_raw)]

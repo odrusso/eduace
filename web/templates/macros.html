@@ -20,6 +20,23 @@ Jinja2 + Flask + Python 3.6
 {% endmacro %}
 
 
+{# MathQuill Imports #}
+{% macro mathquill() %}
+    <link rel="stylesheet" href="http://mathquill.com/lib/mathquill.css"/>
+    <script src="http://mathquill.com/lib/mathquill.js"></script>
+    <script>
+    var MQ = MathQuill.getInterface(2);
+    </script>
+{% endmacro %}
+
+
+{# KaTeX Imports #}
+{% macro katex() %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-alpha/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js"></script>
+{% endmacro %}
+
 
 {# Navigation bar for user dashboard #}
 {% macro nav_bar_dash() %}

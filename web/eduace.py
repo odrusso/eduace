@@ -43,7 +43,9 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(id):
-        return User(id)
+    return User(id)
+
+
 
 @app.route("/")
 def web_index():
@@ -94,7 +96,7 @@ def web_pre_quiz_browse():
 def web_quiz():
     current_structure_object = current_user.datauser.question_structures.filter_by(question_structure_id=current_user.datauser.current_structure).first()
     current_question_list = current_structure_object.questions.all()
-    quesiton_list = [ [x.question_id, x.question_pointer] for x in current_question_list]
+    quesiton_list = [[x.question_id, x.question_pointer] for x in current_question_list]
     sidebar_question_list = []
     for data_question_object in current_question_list:
         current = []
@@ -106,9 +108,24 @@ def web_quiz():
 
     sidebar_question_list = sorted(sidebar_question_list, key=operator.itemgetter(1))
 
-    print(sidebar_question_list)
+    return render_template("quiz.html", sidebar_question_list=sidebar_question_list, current_question=current_structure_object.current_question)
 
-    return render_template("quiz.html", sidebar_question_list=sidebar_question_list)
+@app.route("/_load_question_json")
+@login_required
+def load_question_json():
+    question_id = request.args.get("question_id")
+    question = pickle.loads(session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first().question_pickle)
+    return jsonify(question_latex=question.question_aspects)
+
+
+@app.route("/_evaluate_answer")
+@login_required
+def evaluate_answer():
+    entered_answer = request.args.get("entered_latex")
+    question_id = request.args.get("question_id")
+    question = question = pickle.loads(session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first().question_pickle)
+    return jsonify(result=question.evaluate_answer(entered_answer))
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

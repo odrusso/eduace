@@ -1,37 +1,113 @@
 {% extends "base.html" %}
-{% from "macros.html" import nav_bar_dash %}
+{% from "macros.html" import nav_bar_dash, mathquill, katex %}
 
 {% block title %}EduAce Quiz{% endblock %}
+
+{% block imports %}
+    {{ mathquill() }}
+    {{ katex() }}
+{% endblock %}
 
 {% block body %}
 
     {{ nav_bar_dash() }}
 
-    <script>
-        function deploy_question(question_number) {
-            $('a.active').removeClass('active');
-            $('#question_sidebar_' + String(question_number)).addClass("active");
-        }
-
-    </script>
-
     <div class="row">
-    <div class="col-3 bg-white"  style="height: 100vh; overflow-y: scroll">
-        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            {% for question in sidebar_question_list %}
-                {%  if question[3] == "unanswered" %}
-                    <a class="nav-link" id="question_sidebar_{{ question[1] }}" href="#" onClick="deploy_question({{ question[1] }})">{{  question[2] }}</a>
-                {% else %}
-                    {% if question[3] == "correct" %}
-                        <a class="nav-link text-success" id="question_sidebar_{{ question[1] }}" href="#" onClick="deploy_question({{ question[1] }})">{{  question[2] }}</a>
+        <div class="col-3 bg-white"  style="height: 100vh; overflow-y: scroll">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                {% for question in sidebar_question_list %}
+                    {%  if question[3] == "unanswered" %}
+                        <a class="nav-link" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2][-7:-2] }}</a>
                     {% else %}
-                        <a class="nav-link text-danger" id="question_sidebar_{{ question[1] }}" href="#" onClick="deploy_question({{ question[1] }})">{{  question[2] }}</a>
+                        {% if question[3] == "correct" %}
+                            <a class="nav-link bg-success text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2][-7:-2] }}</a>
+                        {% else %}
+                            <a class="nav-link bg-danger text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2][-7:-2] }}</a>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            {% endfor %}
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+    <div class="col-9">
+        <br><br>
+        <div class="jumbotron">
+
+            <div class="latex_container">
+
+                <span class="latex_deletable centering question_latex">Choose a question...</span>
+                <br>
+
+            </div>
+
+            <hr>
+
+
+            <div class="input-group mb-3">
+                <span class="form-control" width="200px" id="answer"></span>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" id="evaluate_answer" type="button">Submit</button>
+                </div>
+            </div>
+
+            <br>
+            <br>
+
         </div>
     </div>
     </div>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js"   ></script>
+
+    <script>
+        var answerSpan = document.getElementById('answer');
+        var MQ = MathQuill.getInterface(2);
+        var answerMathField = MQ.MathField(answerSpan);
+
+        var current_question_id = 0
+
+        function deploy_question(question_id) {
+            current_question_id = question_id
+            $.getJSON('_load_question_json', {
+                question_id: question_id,
+            }, function(data){
+                $(".latex_deletable").remove()
+                var itt;
+                for (itt=0; itt < data.question_latex.length; itt++) {
+                    $(".latex_container").append('<span class="latex_deletable centering question_latex" id="' + itt + '">$$' + data.question_latex[itt] + '$$</span>');
+                };
+                renderMathInElement(
+                    document.body,
+                    {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        ]
+                    }
+                );
+            });
+            return false
+
+        }
+        deploy_question({{ current_question  }});
+        $(function(){
+            $("#evaluate_answer").bind('click', function(){
+                $.getJSON('_evaluate_answer', {
+                    entered_latex: MQ.MathField(answerSpan).latex(),
+                    question_id: current_question_id
+                }, function(data) {
+                    alert(data.result);
+                    if (data.result[0]) {
+                        alert("Yay!");
+                    }
+                    else {
+                        alert("Whoops!");
+                        };
+                });
+                return false
+            });
+        });
+
+    </script>
 
 {% endblock %}

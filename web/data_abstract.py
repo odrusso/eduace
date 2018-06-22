@@ -1,5 +1,6 @@
 # External Imports
 from sqlalchemy import create_engine, Column, ForeignKey, INTEGER, String, BLOB, FLOAT, Boolean
+from sqlalchemy.exc import InternalError, StatementError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,7 +24,15 @@ def pull_user(username, password):
             return [False, "password"]
 
 def get_user_from_id(id):
-    return session.query(DataUser).filter(DataUser.user_id==id).first()
+    try:
+        return session.query(DataUser).filter(DataUser.user_id==id).first()
+    except InternalError:
+        session.rollback()
+        get_user_from_id(id)
+    except StatementError:
+        session.rollback()
+        get_user_from_id(id)
+
 
 
 class DataUser(Base):
@@ -54,6 +63,7 @@ class DataQuestionStructure(Base):
     user_id = Column(INTEGER, ForeignKey('users.user_id'))
     time_generated = Column(FLOAT)
     time_completed = Column(FLOAT)
+    current_question = Column(INTEGER)
     length = Column(INTEGER)
 
     questions = relationship("DataQuestion", lazy='dynamic')
@@ -80,10 +90,9 @@ class DataQuestion(Base):
     answers = relationship("DataAnswer", lazy='dynamic')
 
     def get_question_status(self):
-        print(self.answers.all())
         if len(self.answers.all()) == 0:
             return "unanswered"
-        elif self.time_completed != 0:
+        elif self.time_completed != 0.0:
             return "correct"
         else:
             return "incorrect"
@@ -107,7 +116,7 @@ class DataAnswer(Base):
 
 
 engine = create_engine(
-    'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@educe.c4a6ld5vzhz5.us-east-2.rds.amazonaws.com/eduace')
+    'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace')
 print(__name__ + ": Engine Created")
 
 Base.metadata.bind = engine
@@ -125,13 +134,12 @@ if __name__ == "__main__":
     print(test_user)
     print(test_user.question_structures.filter_by(question_structure_id=test_user.current_structure).first())
 
-    #from src.courses.ncea_level_1.maths.mcat import *
-
-    #entered_question = pickle.dumps(MathsQuestion("1.2.2"))
-    #q = DataQuestion(question_structure_id=1, question_structure_itt=5, question_pointer='ncea_level_1.maths.mcat.Question("1.2.2")',
-    #             question_pickle=entered_question, time_init=0, time_completed=0, current_timer=0)
-    #session.add(q)
-    #session.commit()
+    from src.courses.ncea_level_1.maths.mcat import *
+    entered_question = pickle.dumps(MathsQuestion("1.1.1"))
+    q = DataQuestion(question_structure_id=1, question_structure_itt=0, question_pointer='ncea_level_1.maths.mcat.Question("1.1.1")',
+                 question_pickle=entered_question, time_init=0, time_completed=21345, current_timer=0)
+    session.add(q)
+    session.commit()
 
     question_data_testing = test_user.question_structures.first().questions.all()
     print(question_data_testing)
