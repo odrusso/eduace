@@ -16,8 +16,13 @@ from flask import Flask, render_template, g, jsonify, request, redirect
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 import pickle
 import operator
+import sys
 
 # Internal Imports
+sys.path.append('.')
+sys.path.append('./enviroment/lib/python3.6/site-packages')
+
+
 from src.courses import course_master
 from src.courses.ncea_level_1.maths import mcat
 from data_abstract import *
