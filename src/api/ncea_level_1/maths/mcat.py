@@ -6,7 +6,7 @@ from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
 from random import randint, shuffle
 from math import sqrt
-from lat2sym.process_latex import process_sympy
+#from lat2sym.process_latex import process_sympy
 
 
 class Data():
@@ -513,8 +513,8 @@ class MathsQuestion():
             #['Eq(A, 2*pi*r*(h+r))', symbols('A, r, h')],
             #['Eq(R, (2*f*(n-1)) / (q + 1))', symbols('R, f, n, q')],
             #['Eq(p, (a - b) / (a + b))', symbols('p, a, b')],
-            ['Eq(E, Rational(1, 2) * m * v ** 2)', symbols('E, m, v')], #behaves weirdly when rearranged for v
-            ['Eq(E, Rational(1, 2) * k * x ** 2)', symbols('E, k, x')],
+            ['Eq(e, Rational(1, 2) * m * v ** 2)', symbols('e, m, v')], #behaves weirdly when rearranged for v
+            ['Eq(e, Rational(1, 2) * k * x ** 2)', symbols('e, k, x')],
             ['Eq(F, (m * v ** 2) / r)', symbols('F, m, v, r')],
             ['Eq(T, 2*pi*sqrt(l / g))', symbols('T, l, g')],
             ['Eq(T, 2*pi*sqrt(m / k))', symbols('T, m, k')]
@@ -535,15 +535,16 @@ class MathsQuestion():
         self.question_aspects = [r'\text{Rearrange }' + latex(self.question_raw) + r'\text{ for }' + latex(variable)]
 
         if len(solve(self.question_raw, variable)) == 1:
-            self.answer_raw = solve(self.question_raw, variable)
+            self.answer_raw = solve(self.question_raw, variable)[0]
 
         elif len(solve(self.question_raw, variable)) == 2:
             self.answer_raw = solve(self.question_raw, variable)[1]
 
+
         else:
             self.answer_raw = solve(self.question_raw, variable)[0]
 
-        #self.answer_aspects = [Eq(variable, self.answer_raw)] this line is broken
+        self.answer_aspects = [Eq(variable, self.answer_raw)] #this line is broken
 
     def generate_question_mcat_3_1_1(self):
         """Question MCAT 3.1.1"""
@@ -876,5 +877,5 @@ def testing_repetition(question):
 
 
 if __name__ == "__main__":
-    testing()
-    #testing_repetition('2.1.2')
+    #testing()
+    testing_repetition('2.1.2')
