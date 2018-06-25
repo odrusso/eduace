@@ -48,6 +48,7 @@ class MathsQuestion():
         self.answer_aspects = []
         self.question_raw = 0
         self.answer_raw = 0
+        self.question_description = None
         self.route = None
 
         if question_number != "0.0.0":
@@ -156,6 +157,8 @@ class MathsQuestion():
     def generate_question_mcat_1_1_1(self):
         """Question MACT 1.1.1"""
 
+        self.question_description = "Collect like terms."
+
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
 
@@ -219,6 +222,8 @@ class MathsQuestion():
     def generate_question_mcat_1_1_2(self):
         """Question MCAT 1.1.2"""
 
+        self.question_description = "Multiplying out terms."
+
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
 
@@ -241,6 +246,8 @@ class MathsQuestion():
 
     def generate_question_mcat_1_1_3(self):
         """Question MCAT 1.1.3"""
+
+        self.question_description = "Powers of powers."
 
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
@@ -272,6 +279,8 @@ class MathsQuestion():
     def generate_question_mcat_1_1_4(self):
         """Question MCAT 1.1.4"""
 
+        self.question_description = "Square roots of powers."
+
         x, y = symbols('x y')
 
         a, b, c = self.random_co(2, 5, 3)
@@ -285,6 +294,9 @@ class MathsQuestion():
 
     def generate_question_mcat_1_2_1(self):
         """Question MCAT 1.2.1"""
+
+        self.question_description = "Expanding out one bracket."
+
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
 
@@ -325,6 +337,8 @@ class MathsQuestion():
     def generate_question_mcat_1_2_2(self):
         """Question MCAT 1.2.2"""
 
+        self.question_description = "Expanding out two brackets."
+
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
 
@@ -364,6 +378,8 @@ class MathsQuestion():
     def generate_question_mcat_1_3_1(self):
         """Question MCAT 1.3.1"""
 
+        self.question_description = "Finding common factors."
+
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
 
@@ -387,6 +403,8 @@ class MathsQuestion():
     def generate_question_mcat_1_3_2(self):
         """Question MCAT 1.3.2"""
 
+        self.question_description = "Factorising quadratics in the form x^2 + bx + c"
+
         x = symbols("x")
         a, b = self.random_co(-4, 4, 2)
         self.question_raw = expand((x + a) * (x + b))
@@ -397,6 +415,8 @@ class MathsQuestion():
 
     def generate_question_mcat_1_3_3(self):
         """Question MCAT 1.3.3"""
+
+        self.question_description = "Factorising quadratics in the form ax^2 + bx + c"
 
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
@@ -421,6 +441,8 @@ class MathsQuestion():
 
     def generate_question_mcat_1_3_4(self):
         """Question MCAT 1.3.4"""
+
+        self.question_description = "Factorising difference of two squares."
 
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
@@ -451,6 +473,8 @@ class MathsQuestion():
 
     def generate_question_mcat_2_1_1(self):
         """Question MCAT 2.1.1"""
+
+        self.question_description = "Substituting into a formula"
 
         equations = [
                         ['Eq(v, u + a*t)', symbols('v, u, a, t')],
@@ -501,6 +525,8 @@ class MathsQuestion():
     def generate_question_mcat_2_1_2(self):
         """Question MCAT 2.1.2"""
 
+        self.question_description = "Rearranging formulas."
+
         equations = [
             ['Eq(v, u + a*t)', symbols('v, u, a, t')],
             #['Eq(d, u*t + Rational(1, 2) * a * t ** 2)', symbols('d, u, t, a')],
@@ -540,14 +566,15 @@ class MathsQuestion():
         elif len(solve(self.question_raw, variable)) == 2:
             self.answer_raw = solve(self.question_raw, variable)[1]
 
-
         else:
             self.answer_raw = solve(self.question_raw, variable)[0]
 
-        self.answer_aspects = [Eq(variable, self.answer_raw)] #this line is broken
+        self.answer_aspects = [Eq(variable, self.answer_raw)]
 
     def generate_question_mcat_3_1_1(self):
         """Question MCAT 3.1.1"""
+
+        self.question_description = "Solving simple linear equations."
 
         if self.route is None:
             self.route = self.random_co(1, 5, 1)[0]
@@ -597,6 +624,9 @@ class MathsQuestion():
     def generate_question_mcat_3_1_2(self): #perfect? route 2 possibly too hard
         """Question MCAT 3.1.2"""
 
+        self.question_description = "Solving linear equations with like terms."
+
+
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
 
@@ -619,6 +649,8 @@ class MathsQuestion():
     def generate_question_mcat_3_1_3(self): #too hard
         """Question MCAT 3.1.3"""
 
+        self.question_description = "Solving linear equations with fractions."
+
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
 
@@ -639,8 +671,10 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_3_1_4(self): #too easy?
-        """MCAT question 3.1.4"""
+    def generate_question_mcat_3_1_4(self):
+        """MCAT question 3.1.4 possibly too easy"""
+
+        self.question_description = "Solving linear equations without unique solutions."
 
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
@@ -661,6 +695,8 @@ class MathsQuestion():
 
     def generate_question_mcat_4_1_1(self):
         """Question MCAT 4.1.1"""
+
+        self.question_description = "Solving quadratic equations which are factorised and equal to zero."
 
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
@@ -687,6 +723,8 @@ class MathsQuestion():
 
     def generate_question_mcat_4_1_2(self):
         """Question MCAT 4.1.2"""
+
+        self.question_description = "Solving quadratic equations which are equal to zero, but not factorised."
 
         if self.route is None:
             self.route = self.random_co(1, 2, 1)[0]
@@ -736,7 +774,9 @@ class MathsQuestion():
     def generate_question_mcat_4_1_3(self):
         """Question MCAT 4.1.3"""
 
-        if self.route == None:
+        self.question_description = "Solving quadratic equations which are not equal to zero."
+
+        if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
 
         if self.route == 1:
@@ -750,7 +790,7 @@ class MathsQuestion():
             x = symbols("x")
             b, c = self.random_co(-8, 8, 2)
             self.question_raw = Eq(expand((x + b) * (x + c)) - (b + c) * x - b * c, -1 * (b + c) * x - b * c)
-            self.question_aspects = [r'&\text{Sovle: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = solve(self.question_raw)
 
         else:
@@ -765,14 +805,16 @@ class MathsQuestion():
     def generate_question_mcat_4_1_4(self):
         """Question MCAT 4.1.4"""
 
-        if self.route == None:
+        self.question_description = "Solving quadratics in the form (x + a)^2 = b."
+
+        if self.route is None:
             self.route = self.random_co(1, 2, 2)
 
         if self.route == 1:
             x = symbols("x")
             a, b = self.random_co(-9, 9, 2, zero=False)
             self.question_raw = Eq((x + a) ** 2, b ** 2)
-            self.question_aspects = [r'&\text{Sovle: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = solve(self.question_raw)
 
         else:
@@ -780,13 +822,15 @@ class MathsQuestion():
             a = self.random_co(-9, 9, 1, zero=False)[0]
             b = self.random_co(2, 20, 1)[0]
             self.question_raw = Eq((x + a) ** 2, b)
-            self.question_aspects = [r'&\text{Sovle: }', '&' + latex(self.question_raw)]
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = solve(self.question_raw)
 
         self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_4_2_2(self):
         """Question MCAT 4.2.2"""
+
+        self.question_description = "Solving exponential equations with unknowns in the base."
 
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
