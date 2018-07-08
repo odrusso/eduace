@@ -129,6 +129,9 @@ class MathsQuestion:
         else:
             return " + " + latex(tester)
 
+    def __str__(self):
+        return "Question Aspects: %s \n Answer Aspects: %s" % (str(self.question_aspects), str(self.answer_aspects))
+
     def evaluate_answer(self, user_input):
         """evaluates the equivlence of a plaintext answer input"""
         user_input = process_sympy(user_input)

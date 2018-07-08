@@ -83,6 +83,7 @@ class DataQuestion(Base):
     question_structure_itt = Column(INTEGER)
     question_pointer = Column(String)
     question_pickle = Column(BLOB)
+    time_gen = Column(INTEGER)
     time_init = Column(FLOAT)
     time_completed = Column(FLOAT)
     current_timer = Column(INTEGER)
@@ -132,7 +133,7 @@ print(__name__ + ": Session Initialised")
 if __name__ == "__main__":
     test_user = session.query(DataUser).filter(DataUser.username == "oscar").one()
     print(test_user)
-    print(test_user.question_structures.filter_by(question_structure_id=test_user.current_structure).first())
+    print(test_user.question_structures.filter_by(question_structure_8id=test_user.current_structure).first())
 
     from src.courses.ncea_level_1.maths.mcat import *
     entered_question = pickle.dumps(MathsQuestion("1.1.1"))
