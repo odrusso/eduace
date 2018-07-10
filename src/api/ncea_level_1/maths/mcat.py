@@ -17,6 +17,7 @@ class Data():
         num = randint(0, len(full_list) - 1)
         return full_list[num]
 
+
 data = Data()
 
 
@@ -210,7 +211,7 @@ class MathsQuestion():
 
             for item in question_elements:
                 insertable = self.ppm(item)
-                if insertable != None:
+                if insertable is not None:
                     question_latex += insertable
 
             self.question_aspects = [r'&\text{Simplify: }', question_latex]
@@ -414,7 +415,7 @@ class MathsQuestion():
         self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_1_3_3(self):
-        """Question MCAT 1.3.3"""
+        """Question MCAT 1.3.3 negative numbers potentially an issue?"""
 
         self.question_description = "Factorising quadratics in the form ax^2 + bx + c"
 
@@ -423,7 +424,7 @@ class MathsQuestion():
 
         if self.route == 1:
             x = symbols("x")
-            a, b, mult = self.random_co(-7, 7, 3, zero=False)  # != 0, negatives an issue?
+            a, b, mult = self.random_co(-7, 7, 3, zero=False)
             self.question_raw = expand(mult * (x + a) * (x + b))
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = Mul(mult, (x + a), (x + b))
@@ -432,7 +433,7 @@ class MathsQuestion():
             x = symbols("x")
             a, b = (2, 4)
             while gcd(a, b) != 1:
-                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False)  # as above
+                a, b, c = self.random_co(-7, 7, 3, zero=False, one=False)
             self.question_raw = expand((a * x + b) * (x + c))
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = Mul((a * x + b), (x + c))
@@ -467,7 +468,6 @@ class MathsQuestion():
             self.question_raw = (xa * a) ** 2 - xb ** 2
             self.question_aspects = [r'&\text{Factorise: }', '&' + latex(self.question_raw)]
             self.answer_raw = (xa * a - xb) * (xa * a + xb)
-
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -529,17 +529,17 @@ class MathsQuestion():
 
         equations = [
             ['Eq(v, u + a*t)', symbols('v, u, a, t')],
-            #['Eq(d, u*t + Rational(1, 2) * a * t ** 2)', symbols('d, u, t, a')],
+            # ['Eq(d, u*t + Rational(1, 2) * a * t ** 2)', symbols('d, u, t, a')],
             ['Eq(d, Rational(1, 2)*(u + v) * t)', symbols('d, u, v, t')],
             ['Eq(A, pi * r ** 2)', symbols('A, r')],
             ['Eq(A, 4 * pi * r ** 2)', symbols('A, r')],
             ['Eq(V, (S(4) / 3) * pi * r ** 3)', symbols('V, r')],
             ['Eq(F, S(9) / 5 * C + 32)', symbols('F, C')],
             ['Eq(C, Mul(S(5) / 9, (F - 32), evaluate=False))', symbols('C, F')],
-            #['Eq(A, 2*pi*r*(h+r))', symbols('A, r, h')],
-            #['Eq(R, (2*f*(n-1)) / (q + 1))', symbols('R, f, n, q')],
-            #['Eq(p, (a - b) / (a + b))', symbols('p, a, b')],
-            ['Eq(e, Rational(1, 2) * m * v ** 2)', symbols('e, m, v')], #behaves weirdly when rearranged for v
+            # ['Eq(A, 2*pi*r*(h+r))', symbols('A, r, h')],
+            # ['Eq(R, (2*f*(n-1)) / (q + 1))', symbols('R, f, n, q')],
+            # ['Eq(p, (a - b) / (a + b))', symbols('p, a, b')],
+            ['Eq(e, Rational(1, 2) * m * v ** 2)', symbols('e, m, v')],
             ['Eq(e, Rational(1, 2) * k * x ** 2)', symbols('e, k, x')],
             ['Eq(F, (m * v ** 2) / r)', symbols('F, m, v, r')],
             ['Eq(T, 2*pi*sqrt(l / g))', symbols('T, l, g')],
@@ -621,8 +621,8 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_3_1_2(self): #perfect? route 2 possibly too hard
-        """Question MCAT 3.1.2"""
+    def generate_question_mcat_3_1_2(self):
+        """Question MCAT 3.1.2 route 2 possibly too hard."""
 
         self.question_description = "Solving linear equations with like terms."
 
@@ -646,8 +646,8 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
-    def generate_question_mcat_3_1_3(self): #too hard
-        """Question MCAT 3.1.3"""
+    def generate_question_mcat_3_1_3(self):
+        """Question MCAT 3.1.3 potentially too hard"""
 
         self.question_description = "Solving linear equations with fractions."
 
@@ -667,7 +667,6 @@ class MathsQuestion():
             self.question_raw = Eq((b + x) / c, Add(d, -1 * (x / a), evaluate=False))
             self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = solve(self.question_raw)
-
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -828,7 +827,7 @@ class MathsQuestion():
         self.answer_aspects = [latex(self.answer_raw)]
 
     def generate_question_mcat_4_2_2(self):
-        """Question MCAT 4.2.2"""
+        """Question MCAT 4.2.2 needs revision, produces to many of the same question (route 1: a = ...)"""
 
         self.question_description = "Solving exponential equations with unknowns in the base."
 
@@ -839,7 +838,7 @@ class MathsQuestion():
             x = symbols("x")
             power = self.random_co(3, 5, 1)[0]
             if power == 5:
-                a = self.random_co(3, 3, 1)[0]  # needs revision, produces too many of the same questions.
+                a = self.random_co(3, 3, 1)[0]
             else:
                 a = self.random_co(3, power, 1)[0]
             self.question_raw = Eq(x ** power, a ** power)
@@ -870,6 +869,116 @@ class MathsQuestion():
                 self.answer_raw = [soln, -1 * soln]
             else:
                 self.answer_raw = soln
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
+    def generate_question_mcat_5_1_1(self):
+        """Question MCAT 5.1.1"""
+
+        self.question_description = "Solve simultaneous equations by elimination."
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        elif self.route == 1:
+            # Coefficients on y term are additive inverses of one another. (Adding equations to solve)
+
+            x, y = symbols("x y")
+            a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+
+            xsoln = Rational((c + e), (a + d))
+            ysoln = Rational((c * d - a * e), (b * (a + d)))
+
+            while type(xsoln) and type(ysoln) is not Integer:
+                a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+                xsoln = Rational((c + e), (a + d))
+                ysoln = Rational((c * d - a * e), (b * (a + d)))
+
+            eqn1 = Eq(a * x + b * y, c)
+            eqn2 = Eq(d * x - b * y, e)
+
+            self.question_aspects = [r'\text{Find } x,y \text{ such that }',
+                                     r'\begin{array}{ccc}'
+                                     r'&' + latex(eqn1) + r'\\'
+                                     r'&' + latex(eqn2),
+                                     r'\end{array}']
+
+            self.answer_raw = (xsoln, ysoln)
+
+        elif self.route == 2:
+            # Coefficients on x are additive inverses of one another. (Adding equations to solve)
+
+            x, y = symbols("x y")
+            a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+
+            xsoln = Rational((c * d - b * e), a * (b + d))
+            ysoln = Rational((c + e), (b + d))
+
+            while type(xsoln) and type(ysoln) is not Integer:
+                a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+                xsoln = Rational((c * d - b * e), a * (b + d))
+                ysoln = Rational((c + e), (b + d))
+
+            eqn1 = Eq(a * x + b * y, c)
+            eqn2 = Eq(-1 * a * x + d * y, e)
+
+            self.question_aspects = [r'\text{Find } x,y \text{ such that }',
+                                     r'\begin{array}{ccc}'
+                                     r'&' + latex(eqn1) + r'\\'
+                                     r'&' + latex(eqn2),
+                                     r'\end{array}']
+
+            self.answer_raw = (xsoln, ysoln)
+
+        elif self.route == 3:
+            # Coefficients on x are equal. (Subtracting equations to solve)
+
+            x, y = symbols("x y")
+            a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+
+            xsoln = Rational((b * e - c * d), (a * (b - d)))
+            ysoln = Rational((c - e), (b - d))
+
+            while type(xsoln) and type(ysoln) is not Integer:
+                a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+                xsoln = Rational((b * e - c * d), (a * (b - d)))
+                ysoln = Rational((c - e), (b - d))
+
+            eqn1 = Eq(a * x + b * y, c)
+            eqn2 = Eq(a * x + d * y, e)
+
+            self.question_aspects = [r'\text{Find } x,y \text{ such that }',
+                                     r'\begin{array}{ccc}'
+                                     r'&' + latex(eqn1) + r'\\'
+                                     r'&' + latex(eqn2),
+                                     r'\end{array}']
+
+            self.answer_raw = (xsoln, ysoln)
+
+        elif self.route == 4:
+            # Coefficients on y are equal. (Subtracting equations to solve)
+
+            x, y = symbols("x y")
+            a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+
+            xsoln = Rational((c - e), (a - d))
+            ysoln = Rational((a * e - c * d), (b * (a - d)))
+
+            while type(xsoln) and type(ysoln) is not Integer:
+                a, b, c, d, e = self.random_co(-6, 6, 5, zero=False)
+                xsoln = Rational((c - e), (a - d))
+                ysoln = Rational((a * e - c * d), (b * (a - d)))
+
+            eqn1 = Eq(a * x + b * y, c)
+            eqn2 = Eq(d * x + b * y, e)
+
+            self.question_aspects = [r'\text{Find } x,y \text{ such that }',
+                                     r'\begin{array}{ccc}'
+                                     r'&' + latex(eqn1) + r'\\' 
+                                     r'&' + latex(eqn2),
+                                     r'\end{array}']
+
+            self.answer_raw = (xsoln, ysoln)
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -921,5 +1030,5 @@ def testing_repetition(question):
 
 
 if __name__ == "__main__":
-    #testing()
-    testing_repetition('2.1.2')
+    testing()
+    # testing_repetition('5.1.1')
