@@ -579,8 +579,6 @@ class MathsQuestion():
         if self.route is None:
             self.route = self.random_co(1, 3, 1)[0]
 
-        self.route = 3
-
         if self.route == 1:
             x = symbols('x')
             a, b = self.random_co(-8, 8, 2)
@@ -590,7 +588,7 @@ class MathsQuestion():
 
         elif self.route == 2:
             x = symbols('x')
-            a, b, c = self.random_co(-8, 8, 3, one=False)
+            a, b, c = self.random_co(-8, 8, 3, zero=False, one=False)
             self.question_raw = expand((x + a) * (x + b)) / expand((c * x * (x + a)))
             self.question_aspects = [r'Simplify: ' + latex(self.question_raw)]
             self.answer_raw = simplify(self.question_raw)
