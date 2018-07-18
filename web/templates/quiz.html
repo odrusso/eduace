@@ -17,12 +17,12 @@
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 {% for question in sidebar_question_list %}
                     {%  if question[3] == "unanswered" %}
-                        <a class="nav-link" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2][-7:-2] }}</a>
+                        <a class="nav-link" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
                     {% else %}
                         {% if question[3] == "correct" %}
-                            <a class="nav-link bg-success text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2][-7:-2] }}</a>
+                            <a class="nav-link bg-success text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
                         {% else %}
-                            <a class="nav-link bg-danger text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2][-7:-2] }}</a>
+                            <a class="nav-link bg-danger text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
                         {% endif %}
                     {% endif %}
                     <br>
@@ -34,19 +34,17 @@
         <div class="jumbotron">
 
             <div class="latex_container">
-
-                <span class="latex_deletable centering question_latex">Choose a question...</span>
+                <span class="latex_deletable centering">Loading...</span>
                 <br>
-
             </div>
 
             <hr>
 
-
             <div class="input-group mb-3">
-                <span class="form-control" width="200px" id="answer"></span>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" id="evaluate_answer" type="button">Submit</button>
+                <div  id="answer_container" class="col-10">
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-outline-secondary vertical-align" id="evaluate_answer" type="button">Submit</button>
                 </div>
             </div>
 
@@ -57,15 +55,13 @@
     </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js"   ></script>
 
     <script>
-        var answerSpan = document.getElementById('answer');
-        var MQ = MathQuill.getInterface(2);
-        var answerMathField = MQ.MathField(answerSpan);
 
         var current_question_id = 0
+
+        var mq_objects = new Array();
 
         function deploy_question(question_id) {
             current_question_id = question_id
@@ -75,8 +71,17 @@
                 $(".latex_deletable").remove()
                 var itt;
                 for (itt=0; itt < data.question_latex.length; itt++) {
-                    $(".latex_container").append('<span class="latex_deletable centering question_latex" id="' + itt + '">$$' + data.question_latex[itt] + '$$</span>');
+                    $(".latex_container").append('<span class="latex_deletable centering question_latex">$$' + data.question_latex[itt] + '$$</span>');
                 };
+                itt = 0;
+                $(".answer_deletable").remove()
+                var answer_length = data.answer_length;
+                mq_objects.length = 0;
+                var MQ = MathQuill.getInterface(2);
+                for (itt=0; itt < answer_length; itt++) {
+                    $("#answer_container").append('<span class="form-control answer_deletable" width="200px" id="answer_' + itt + '"></span>')
+                    mq_objects.push(MQ.MathField(document.getElementById('answer_' + itt)));
+                }
                 renderMathInElement(
                     document.body,
                     {
@@ -90,19 +95,32 @@
 
         }
         deploy_question({{ current_question  }});
+
         $(function(){
             $("#evaluate_answer").bind('click', function(){
+                var itt;
+                var entered_latex = new Array();
+                for (itt=0; itt < mq_objects.length; itt++) {
+                    entered_latex.push(MQ.MathField(document.getElementById("answer_" + itt)).latex());
+                }
+                alert(entered_latex)
                 $.getJSON('_evaluate_answer', {
-                    entered_latex: MQ.MathField(answerSpan).latex(),
+                    entered_answers: JSON.stringify(entered_latex),
                     question_id: current_question_id
                 }, function(data) {
                     alert(data.result);
-                    if (data.result[0]) {
-                        alert("Yay!");
-                    }
-                    else {
-                        alert("Whoops!");
-                        };
+                    if(data.result == "True") {
+                        if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
+                            $("#question_sidebar_"+current_question_id).removeClass("bg-danger");
+                        }
+                        $("#question_sidebar_"+current_question_id).addClass("bg-success");
+                    } else {
+                        if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
+                            null
+                        }
+                        $("#question_sidebar_"+current_question_id).addClass("bg-danger");
+                        $("#question_sidebar_"+current_question_id).addClass("text-white");
+                    };
                 });
                 return false
             });

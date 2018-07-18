@@ -15,6 +15,7 @@ Jinja2 + Flask + Python 3.6
     {% macro nav_bar_landing() %}
     <div class="navbar bg-light">
         <a href="/login"><button class="btn">Login</button></a>
+        <a href="/register"><button class="btn">Register</button></a>
     </div>
     <br>
 {% endmacro %}
@@ -43,21 +44,9 @@ Jinja2 + Flask + Python 3.6
     <div class="navbar navbar-expand-lg navbar-light bg-light">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a href="/_logout"><button class="btn">Logout</button></a></li>
-            <li class="nav-item"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Course selection</a>
-                <div class="dropdown-menu">
-                    <h6 class="dropdown-header">NCEA Level 1</h6>
-                    <a class="dropdown-item" href="#">MCAT</a>
-                    <a class="dropdown-item disabled" href="#">Accounting</a>
-                    <div class="dropdown-divider"></div>
-                    <h6 class="dropdown-header">NCEA Level 2</h6>
-                    <a class="dropdown-item disabled" href="#">Calculus</a>
-                    <a class="dropdown-item disabled" href="#">Algebra</a>
-                </div>
-            </li>
+            <li class="nav-item"> &nbsp&nbsp </li>
+            <li class="nav-item"><a href="/dashboard"><button class="btn">Dashboard</button></a></li>
         </ul>
-        <span class="navbar-text">Score: <strong>{{ g.score }}</strong></span>
     </div>
 {% endmacro %}
 

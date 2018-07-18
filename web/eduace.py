@@ -12,9 +12,13 @@ Written by Oscar Russo for EduAce NZ
 """
 
 # Dependency  Imports
-from flask import Flask, render_template, g, jsonify, request, redirect
+from typing import List
+
+from flask import Flask, render_template, g, jsonify, request, redirect, abort
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash
+from time import time, strftime, gmtime
+import json
 import pickle
 import operator
 import sys
@@ -45,8 +49,6 @@ class User(UserMixin):
         self.email = self.datauser.email
         self.role = self.datauser.role
         self.score = self.datauser.score
-        self.current_structure = self.datauser.current_structure
-
 
 @login_manager.user_loader
 def load_user(id):
@@ -91,12 +93,41 @@ def user_logout():
 @app.route("/dashboard")
 @login_required
 def web_dashboard():
-    if current_user.current_structure == None:
+    # strftime("%d/%m/%y %H:%M", gmtime(time()))
+    if len(current_user.datauser.question_structures.all()) == 0:
         return render_template("dashboard_fresh.html")
     else:
-        g.all_courses = course_master.get_list_of_courses()
-        g.score = current_user.score
-        return render_template('dashboard.html')
+        course_name = "MCAT"
+        question_structures = current_user.datauser.question_structures.filter_by(name=course_name).all()
+        question_strctures = sorted(question_structures, key=lambda x: x.time_generated)
+
+        question_structure_recent = sorted(question_structures, key=lambda x: x.recent_access)[-1]
+        passing_structure_recent = {
+            "id": question_structure_recent.question_structure_id,
+            "name": question_structure_recent.name,
+            "init_time": strftime("%d/%m/%y %H:%M", gmtime(question_structure_recent.time_generated)),
+            "recent_time": strftime("%d/%m/%y %H:%M", gmtime(question_structure_recent.recent_access)),
+            "completeness": question_structure_recent.completion_percent()
+        }
+
+        if passing_structure_recent["recent_time"] == "01/01/70 00:00":
+            passing_structure_recent["recent_time"] = "Never"
+
+        passing_structures = []
+        for structure in question_structures:
+            to_add = {
+                "id": structure.question_structure_id,
+                "name": structure.name,
+                "init_time": strftime("%d/%m/%y %H:%M", gmtime(structure.time_generated)),
+                "recent_time": strftime("%d/%m/%y %H:%M", gmtime(structure.recent_access)),
+                "completeness": structure.completion_percent()
+            }
+            if to_add["recent_time"] == "01/01/70 00:00":
+                to_add["recent_time"] = "Never"
+
+            passing_structures.append(to_add)
+
+        return render_template('dashboard.html', structure_recent=passing_structure_recent, question_structures=passing_structures)
 
 
 @app.route("/pre-quiz-browse")
@@ -105,82 +136,109 @@ def web_pre_quiz_browse():
     return "None"
 
 
-@app.route("/quiz")
+@app.route("/quiz/<string:question_structure_number>")
 @login_required
-def web_quiz():
-    current_structure_object = current_user.datauser.question_structures.filter_by(question_structure_id=current_user.datauser.current_structure).first()
-    current_question_list = current_structure_object.questions.all()
-    quesiton_list = [[x.question_id, x.question_pointer] for x in current_question_list]
-    sidebar_question_list = []
-    for data_question_object in current_question_list:
-        current = []
-        current.append(data_question_object.question_id)
-        current.append(data_question_object.question_structure_itt)
-        current.append(data_question_object.question_pointer)
-        current.append(data_question_object.get_question_status())
-        sidebar_question_list.append(current)
+def web_quiz(question_structure_number):
+    current_structure_object = current_user.datauser.question_structures.filter_by(question_structure_id=question_structure_number).first()
+    if current_structure_object is None:
+        abort(404)
+    else:
+        current_question_list = current_structure_object.questions.all()
+        quesiton_list = [[x.question_id, x.question_pointer] for x in current_question_list]
+        sidebar_question_list = []
+        for data_question_object in current_question_list:
+            current = []
+            current.append(data_question_object.question_id)
+            current.append(data_question_object.question_structure_itt)
+            current.append(data_question_object.question_description)
+            current.append(data_question_object.get_question_status())
+            sidebar_question_list.append(current)
 
-    sidebar_question_list = sorted(sidebar_question_list, key=operator.itemgetter(1))
+        sidebar_question_list = sorted(sidebar_question_list, key=operator.itemgetter(1))
 
-    return render_template("quiz.html", sidebar_question_list=sidebar_question_list, current_question=current_structure_object.current_question)
+        current_structure_object.recent_access = time()
+        session.commit()
+
+        return render_template("quiz.html", sidebar_question_list=sidebar_question_list, current_question=current_structure_object.current_question)
 
 
-@app.route("/_load_question_json")
+@app.route("/quiz/_load_question_json")
 @login_required
 def load_question_json():
     question_id = request.args.get("question_id")
     question = pickle.loads(session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first().question_pickle)
-    return jsonify(question_latex=question.question_aspects)
+    if type(question.answer_raw) == type([1, 2]):
+        answer_length = len(question.answer_raw)
+    else:
+        answer_length = 1
+    print("-------------------------")
+    print(question_id)
+    print(question.question_raw)
+    print(question.answer_raw)
+    print("-------------------------")
+
+    return jsonify(question_latex=question.question_aspects, answer_length=answer_length)
 
 
-@app.route("/_evaluate_answer")
+@app.route("/quiz/_evaluate_answer")
 @login_required
 def evaluate_answer():
-    entered_answer = request.args.get("entered_latex")
+    entered_answer = request.args.get("entered_answers")
+    entered_answer = json.loads(entered_answer)
     question_id = request.args.get("question_id")
-    question = question = pickle.loads(session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first().question_pickle)
-    return jsonify(result=question.evaluate_answer(entered_answer))
+    data_question = session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first()
+    question = pickle.loads(data_question.question_pickle)
+    correct = question.evaluate_answer(entered_answer)
+    answer = DataAnswer(question_id=question_id,
+                        answer_pickle=pickle.dumps(entered_answer),
+                        time_entered=time(),
+                        timer_current=0,
+                        correct=correct[0])
+    session.add(answer)
+    if answer.correct:
+        data_question.correct = 1
+    session.commit()
+
+    return jsonify(result=str(data_question.correct))
 
 
 @app.route("/register", methods=['GET', 'POST'])
-def evaluagte_answer():
+def register_user():
     if request.method == "POST":
         username_exists = len(session.query(DataUser.username).filter_by(username=request.form['username']).all()) != 0
         email_exists = len(session.query(DataUser.username).filter_by(email=request.form['email']).all()) != 0
         password = request.form['password']
 
-        print(username_exists)
-
         if username_exists:
-            print("user error")
             return render_template("register.html", error="Username already exists!")
 
         elif email_exists:
-            print("email error")
             return render_template("register.html", error="Email already exists!")
 
         elif len(password) < 8:
-            print("password error")
             return render_template("register.html", error="Password must be greater than 8 characters!")
 
         else:
             new_user = DataUser(username=request.form['username'], passhash=generate_password_hash(password), email=request.form["email"], role="demo", score=0)
             session.add(new_user)
             session.commit()
-            print("sucess - user added")
             return render_template("register_success.html")
     else:
         if not current_user.is_anonymous:
             return redirect('/dashboard')
         else:
             return render_template("register.html", error="")
-        print("initial render")
 
 
 @app.route("/_generate_mcat_exam")
 def generate_demo_exam():
     generate(current_user.id)
     return redirect('/dashboard')
+
+
+@app.route("/careers")
+def pointless():
+    return "Uhh - bit you found an easter egg! But unfortunately we don't even make enough money to pay our own developers, let alone hire anyone :/ <br> If you're super keen to get involved, you could chuck it@eduace.co.nz an email :)"
 
 
 if __name__ == '__main__':

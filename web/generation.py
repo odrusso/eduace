@@ -17,9 +17,9 @@ from data_abstract import *
 
 def generate(user_id):
 
-    MATHS_QUESTION_LIST = ["1.1.2", "1.1.2", "1.1.3", "1.1.4", "1.2.1", "1.2.2", "1.3.1", "1.3.2", "1.3.3", "1.3.4"]
+    MATHS_QUESTION_LIST = ["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2","3.1.1","3.1.2","3.1.3","3.1.4","4.1.1","4.1.2","4.1.3","4.1.4","4.2.2",]
 
-    new_question_structure = DataQuestionStructure(user_id=user_id, time_generated=int(time()))
+    new_question_structure = DataQuestionStructure(user_id=user_id, name="MCAT", time_generated=int(time()), recent_access=0)
 
     session.add(new_question_structure)
 
@@ -37,12 +37,20 @@ def generate(user_id):
         print(question_object)
         data_question_object = DataQuestion(question_pointer = "courses.ncea_level_1.maths.%s" % question,
                                             question_pickle=pickle.dumps(question_object),
+                                            question_description=question_object.question_description,
                                             question_structure_itt=itt,
                                             question_structure_id=st_id,
-                                            time_gen=int(time())
+                                            time_gen=int(time()),
+                                            correct=0
                                             )
         session.add(data_question_object)
 
-    new_question_structure.current_question = data_question_object.question_id
+    session.commit()
+
+    new_question_structure.current_question = new_question_structure.questions[0].question_id
 
     session.commit()
+
+
+if __name__ == "__main__":
+    generate(1)

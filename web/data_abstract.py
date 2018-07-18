@@ -44,9 +44,11 @@ class DataUser(Base):
     passhash = Column(String)
     role = Column(String)
     score = Column(INTEGER)
-    current_structure = Column(INTEGER)
 
     question_structures = relationship("DataQuestionStructure", lazy='dynamic')
+
+    institutes = relationship("DataInstitutes", lazy="dynamic")
+    classes = relationship("DataClasses", lazy="dynamic")
 
     def __repr__(self):
         return "<User(user_id='%s', username='%s', email='%s', role='%s', score='%s')>" % (
@@ -61,10 +63,11 @@ class DataQuestionStructure(Base):
 
     question_structure_id = Column(INTEGER, primary_key=True)
     user_id = Column(INTEGER, ForeignKey('users.user_id'))
+    name = Column(String)
     time_generated = Column(FLOAT)
     time_completed = Column(FLOAT)
+    recent_access = Column(FLOAT)
     current_question = Column(INTEGER)
-    length = Column(INTEGER)
 
     questions = relationship("DataQuestion", lazy='dynamic')
 
@@ -72,7 +75,15 @@ class DataQuestionStructure(Base):
         return "<QuestionStructure(id='%s', length='%s')>" % (
             self.question_structure_id, self.length)
 
-    # MAKE ITTERATIABLE
+    def completion_percent(self):
+        all_questions = self.questions.all()
+        total = len(all_questions)
+        correct = 0
+        for question in all_questions:
+            if question.correct:
+                correct += 1
+        return "%s" % int(100*(correct/total))
+
 
 
 class DataQuestion(Base):
@@ -83,17 +94,19 @@ class DataQuestion(Base):
     question_structure_itt = Column(INTEGER)
     question_pointer = Column(String)
     question_pickle = Column(BLOB)
+    question_description = Column(String)
     time_gen = Column(INTEGER)
     time_init = Column(FLOAT)
     time_completed = Column(FLOAT)
     current_timer = Column(INTEGER)
+    correct = Column(Boolean)
 
     answers = relationship("DataAnswer", lazy='dynamic')
 
     def get_question_status(self):
         if len(self.answers.all()) == 0:
             return "unanswered"
-        elif self.time_completed != 0.0:
+        elif self.correct:
             return "correct"
         else:
             return "incorrect"
@@ -116,6 +129,36 @@ class DataAnswer(Base):
         return "<Answer(id='%s', completion='%s')>" % (self.answer_id, self.correct)
 
 
+class DataInstitutes(Base):
+    __tablename__ = 'institutes'
+
+    institute_id = Column(INTEGER, primary_key=True)
+    name = Column(String)
+    leader_id = Column(INTEGER, ForeignKey('users.user_id'))
+
+    classes = relationship("DataClasses", lazy="dynamic")
+    leader = relationship("DataUser", back_populates="institutes")
+
+    def __str__(self):
+        return "Institute(id=%s, name=%s)" % (self.institute_id, self.name)
+
+
+class DataClasses(Base):
+    __tablename__ = 'classes'
+
+    class_id = Column(INTEGER, primary_key=True)
+    name = Column(String)
+    leader_id = Column(INTEGER, ForeignKey('users.user_id'))
+    institute_id = Column(INTEGER, ForeignKey('institutes.institute_id'))
+
+    institute = relationship("DataInstitutes", back_populates="classes")
+    leader = relationship("DataUser", back_populates="classes")
+
+
+    def __str__(self):
+        return "Class(id=%s, name=%s)" % (self.class_id, self.name)
+
+
 engine = create_engine(
     'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace')
 print(__name__ + ": Engine Created")
@@ -131,18 +174,10 @@ session = DBSession()
 print(__name__ + ": Session Initialised")
 
 if __name__ == "__main__":
-    test_user = session.query(DataUser).filter(DataUser.username == "oscar").one()
-    print(test_user)
-    print(test_user.question_structures.filter_by(question_structure_8id=test_user.current_structure).first())
 
-    from src.courses.ncea_level_1.maths.mcat import *
-    entered_question = pickle.dumps(MathsQuestion("1.1.1"))
-    q = DataQuestion(question_structure_id=1, question_structure_itt=0, question_pointer='ncea_level_1.maths.mcat.Question("1.1.1")',
-                 question_pickle=entered_question, time_init=0, time_completed=21345, current_timer=0)
-    session.add(q)
-    session.commit()
+    current_class = session.query(DataClasses).first()
 
-    question_data_testing = test_user.question_structures.first().questions.all()
-    print(question_data_testing)
-    question_testing = pickle.loads(question_data_testing[-1].question_pickle)
-    print(question_testing.question_raw)
+    print(current_class)
+    print(current_class.institute)
+    print(current_class.leader)
+    print(current_class.institute.leader)
