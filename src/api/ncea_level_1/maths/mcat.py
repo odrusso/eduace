@@ -713,12 +713,14 @@ class MathsQuestion():
             x = symbols("x")
             a, b, c = self.random_co(1, 15, 3)
             self.question_raw = Eq(factor(a * x + b), a * x - c, evaluate=False)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = [r'&\text{No solution.}']
 
         elif self.route == 2:
             x = symbols("x")
             a, b = self.random_co(1, 9, 2)
             self.question_raw = Eq(Add(factor(a * x + a * b), -1 * a * x, evaluate=False), b, evaluate=False)
+            self.question_aspects = [r'&\text{Solve: }', '&' + latex(self.question_raw)]
             self.answer_raw = [r'&\text{Infinite solutions.}']
 
         self.answer_aspects = latex(self.answer_raw)
