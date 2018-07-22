@@ -101,6 +101,8 @@ class DataQuestion(Base):
     current_timer = Column(INTEGER)
     correct = Column(Boolean)
 
+    structure = relationship("DataQuestionStructure", back_populates="questions")
+
     answers = relationship("DataAnswer", lazy='dynamic')
 
     def get_question_status(self):
@@ -114,6 +116,11 @@ class DataQuestion(Base):
     def __repr__(self):
         return "<Question(id='%s')>" % self.question_id
 
+    def get_recent_answer(self):
+        if len(self.answers.all()) == 0:
+            return ["", ""]
+        else:
+            return pickle.loads(self.answers.all()[-1].answer_pickle)
 
 class DataAnswer(Base):
     __tablename__ = 'answers'
@@ -161,17 +168,11 @@ class DataClasses(Base):
 
 engine = create_engine(
     'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace')
-print(__name__ + ": Engine Created")
-
 Base.metadata.bind = engine
-print(__name__ + ": Engine Bound to Base")
-
-
 DBSession = sessionmaker(bind=engine)
-print(__name__ + ": Engine Bound to Session")
-
 session = DBSession()
-print(__name__ + ": Session Initialised")
+print(__name__ + ": SQL Session Initialised")
+
 
 if __name__ == "__main__":
 

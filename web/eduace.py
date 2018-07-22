@@ -17,7 +17,9 @@ from typing import List
 from flask import Flask, render_template, g, jsonify, request, redirect, abort
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash
+from sqlalchemy import exc
 from time import time, strftime, gmtime
+from raven.contrib.flask import Sentry
 import json
 import pickle
 import operator
@@ -35,6 +37,8 @@ from generation import generate
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
+
+sentry = Sentry(app, dsn='https://ac173641bbe144a99d666c0dde8a388d:132651151e874f5981aaff223580ef34@sentry.io/1245240')
 
 app.config["SECRET_KEY"] = "somebullshitsecretkey"
 
@@ -144,7 +148,6 @@ def web_quiz(question_structure_number):
         abort(404)
     else:
         current_question_list = current_structure_object.questions.all()
-        quesiton_list = [[x.question_id, x.question_pointer] for x in current_question_list]
         sidebar_question_list = []
         for data_question_object in current_question_list:
             current = []
@@ -166,18 +169,25 @@ def web_quiz(question_structure_number):
 @login_required
 def load_question_json():
     question_id = request.args.get("question_id")
-    question = pickle.loads(session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first().question_pickle)
+    data_question_object = session.query(DataQuestion).filter(DataQuestion.question_id == question_id).first()
+
+    data_question_object.structure.current_question = question_id
+    session.commit()
+
+    question = pickle.loads(data_question_object.question_pickle)
+
     if type(question.answer_raw) == type([1, 2]):
         answer_length = len(question.answer_raw)
     else:
         answer_length = 1
-    print("-------------------------")
-    print(question_id)
-    print(question.question_raw)
-    print(question.answer_raw)
-    print("-------------------------")
 
-    return jsonify(question_latex=question.question_aspects, answer_length=answer_length)
+    # print(data_question_object.answers)
+
+    recent_answer = data_question_object.get_recent_answer()
+
+    print(recent_answer)
+
+    return jsonify(question_latex=question.question_aspects, answer_length=answer_length, recent_answer=recent_answer)
 
 
 @app.route("/quiz/_evaluate_answer")
@@ -238,8 +248,26 @@ def generate_demo_exam():
 
 @app.route("/careers")
 def pointless():
-    return "Uhh - bit you found an easter egg! But unfortunately we don't even make enough money to pay our own developers, let alone hire anyone :/ <br> If you're super keen to get involved, you could chuck it@eduace.co.nz an email :)"
+    return "Uhh - you found an easter egg! But unfortunately we don't even make enough money to pay our own developers, let alone hire anyone :/ <br> If you're super keen to get involved, you could chuck it@eduace.co.nz an email :)"
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('errors/error.html', refresh=redirect(request.url), error=e, error_short=str(e).split(":")[0]), 404
+
+@app.errorhandler(exc.InvalidRequestError)
+@app.errorhandler(exc.OperationalError)
+@app.errorhandler(exc.InterfaceError)
+def handle_invalid_sql_request(e):
+    print("Session has been rolled-back after error has occured")
+    return redirect(request.url)
+
+
+@app.errorhandler(AttributeError)
+def handle_invalid_data(e):
+    session.rollback()
+    print("Page has been forced reset due to an AttributeError")
+    return redirect(request.url)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

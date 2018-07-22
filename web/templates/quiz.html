@@ -81,6 +81,7 @@
                 for (itt=0; itt < answer_length; itt++) {
                     $("#answer_container").append('<span class="form-control answer_deletable" width="200px" id="answer_' + itt + '"></span>')
                     mq_objects.push(MQ.MathField(document.getElementById('answer_' + itt)));
+                    MQ.MathField(document.getElementById('answer_' + itt)).latex(data.recent_answer[itt])
                 }
                 renderMathInElement(
                     document.body,
@@ -103,7 +104,6 @@
                 for (itt=0; itt < mq_objects.length; itt++) {
                     entered_latex.push(MQ.MathField(document.getElementById("answer_" + itt)).latex());
                 }
-                alert(entered_latex)
                 $.getJSON('_evaluate_answer', {
                     entered_answers: JSON.stringify(entered_latex),
                     question_id: current_question_id
@@ -114,6 +114,8 @@
                             $("#question_sidebar_"+current_question_id).removeClass("bg-danger");
                         }
                         $("#question_sidebar_"+current_question_id).addClass("bg-success");
+                        $("#question_sidebar_"+current_question_id).addClass("text-white");
+
                     } else {
                         if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
                             null

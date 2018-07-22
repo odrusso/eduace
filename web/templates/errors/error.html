@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}EduAce Dashboard{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron">
+        <h2>{{ error_short }}</h2>
+        <h3>You can try <a href="{{ refresh }}">refreshing this page.</a></h3>
+        <p class="text"><small>{{ error }}</small></p>
+
+        <a href="/"><h3>Return home...</h3></a>
+        <p class="text">If this problem keeps happening, feel free to send us an email at it@eduace.co.nz, letting us knows what's happening.</p>
+    </div>
+
+{% endblock %}
