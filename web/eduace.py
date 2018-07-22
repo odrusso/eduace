@@ -181,11 +181,7 @@ def load_question_json():
     else:
         answer_length = 1
 
-    # print(data_question_object.answers)
-
     recent_answer = data_question_object.get_recent_answer()
-
-    print(recent_answer)
 
     return jsonify(question_latex=question.question_aspects, answer_length=answer_length, recent_answer=recent_answer)
 
