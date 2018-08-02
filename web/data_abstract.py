@@ -82,7 +82,8 @@ class DataQuestionStructure(Base):
         for question in all_questions:
             if question.correct:
                 correct += 1
-        return "%s" % int(100*(correct/total))
+        #return "%s" % int(100*(correct/total+1))
+        return "1"
 
 
 

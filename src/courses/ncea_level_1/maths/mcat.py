@@ -5,8 +5,10 @@
 from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations,implicit_multiplication_application, convert_xor, parse_expr
 from random import randint, shuffle
+import svgwrite
 from math import sqrt
-from latex2sympy.process_latex import process_sympy
+#from latex2sympy.process_latex import process_sympy
+from latex_to_sympy_internal import parse_latex
 
 
 class Data:
@@ -133,39 +135,29 @@ class MathsQuestion:
     def evaluate_answer(self, user_input):
         """evaluates the equivlence of a plaintext answer input"""
 
-        # Single answer evaluation
-        if len(user_input) == 1:
-            user_input = user_input[0]
-            user_input = user_input.replace(" ", "")
-            user_input = process_sympy(user_input)
+        # user_input = process_sympy(user_input)
 
-            if user_input == str(self.answer_raw):
-                return [True, "Correct"]
+        answer_results = []
+
+        for i in range(len(user_input)):
+            print("Evaluating answer %s" % user_input)
+            user_answer = user_input[i]
+            processed_sym = parse_latex(user_answer)
+
+            print("User input evaluated to %s" % processed_sym)
+            print("Model answer is %s" % self.answer_raw[i])
+
+            if processed_sym == self.answer_raw[i]: # direct match
+                print("Direct match")
+                answer_results.append(True)
             else:
-                try:
-                    # Testing
-                    # print("User answer: " +  str(user_parsed))
-                    # print("Real answer: " + str(self.answer_raw))
+                print("Seems to be false")
+                answer_results.append(False)
 
-                    if user_input == self.answer_raw:
-                        return [True, "Correct"]
-                    elif user_input - self.answer_raw == 0:
-                        return [True, "Correct", "Your answer *may* not be fully simplified"]
-                    elif simplify(simplify(user_input) - simplify(self.answer_raw)) == 0:
-                        return [False, "Partially Correct", "Your answer was not fully simplified"]
-                    else:
-                        return [False, "Incorrect"]
-                except SyntaxError:
-                    return [False, "Invalid entry"]
-                # except Exception as e:
-                #     print(e)
+        print("Returning %s" % answer_results)
 
-        # Multiple answer evaluation
-        else:
-            if user_input == self.answer_raw:
-                return [True, "Exact list match"]
-            else:
-                return [False, "I can't handle multiple answers yet!"]
+        return answer_results
+
 
     def generate_question_mcat_1_1_1(self):
         """Question MACT 1.1.1"""
@@ -185,7 +177,7 @@ class MathsQuestion:
             question_order = '' + str(xa) + 'x ' + "%+d" % (ca) + " %+dx" % (xb) + " %+d" % (cb)
             self.question_aspects = [r'\text{Simplify: }', question_order]
 
-            self.answer_raw = self.question_raw.simplify()
+            self.answer_raw = [self.question_raw.simplify()]
 
         elif self.route == 2:
             a = symbols("a")
@@ -196,7 +188,7 @@ class MathsQuestion:
 
             self.question_aspects = [r'\text{Simplify: }', '' + latex(self.question_raw)]
 
-            self.answer_raw = self.question_raw.simplify().expand()
+            self.answer_raw = [self.question_raw.simplify().expand()]
 
         elif self.route == 3:
             a, b = symbols("a b")
@@ -228,7 +220,7 @@ class MathsQuestion:
 
             self.question_aspects = [r'\text{Simplify: }', question_latex]
 
-            self.answer_raw = latex(self.question_raw.simplify().expand())
+            self.answer_raw = [self.question_raw.simplify().expand()]
 
         self.answer_aspects = [latex(self.answer_raw)]
 
@@ -889,6 +881,26 @@ class MathsQuestion:
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_4_1_5(self):
+        """Question MCAT 4.1.5"""
+        self.question_description = "Solving problems with quadratic equations"
+        x = symbols("x")
+        a = self.random_co(5, 9, 1)[0]
+        b = self.random_co(2, 4, 1)[0]
+        dwg = svgwrite.Drawing(viewBox= "0 0 "+ str(30+(10*a)+2) + " " + str(30+(10*b)+2))
+        gs = svgwrite.rgb(150, 150, 150)
+        bs = svgwrite.rgb(0, 0, 0)
+        dwg.add(dwg.rect(insert=(1, 1), size=((10 * (3 + a), 10 * (3 + b))), stroke=gs, fill_opacity=0))
+        dwg.add(dwg.text("x", font_size="6px", insert=(3, 18)))
+        dwg.add(dwg.text("x", font_size="6px", insert=(15, 7)))
+        dwg.add(dwg.rect(insert=(1, 1), size=(30, 30), stroke=bs, fill_opacity=0))
+        dwg.add(dwg.text(b, font_size="6px", insert=(3, 30 + (b / 0.2))))
+        dwg.add(dwg.text(a, font_size="6px", insert=(30 + (a / 0.2), 7)))
+        self.question_aspects = [r"\text{Find the area of this shape:}", dwg.tostring(),
+                                 r"\text{Give your answer in it's most expanded form}"]
+        self.question_raw = (x + a) * (x + b)
+        self.answer_raw = expand(self.question_raw)
+
 
 class MathsAnswer:
     def __init__(self, input_raw):
@@ -927,6 +939,17 @@ def testing():
     for line in new_question.answer_aspects:
         print(line)
 
+    answer_input = []
+    print(answer_input)
+
+    for i in new_question.answer_raw:
+        answer_input.append(input("Enter answer %s in LaTeX: " % i))
+
+
+    print("Response: ")
+    for res in new_question.evaluate_answer(answer_input):
+        print(res)
+
 def testing_repetition(question):
     init_printing()
     
@@ -940,6 +963,15 @@ def testing_repetition(question):
         print(new_question.answer_aspects)
         input()
 
+def evaluation_testing():
+    q = MathsQuestion("1.1.1")
+    print(q.question_aspects)
+    print(q.answer_raw)
+    latex_input = input()
+    print(q.evaluate_answer(latex_input))
+
 if __name__ == "__main__":
     testing()
     #testing_repetition('1.1.4')
+    #while True:
+    #    print(process_sympy(input()))

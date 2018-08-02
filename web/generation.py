@@ -17,7 +17,9 @@ from data_abstract import *
 
 def generate(user_id):
 
-    MATHS_QUESTION_LIST = ["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2","3.1.1","3.1.2","3.1.3","3.1.4","4.1.1","4.1.2","4.1.3","4.1.4","4.2.2",]
+    #MATHS_QUESTION_LIST = ["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2","3.1.1","3.1.2","3.1.3","3.1.4","4.1.1","4.1.2","4.1.3","4.1.4","4.2.2",]
+
+    MATHS_QUESTION_LIST = ["4.1.5", "4.1.5", "4.1.5"]
 
     new_question_structure = DataQuestionStructure(user_id=user_id, name="MCAT", time_generated=int(time()), recent_access=0)
 

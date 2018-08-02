@@ -71,8 +71,13 @@
                 $(".latex_deletable").remove()
                 var itt;
                 for (itt=0; itt < data.question_latex.length; itt++) {
-                    $(".latex_container").append('<span class="latex_deletable centering question_latex">$$' + data.question_latex[itt] + '$$</span>');
+                    if (data.question_latex[itt].startsWith("<svg")) {
+                        $(".latex_container").append('<span class="latex_deletable centering question_diagram">' + data.question_latex[itt] + '</span>');
+                    } else {
+                        $(".latex_container").append('<span class="latex_deletable centering question_latex">$$' + data.question_latex[itt] + '$$</span>');
+                    }
                 };
+                $("svg").addClass("img-fluid")
                 itt = 0;
                 $(".answer_deletable").remove()
                 var answer_length = data.answer_length;
