@@ -18,10 +18,13 @@ def pull_user(username, password):
         return [False, "username"]
     else:
         current_user = user_result[0]
-        if check_password_hash(current_user.passhash, password):
-            return [True, current_user.user_id]
+        if current_user.confirmed:
+            if check_password_hash(current_user.passhash, password):
+                return [True, current_user.user_id]
+            else:
+                return [False, "password"]
         else:
-            return [False, "password"]
+            return [False, "unconfirmed"]
 
 def get_user_from_id(id):
     try:
@@ -34,6 +37,14 @@ def get_user_from_id(id):
         get_user_from_id(id)
 
 
+def confirm_email_update(email):
+    try:
+        session.query(DataUser).filter(DataUser.email==email).first().confirmed = True
+        session.commit()
+    except:
+        return None
+
+
 
 class DataUser(Base):
     __tablename__ = 'users'
@@ -44,6 +55,7 @@ class DataUser(Base):
     passhash = Column(String)
     role = Column(String)
     score = Column(INTEGER)
+    confirmed = Column(Boolean)
 
     question_structures = relationship("DataQuestionStructure", lazy='dynamic')
 

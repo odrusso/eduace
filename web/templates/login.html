@@ -12,11 +12,14 @@
         <div class="card-header text-center h3">Login Here:</div>
         <div class="card-body">
             <form method="POST">
+                {% if failure == "unconfirmed"  %} <p class="text text-danger"> Your email address has not been confirmed.</p> <br> {% endif %}
+                {% if failure == "confirmed"  %} <p class="text text-success"> Your email address has been confirmed.</p> <br> {% endif %}
+
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Username: </span>
                     </div>
-                    <input class="form-control {% if failure == "username" %}is-invalid{% endif %}" name="username" type="text" required>
+                    <input class="form-control {% if failure == "username" or failure == "unconfirmed" %}is-invalid{% endif %}" name="username" type="text" required>
                     {% if failure == "username" %}
                     <div class="invalid-feedback">
                         Invalid username.

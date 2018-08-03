@@ -12,35 +12,42 @@ Written by Oscar Russo for EduAce NZ
 """
 
 # Dependency  Imports
-from typing import List
+# from typing import List
 
-from flask import Flask, render_template, g, jsonify, request, redirect, abort
+from flask import Flask, render_template, g, jsonify, request, redirect, abort, url_for
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
+from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash
 from sqlalchemy import exc
 from time import time, strftime, gmtime
+from itsdangerous import URLSafeSerializer
 from raven.contrib.flask import Sentry
 import json
 import pickle
 import operator
 import sys
-
 # Internal Imports
 sys.path.append('.')
 sys.path.append('./enviroment/lib/python3.6/site-packages')
-
-from src.courses import course_master
-from src.courses.ncea_level_1.maths import mcat
+# from src.courses import course_master
+# from src.courses.ncea_level_1.maths import mcat
 from data_abstract import *
 from generation import generate
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "thequickbrownfoxjumpesoverthelazydog"
+app.config["MAIL_SERVER"] = "smtp.mail.us-west-2.awsapps.com"
+app.config["MAIL_USERNAME"] = "it@eduace.co.nz"
+app.config["MAIL_PASSWORD"] = "3nK-6mG-5Le-SS8"
+app.config["MAIL_PORT"] = 465
+app.config["MAIL_USE_SSL"] = True
+app.config["MAIL_USE_TLS"] = False
+mail = Mail(app)
 login_manager = LoginManager(app)
+email_serialiser = URLSafeSerializer(app.config["SECRET_KEY"])
+# sentry = Sentry(app, dsn='https://ac173641bbe144a99d666c0dde8a388d:132651151e874f5981aaff223580ef34@sentry.io/1245240')
 
-sentry = Sentry(app, dsn='https://ac173641bbe144a99d666c0dde8a388d:132651151e874f5981aaff223580ef34@sentry.io/1245240')
-
-app.config["SECRET_KEY"] = "somebullshitsecretkey"
 
 class User(UserMixin):
     def __init__(self, id):
@@ -73,7 +80,8 @@ def web_login():
 
 
 @app.route('/login', methods=['POST'])
-def verify_login():
+@app.route('/confirm_email/<token>', methods=['POST'])
+def verify_login(token=None):
     username = request.form['username']
     password = request.form['password']
     result = pull_user(username, password)
@@ -83,6 +91,9 @@ def verify_login():
         return redirect("/dashboard")
     elif result[1] == 'username':
         return render_template("/login.html", failure="username")  # failure state required
+    elif result[1] == 'unconfirmed':
+        # send another email
+        return render_template("/login.html", failure="unconfirmed")  # failure state required
     else:
         return render_template("/login.html", failure="password")  # failure state required
 
@@ -199,7 +210,7 @@ def evaluate_answer():
                         answer_pickle=pickle.dumps(entered_answer),
                         time_entered=time(),
                         timer_current=0,
-                        correct=correct[0])
+                        correct= False not in correct)
     session.add(answer)
     if answer.correct:
         data_question.correct = 1
@@ -225,15 +236,40 @@ def register_user():
             return render_template("register.html", error="Password must be greater than 8 characters!")
 
         else:
-            new_user = DataUser(username=request.form['username'], passhash=generate_password_hash(password), email=request.form["email"], role="demo", score=0)
+
+            confirm_token = email_serialiser.dumps(request.form["email"], salt="email-confirm")
+            confirm_message = Message("Confirm Email", sender="it@eduace.co.nz", recipients=[request.form["email"]])
+            confirm_link = url_for("confirm_email", token=confirm_token, _external=True)
+            confirm_message.body = "Confirm: <a>%s</a>" % confirm_link
+
+            mail.send(confirm_message)
+
+            new_user = DataUser(username=request.form['username'], passhash=generate_password_hash(password),
+                                email=request.form["email"], confirmed=False, role="demo", score=0)
             session.add(new_user)
             session.commit()
+
             return render_template("register_success.html")
     else:
         if not current_user.is_anonymous:
             return redirect('/dashboard')
         else:
             return render_template("register.html", error="")
+
+
+@app.route("/confirm_email/<token>")
+def confirm_email(token):
+    try:
+        email = email_serialiser.loads(token, salt="email-confirm")
+        confirm_email_update(email)
+        return render_template("/login.html", failure="confirmed")
+    except:
+        return "<h1>Invalid confirmation</h1>"
+
+
+@app.route("/register_success.html")
+def testingbla():
+    return render_template("register_success.html")
 
 
 @app.route("/_generate_mcat_exam")

@@ -135,6 +135,8 @@ def parse_latex(input_latex):
     input_latex = remove_left_right(input_latex)
     input_latex = decompose_frac(input_latex)
     input_latex = decompose_surds(input_latex)
+    input_latex = input_latex.replace("{", "(")
+    input_latex = input_latex.replace("}", ")")
 
     tfms = (standard_transformations + (implicit_multiplication_application, convert_xor, split_symbols))
 
