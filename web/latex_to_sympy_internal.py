@@ -8,6 +8,7 @@ def remove_left_right(s):
     return s
 
 
+
 def decompose_frac(s):
     """Please don't touch this .... You have been warned!
     Removes \frac latex elements from a string and turns them into infix-happy elements hopefully
@@ -70,6 +71,8 @@ def decompose_surds(s):
         Should work in the form of both \sqrt{expression} and \sqrt{base}{expression}
         Will replace these sections with (expression)^(1/base)
     """
+    s = s.replace("[","{")
+    s = s.replace("]","}")
     k = []
     itt = 0
 
@@ -131,12 +134,15 @@ def parse_latex(input_latex):
     Only supports normal operations { + - * ^ / ( ) }, surds, and fractions.
     Uses parse_expr, so not really injection safe.
     """
-    input_latex = input_latex.replace(" ", "")
-    input_latex = remove_left_right(input_latex)
-    input_latex = decompose_frac(input_latex)
-    input_latex = decompose_surds(input_latex)
-    input_latex = input_latex.replace("{", "(")
-    input_latex = input_latex.replace("}", ")")
+    input_latex = input_latex.replace(" ", "")          # remove spaces
+    input_latex = input_latex.replace(r"\le", "<=")     # replace less-than-equal-to
+    input_latex = input_latex.replace(r"\ge", ">=")     # replace greater-than-equal-to
+    input_latex = input_latex.replace(r"\cdot", "*")    # replace cdot with times
+    input_latex = remove_left_right(input_latex)        # removes left right's
+    input_latex = decompose_frac(input_latex)           # decomposes fracs
+    input_latex = decompose_surds(input_latex)          # decomposes surds
+    input_latex = input_latex.replace("{", "(")         # replaces all right curly braces
+    input_latex = input_latex.replace("}", ")")         # replaces all left curly braces
 
     tfms = (standard_transformations + (implicit_multiplication_application, convert_xor, split_symbols))
 
@@ -146,7 +152,14 @@ def parse_latex(input_latex):
 
 
 if __name__ == "__main__":
-    print("Testing code...")
-    s2 = r"\frac{ - b + \sqrt{b^2-4ac}}{2a}"
-    print(parse_latex(s2))
+    #print("Testing code...")
+    #s2 = r"\frac{ - b + \sqrt{b^2-4ac}}{2a}"
+    #print(parse_latex(s2))
+    #s3 = r"\frac{ - b + \sqrt{}{b^2-4ac}}{2a}"
+    #print(parse_latex(s3))
+    #s4 = r"\frac{ - b + \sqrt{b^2-4ac}}{2a}"
+    #print(type(parse_latex(s4)))
+    s5 = r"\frac{-b}{\sqrt[\frac{1}{e}]{x^2}}"
+    print(parse_latex(s5))
+
     # s3 =
