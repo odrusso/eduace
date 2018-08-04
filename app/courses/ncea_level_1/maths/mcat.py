@@ -5,6 +5,7 @@
 from sympy import *
 from random import randint, shuffle
 import svgwrite
+from latex_to_sympy_internal import parse_latex
 
 
 class Data:
@@ -136,8 +137,8 @@ class MathsQuestion:
         answer_results = []
 
         for i in range(len(user_input)):
-            print("Evaluating answer for:")
-            print(user_input)
+            # print("Evaluating answer for:")
+            # print(user_input)
 
             if "=" in user_input:
                 # Ignore equivlences of the subject,
@@ -150,19 +151,19 @@ class MathsQuestion:
 
 
 
-            print("User input evaluated to %s" % processed_sym)
-            print("Model answer is")
-            print(self.answer_raw)
-            print("For itteration %s" % i)
+            # print("User input evaluated to %s" % processed_sym)
+            # print("Model answer is")
+            # print(self.answer_raw)
+            # print("For itteration %s" % i)
 
             if processed_sym == self.answer_raw[i]: # direct match
-                print("Direct match")
+                # print("Direct match")
                 answer_results.append(True)
             else:
-                print("Seems to be false")
+                # print("Seems to be false")
                 answer_results.append(False)
 
-        print("Returning %s" % answer_results)
+        # print("Returning %s" % answer_results)
 
         return answer_results
 

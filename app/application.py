@@ -23,21 +23,19 @@ from raven.contrib.flask import Sentry
 import json
 import pickle
 import operator
-import sys
 
 # Internal Imports
 from data_abstract import *
-from generation import generate
+from config import SECRET_KEY, MAIL_SERVER, MAIL_USERNAME, MAIL_PASSWORD, SENTRY_URL, HOST, DEBUG
 
 
 application = app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "thequickbrownfoxjumpesoverthelazydog"
+app.config["SECRET_KEY"] = SECRET_KEY
 
-app.config["DB_ENGINE"] = 'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace'
-app.config["MAIL_SERVER"] = "smtp.mail.us-west-2.awsapps.com"
-app.config["MAIL_USERNAME"] = "it@eduace.co.nz"
-app.config["MAIL_PASSWORD"] = "3nK-6mG-5Le-SS8"
+app.config["MAIL_SERVER"] = MAIL_SERVER
+app.config["MAIL_USERNAME"] = MAIL_USERNAME
+app.config["MAIL_PASSWORD"] = MAIL_PASSWORD
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
 app.config["MAIL_USE_TLS"] = False
@@ -46,7 +44,7 @@ mail = Mail(app)
 login_manager = LoginManager(app)
 email_serialiser = URLSafeSerializer(app.config["SECRET_KEY"])
 
-#sentry = Sentry(app, dsn='https://ac173641bbe144a99d666c0dde8a388d:132651151e874f5981aaff223580ef34@sentry.io/1245240')
+sentry = Sentry(app, dsn=SENTRY_URL)
 
 
 class User(UserMixin):
@@ -302,4 +300,4 @@ def handle_invalid_data(e):
     return redirect(request.url)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host=HOST, debug=DEBUG)
