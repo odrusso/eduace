@@ -1190,7 +1190,8 @@ def evaluation_testing():
     print(q.evaluate_answer(latex_input))
 
 if __name__ == "__main__":
-    testing()
+    print(dir(MathsQuestion))
+    # testing()
     #testing_repetition('1.1.4')
     #while True:
     #    print(process_sympy(input()))
