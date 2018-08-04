@@ -1,3 +1,7 @@
+# utf-8
+# Python 3.6, SymPy 1.1.1
+# http://github.com/odrusso/eduace
+
 from sympy import *
 from sympy.parsing.sympy_parser import standard_transformations, split_symbols, implicit_multiplication_application, convert_xor, parse_expr
 

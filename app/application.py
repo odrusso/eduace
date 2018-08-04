@@ -12,8 +12,6 @@ Written by Oscar Russo for EduAce NZ
 """
 
 # Dependency  Imports
-# from typing import List
-
 from flask import Flask, render_template, g, jsonify, request, redirect, abort, url_for
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_mail import Mail, Message
@@ -26,27 +24,29 @@ import json
 import pickle
 import operator
 import sys
+
 # Internal Imports
-sys.path.append('.')
-sys.path.append('./enviroment/lib/python3.6/site-packages')
-# from src.courses import course_master
-# from src.courses.ncea_level_1.maths import mcat
 from data_abstract import *
 from generation import generate
 
 
-app = Flask(__name__)
+application = app = Flask(__name__)
+
 app.config["SECRET_KEY"] = "thequickbrownfoxjumpesoverthelazydog"
+
+app.config["DB_ENGINE"] = 'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace'
 app.config["MAIL_SERVER"] = "smtp.mail.us-west-2.awsapps.com"
 app.config["MAIL_USERNAME"] = "it@eduace.co.nz"
 app.config["MAIL_PASSWORD"] = "3nK-6mG-5Le-SS8"
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
 app.config["MAIL_USE_TLS"] = False
+
 mail = Mail(app)
 login_manager = LoginManager(app)
 email_serialiser = URLSafeSerializer(app.config["SECRET_KEY"])
-# sentry = Sentry(app, dsn='https://ac173641bbe144a99d666c0dde8a388d:132651151e874f5981aaff223580ef34@sentry.io/1245240')
+
+#sentry = Sentry(app, dsn='https://ac173641bbe144a99d666c0dde8a388d:132651151e874f5981aaff223580ef34@sentry.io/1245240')
 
 
 class User(UserMixin):
@@ -295,7 +295,7 @@ def handle_invalid_sql_request(e):
     return redirect(request.url)
 
 
-@app.errorhandler(AttributeError)
+#@app.errorhandler(AttributeError)
 def handle_invalid_data(e):
     session.rollback()
     print("Page has been forced reset due to an AttributeError")

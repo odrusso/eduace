@@ -1,3 +1,7 @@
+# utf-8
+# Python 3.6, SymPy 1.1.1
+# http://github.com/odrusso/eduace
+
 # External Imports
 from sqlalchemy import create_engine, Column, ForeignKey, INTEGER, String, BLOB, FLOAT, Boolean
 from sqlalchemy.exc import InternalError, StatementError
@@ -6,6 +10,8 @@ from sqlalchemy.orm import sessionmaker, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 import pickle
 
+#Internal Imports
+from application import app
 
 Base = declarative_base()
 
@@ -43,7 +49,6 @@ def confirm_email_update(email):
         session.commit()
     except:
         return None
-
 
 
 class DataUser(Base):
@@ -179,12 +184,11 @@ class DataClasses(Base):
         return "Class(id=%s, name=%s)" % (self.class_id, self.name)
 
 
-engine = create_engine(
-    'mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace')
+engine = create_engine(app.config["DB_ENGINE"])
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-print(__name__ + ": SQL Session Initialised")
+# print(__name__ + ": SQL Session Initialised")
 
 
 if __name__ == "__main__":

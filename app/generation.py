@@ -1,25 +1,23 @@
+# utf-8
+# Python 3.6, SymPy 1.1.1
+# http://github.com/odrusso/eduace
+
 # Dependency  Imports
-from flask import Flask, render_template, g, jsonify, request, redirect
-from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 import pickle
-import operator
 from time import time
-import sys
 
 # Internal Imports
-sys.path.append('.')
-sys.path.append('./enviroment/lib/python3.6/site-packages')
+from courses.ncea_level_1.maths import mcat
+from data_abstract import session, DataQuestionStructure, DataQuestion, DataUser
 
-
-from src.courses import course_master
-from src.courses.ncea_level_1.maths import mcat
-from data_abstract import *
 
 def generate(user_id):
 
-    MATHS_QUESTION_LIST = sorted["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2", "2.3.1", "2.3.3", "2.3.4", "2.3.5", "3.1.1","3.1.2","3.1.3", "3.1.4","3.2.1","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5","4.2.1", "4.2.2",]
+    #MATHS_QUESTION_LIST = sorted(["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2", "2.3.1", "2.3.3", "2.3.4", "2.3.5", "3.1.1","3.1.2","3.1.3", "3.1.4","3.2.1","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5","4.2.1", "4.2.2"])
 
     # MATHS_QUESTION_LIST = ["4.1.5", "4.1.5", "4.1.5"]
+
+    MATHS_QUESTION_LIST = ["1.1.1"]
 
     new_question_structure = DataQuestionStructure(user_id=user_id, name="MCAT", time_generated=int(time()), recent_access=0)
 
@@ -55,4 +53,4 @@ def generate(user_id):
 
 
 if __name__ == "__main__":
-    generate(1)
+    generate(14)
