@@ -978,6 +978,16 @@ class MathsQuestion:
         self.question_aspects = ["Simplify", latex(self.question_raw[0])]
 
 
+    def generate_question_mcat_2_3_4(self):
+        x = symbols("x")
+        a, b, c, d = self.random_co(2, 8, 4)
+        top = Mul(a*x**b, S(1)/c, evaluate=False)
+        bottom = Mul(d, S(1)/x , evaluate=False)
+        self.question_raw = [Mul(top, 1/bottom, evaluate=False)]
+        self.question_aspects = [latex(top) + "\div" + latex(bottom)]
+        self.answer_raw = [simplify(self.question_raw[0])]
+
+
 
 class MathsAnswer:
     def __init__(self, input_raw):
