@@ -2,16 +2,20 @@
 # Python 3.6, SymPy 1.1.1
 # http://github.com/odrusso/eduace
 
+
 # External Imports
 from sqlalchemy import create_engine, Column, ForeignKey, INTEGER, String, BLOB, FLOAT, Boolean
 from sqlalchemy.exc import InternalError, StatementError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
-import pickle
+from time import time
+import pickle#
 
 #Internal Imports
-from application import app
+from courses.ncea_level_1.maths import mcat
+from config import DB_ENGINE
+
 
 Base = declarative_base()
 
@@ -184,7 +188,49 @@ class DataClasses(Base):
         return "Class(id=%s, name=%s)" % (self.class_id, self.name)
 
 
-engine = create_engine(app.config["DB_ENGINE"])
+def generate(user_id):
+
+    #MATHS_QUESTION_LIST = sorted(["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2", "2.3.1", "2.3.3", "2.3.4", "2.3.5", "3.1.1","3.1.2","3.1.3", "3.1.4","3.2.1","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5","4.2.1", "4.2.2"])
+
+    # MATHS_QUESTION_LIST = ["4.1.5", "4.1.5", "4.1.5"]
+
+    MATHS_QUESTION_LIST = ["1.1.1"]
+
+    new_question_structure = DataQuestionStructure(user_id=user_id, name="MCAT", time_generated=int(time()), recent_access=0)
+
+    session.add(new_question_structure)
+
+    session.commit()
+
+    st_id = new_question_structure.question_structure_id
+
+    session.query(DataUser).filter(DataUser.user_id == user_id).one().current_structure = st_id
+
+    print(st_id)
+
+    itt = 0
+    for question in MATHS_QUESTION_LIST:
+        question_object = mcat.MathsQuestion(question)
+        print(question_object)
+        data_question_object = DataQuestion(question_pointer = "courses.ncea_level_1.maths.%s" % question,
+                                            question_pickle=pickle.dumps(question_object),
+                                            question_description=question_object.question_description,
+                                            question_structure_itt=itt,
+                                            question_structure_id=st_id,
+                                            time_gen=int(time()),
+                                            correct=0
+                                            )
+        session.add(data_question_object)
+
+    session.commit()
+
+    new_question_structure.current_question = new_question_structure.questions[0].question_id
+
+    session.commit()
+
+
+engine = create_engine(DB_ENGINE)
+#engine = create_engine("mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace")
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -193,9 +239,9 @@ session = DBSession()
 
 if __name__ == "__main__":
 
-    current_class = session.query(DataClasses).first()
-
-    print(current_class)
-    print(current_class.institute)
-    print(current_class.leader)
-    print(current_class.institute.leader)
+    #current_class = session.query(DataClasses).first()
+    #print(current_class)
+    #print(current_class.institute)
+    #print(current_class.leader)
+    #print(current_class.institute.leader)
+    generate(14)
