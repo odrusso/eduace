@@ -1,0 +1,7 @@
+sympy
+Flask
+Flask-Login
+Flask-Security
+svgwrite
+SQLAlchemy
+itsdangerous
