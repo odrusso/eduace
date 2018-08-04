@@ -849,6 +849,8 @@ class MathsQuestion:
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+
+
     def generate_question_mcat_4_2_2(self):
         """Question MCAT 4.2.2"""
 
@@ -915,6 +917,67 @@ class MathsQuestion:
         self.question_raw = (x + a) * (x + b)
         self.answer_raw = expand(self.question_raw)
 
+    def generate_question_mcat_3_2_1(self):
+        self.question_description = "Solving Linear Inequalities"
+
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        x = symbols('x')
+
+        ieq = ["<", "<=", ">", ">="]
+        opp = {"<": ">", "<=": ">=", ">": "<", ">=": "<="}
+
+        shuffle(ieq)
+        ieq = ieq[0]
+
+        if self.route == 1:
+            a = self.random_co(2, 10, 1)[0]
+            b, c = self.random_co(-10, 10, 2, one=False)
+
+            self.question_raw = [eval("((a * x) + c)" + ieq + "((a * b) + c)")]
+            self.answer_raw = [eval("x" + ieq + "b")]
+
+        elif self.route == 2:
+            a, d = self.random_co(-8, 8, 2, one=False)
+            b, c = self.random_co(-10, 10, 2, one=False)
+
+            self.question_raw = [eval("(((a+d) * x) + c)" + ieq + "((d * x) + (a * b) + c)")]
+            if a < 0:
+                ieq = opp[ieq]
+            self.answer_raw = [simplify(eval("x" + ieq + "b"))]
+
+        self.question_aspects = ["Simplify", latex(self.question_raw[0])]
+
+
+    def generate_question_mcat_2_3_5(self):
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        a = symbols("a")
+        pm = self.random_co(-1, 1, 1, one=True)[0]
+
+        self.route = 3
+
+        if self.route == 1:
+            a1, a2 = self.random_co(2, 6, 2)
+            self.question_raw = [Add(a/a1, pm*a/a2, evaluate=False)]
+            self.answer_raw = [simplify(self.question_raw[0])]
+
+        elif self.route == 2:
+            a1, a2, a3, a4 = self.random_co(2, 8, 4)
+            self.question_raw = [Add(Mul((a1*a), S(1)/a2, evaluate=False), pm*Mul((a3*a), S(1)/a4, evaluate=False))]
+            self.answer_raw = [simplify(self.question_raw[0])]
+
+        elif self.route == 3:
+            a1, a2, a3 = self.random_co(2, 7, 3)
+            self.question_raw = [Add(a1/a, pm * (a2 / (a + a3)), evaluate=False)]
+            self.answer_raw = [simplify(self.question_raw[0])]
+
+        self.question_aspects = ["Simplify", latex(self.question_raw[0])]
+
+
 
 class MathsAnswer:
     def __init__(self, input_raw):
@@ -944,7 +1007,7 @@ def testing():
     print()
 
     print("Answer Raw: ")
-    print(latex(new_question.answer_raw))
+    print(new_question.answer_raw)
 
     print()
 
