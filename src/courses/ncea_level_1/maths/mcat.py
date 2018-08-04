@@ -987,6 +987,138 @@ class MathsQuestion:
         self.question_aspects = [latex(top) + "\div" + latex(bottom)]
         self.answer_raw = [simplify(self.question_raw[0])]
 
+    def generate_question_mcat_2_3_3(self):
+
+        if self.route is None:
+            self.route == self.random_co(1, 2, 1)[0]
+
+        # self.route = 2
+
+        if self.route == 1:
+            x, y = symbols("x y")
+            a, c, d, e = self.random_co(2, 10, 4, one=False)
+            b, f = self.random_co(2, 5, 2)
+
+            t1 = a * x ** b
+            b1 = c * y
+            t2 = d * y
+            b2 = e * x ** f
+
+            l = Mul(t1, 1/b1)
+            r = Mul(t2, 1/b2)
+            self.question_raw = [Mul(l, r, evaluate=False)]
+            self.answer_raw = [simplify(simplify(t1 * t2) / simplify(b1 * b2))]
+            self.question_aspects = [latex(l) + r"\times" + latex(r)]
+
+        if self.route == 2:
+            x, y, z = symbols("x y z")
+            a, c, d, e = self.random_co(2, 10, 4, one=False)
+            a1, a2 = self.random_co(-3, 3, 2, zero=True)
+            b, f = self.random_co(2, 5, 2)
+
+            t1 = a * (x ** b) * a1 * z
+            b1 = c * y
+            t2 = d * y * a2 * z
+            b2 = e * x ** f
+
+            l = Mul(t1, 1/b1)
+            r = Mul(t2, 1/b2)
+            self.question_raw = [Mul(l, r, evaluate=False)]
+            self.answer_raw = [simplify(simplify(t1 * t2) / simplify(b1 * b2))]
+            self.question_aspects = [latex(l) + r"\times" + latex(r)]
+
+
+    def generate_question_mcat_2_3_1(self):
+        if self.route is None:
+            self.route == self.random_co(1, 3, 1)[0]
+
+        # self.route = 3
+
+        if self.route == 1:
+            a = symbols("a")
+            a1, a2 = self.random_co(-3, 10, 2, one=False)
+            a3, a4 = self.random_co(2, 6, 2)
+
+            self.question_raw = [ Mul(a1 * a ** a3, 1/(a2 * a ** a4), evaluate=False) ]
+            self.question_aspects = ["Simplify", r"\frac{%s}{%s}" % (latex(a1 * a ** a3), latex(a2 * a ** a4))]
+            self.answer_raw = [simplify(S(a1)/a2 * a ** (a3 - a4))]
+
+        elif self.route == 2:
+            x, y = symbols("x y")
+            a1, a2 = self.random_co(-3, 10, 2, one=False)
+            a3, a4 = self.random_co(2, 6, 2)
+
+            self.question_raw = [Mul(a1 * x ** a3, 1 / (a2 * (x ** a4) * y), evaluate=False)]
+            self.question_aspects = ["Simplify", r"\frac{%s}{%s}" % (latex(a1 * a ** a3), latex(a2 * (a ** a4) * y))]
+            self.answer_raw = [simplify((S(a1) / a2) * x ** (a3 - a4)) / y]
+
+        elif self.route == 3:
+            x, y = symbols("x y")
+            a1, a4 = self.random_co(-3, 10, 2, one=False)
+            a2, a3, a5, a6 = self.random_co(2, 6, 4)
+
+            self.question_raw = [Mul(a1 * (x ** a2) * (y ** a3), 1 / (a4 * (x ** a5) * (y * a6)), evaluate=False)]
+            self.question_aspects = ["Simplify", r"\frac{%s}{%s}" % (latex(a1 * (x ** a2) * (y ** a3)), latex(a4 * (x ** a5) * (y * a6)))]
+            self.answer_raw = [simplify((S(a1) / a4) * x ** (a2 - a5) * y ** (a3 - a6)) / y]
+
+
+    def generate_question_mcat_4_2_1(self):
+        if self.route is None:
+            self.route == self.random_co(1, 3, 1)[0]
+
+        self.route = 3
+
+        if self.route == 1:
+            x = symbols("x")
+            a = self.random_co(2, 10, 1)[0]
+
+            if a in [2]: m = 8
+            elif a in [2, 3, 4]: m = 4
+            elif a in [5]: m = 3
+            elif a in [6, 7, 8, 9]: m = 2
+            else: m = 4
+
+            b = self.random_co(2, m, 1)[0]
+
+            self.question_raw = [Eq(a ** x, a ** b, evaluate=False)]
+            self.answer_aspects = ["Find x", latex(self.question_raw[0])]
+            self.answer_raw = [b]
+
+        elif self.route == 2:
+            x = symbols("x")
+            a = self.random_co(2, 10, 1)[0]
+
+            if a in [2]: m = 8
+            elif a in [2, 3, 4]: m = 4
+            elif a in [5]: m = 3
+            elif a in [6, 7, 8, 9]: m = 2
+            else: m = 4
+
+            b = self.random_co(2, m, 1)[0]
+
+            c = self.random_co(-a**b, a**b, 1)[0]
+
+            self.question_raw = [Eq(a ** x + c, (a ** b) + c, evaluate=False)]
+            self.answer_aspects = ["Find x", latex(self.question_raw[0])]
+            self.answer_raw = [b]
+
+        elif self.route == 3:
+            x = symbols("x")
+            a = self.random_co(2, 10, 1)[0]
+
+            if a in [2]: m = 8
+            elif a in [2, 3, 4]: m = 4
+            elif a in [5]: m = 3
+            elif a in [6, 7, 8, 9]: m = 2
+            else: m = 4
+
+            b = self.random_co(2, m, 1)[0]
+
+            c = self.random_co(-b, b, 1)[0]
+
+            self.question_raw = [Eq(a ** (x + c), (a ** b), evaluate=False)]
+            self.answer_aspects = ["Find x", latex(self.question_raw[0])]
+            self.answer_raw = [b-c]
 
 
 class MathsAnswer:
