@@ -21,11 +21,13 @@
     <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+
     {% block imports %}{% endblock %}
 
 </head>
 
-{% block bodydef %}<body class="bg-secondary">{% endblock %}
+{% block bodydef %}<body class="container">{% endblock %}
 
     {% block body %}{% endblock %}
 

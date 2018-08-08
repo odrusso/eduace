@@ -299,5 +299,9 @@ def handle_invalid_data(e):
     print("Page has been forced reset due to an AttributeError")
     return redirect(request.url)
 
+@app.route("/test")
+def test():
+    return render_template("/dashboard.html")
+
 if __name__ == '__main__':
     app.run(host=HOST, debug=DEBUG)

@@ -5,91 +5,26 @@
 
 {% block body %}
 
-    {{ nav_bar_dash() }}
-    <br>
-    <div class="container">
-        <div class="jumbotron">
-            <p class="lead text-center">Get learned!</p>
-            <br><br>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-2">
-                        <h3 class="h3">Select:</h3>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">Select a question set...</button>
-                            <div class="dropdown-menu">
-                                <h6 class="dropdown-header">Recent:</h6>
-                                <a class="dropdown-item row" href='/quiz/{{ structure_recent["id"] }}'>
-                                    <div class="col-2">{{ structure_recent["name"] }}</div>
-                                    <small>
-                                    <div class="col-10">
-                                        <div class="row">
-                                            <div class="col-7">Completion:</div>
-                                            <div class="col-5">{{ structure_recent["completeness"] }}%</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-7">Generated:</div>
-                                            <div class="col-5">{{ structure_recent["init_time"] }}</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-7">Recent:</div>
-                                            <div class="col-5">{{ structure_recent["recent_time"] }}</div>
-                                        </div>
-                                    </div>
-                                    </small>
-                                </a>
+    <!-- Static Desktop Sidebar -->
+    <div class="col-md-2">
 
-                                <div class="dropdown-divider"></div>
-
-                                {% for structure in question_structures %}
-                                <a class="dropdown-item row" href='/quiz/{{ structure["id"] }}'>
-                                    <div class="col-2">{{ structure["name"] }}</div>
-                                    <small>
-                                    <div class="col-10">
-                                        <div class="row">
-                                            <div class="col-7">Completion:</div>
-                                            <div class="col-5">{{ structure["completeness"] }}%</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-7">Generated:</div>
-                                            <div class="col-5">{{ structure["init_time"] }}</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-7">Recent:</div>
-                                            <div class="col-5">{{ structure["recent_time"] }}</div>
-                                        </div>
-                                    </div>
-                                    </small>
-                                </a>
-                                <br>
-                                {% endfor %}
-
-                                <div class="dropdown-divider"></div>
-
-                                <a class="dropdown-item row" href='_generate_mcat_exam'>
-                                    <div class="col-2">Generate new...</div>
-                                </a>
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row d-none">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2">
-
-                    </div>
-                    <div class="col-md-2">
-
-                    </div>
-                    <div class="col-md-4"></div>
-                </div>
-            </div>
+        <!-- Logo Row -->
+        <div class="row">
+            <img class="sidebar_logo_image" src="{{ url_for('static', filename='logo.png') }}">
         </div>
+
+        <!-- Home Row -->
+        <div class="row">
+            <img src="{{ url_for('static', filename='icons/house.svg') }}">
+            <p class="text">Home</p>
+        </div>
+
+
+    </div>
+
+    <!-- Static Desktop Content -->
+    <div class="col-md-12">
+
     </div>
 
 {% endblock %}

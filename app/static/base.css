@@ -1,0 +1,9 @@
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: rgb(246, 245, 250);
+}
+.sidebar_logo_image {
+    width: 40px;
+    height: 40px;
+}
