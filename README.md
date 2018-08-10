@@ -5,3 +5,13 @@
 Eduace NZ development, repository, and (some) documentation
 
 # Installation
+
+`pip3 install -r requirements.txt` will install all dependencies for the project. It is reccomended that you use a Python Virtual Enviroment or a doker instance to minimise conflicts. 
+
+A `config.py` file will need to be created with the addresses of the databases, secret keys, and other sensitive variables. 
+
+# To use
+`python3 app.py` will launch the Flask development server.
+
+# To deploy
+It is reccomended to run the Flask application within a Gunicorn instance (inside a Virtual Enviroment), that is reverse-proxied through an Nginx or Apache webserver for security. A hypervisor such as "Supervisor" is reccomended for realtime analytics. 
