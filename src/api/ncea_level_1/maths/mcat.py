@@ -1015,6 +1015,62 @@ class MathsQuestion():
 
         self.answer_aspects = [latex(self.answer_raw)]
 
+    def generate_question_mcat_5_1_3(self):
+        """MCAT Question 5.1.3"""
+
+        self.question_description = "Solving simultaneous equations by substitution."
+
+        if self.route is None:
+            self.route = self.random_co(1, 2, 1)[0]
+
+        self.route = 2
+
+        if self.route == 1:
+            x, y = symbols("x y")
+            a, b, c, d, e = self.random_co(-8, 8, 5, zero=False)
+            xsoln = Rational((e - b * d), (a * d + c))
+            ysoln = Rational((a * e + b * c), (a * d + c))
+
+            while type(xsoln) and type(ysoln) is not Integer:
+                a, b, c, d, e = self.random_co(-8, 8, 5, zero=False)
+                xsoln = Rational((e - b * d), (a * d + c))
+                ysoln = Rational((a * e + b * c), (a * d + c))
+
+            eqn1 = Eq(y, a * x + b)
+            eqn2 = Eq(c * x + d * y, e)
+
+            self.question_aspects = [r'\text{Find } x,y \text{ such that }',
+                                     r'\begin{array}{ccc}'
+                                     r'&' + latex(eqn1) + r'\\'
+                                     r'&' + latex(eqn2),
+                                     r'\end{array}']
+
+            self.answer_raw = (xsoln, ysoln)
+
+        if self.route == 2:
+            x, y = symbols("x y")
+            a, b, c, d = self.random_co(-8, 8, 4, zero=False)
+            xsoln = Rational((d - b), (a - c))
+            ysoln = Rational((a * d - b * c), (a - c))
+
+            while type(xsoln) and type(ysoln) is not Integer:
+                a, b, c, d = self.random_co(-8, 8, 4, zero=False)
+                xsoln = Rational((d - b), (a - c))
+                ysoln = Rational((a * d - b * c), (a - c))
+
+            eqn1 = Eq(y, a * x + b)
+            eqn2 = Eq(y, c * x + d)
+
+            self.question_aspects = [r'\text{Find } x,y \text{ such that }',
+                                     r'\begin{array}{ccc}'
+                                     r'&' + latex(eqn1) + r'\\'
+                                     r'&' + latex(eqn2),
+                                     r'\end{array}']
+
+            self.answer_raw = (xsoln, ysoln)
+
+        self.answer_aspects = [latex(self.answer_raw)]
+
 
 def testing():
     """Testing for program structure and question types"""
@@ -1063,5 +1119,5 @@ def testing_repetition(question):
 
 
 if __name__ == "__main__":
-    testing()
-    # testing_repetition('2.3.2')
+    #testing()
+    testing_repetition('5.1.3')
