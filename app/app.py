@@ -240,8 +240,18 @@ def register_user():
 
             mail.send(confirm_message)
 
-            new_user = DataUser(username=request.form['username'], passhash=generate_password_hash(password),
-                                email=request.form["email"], confirmed=False, role="demo", score=0)
+            new_user = DataUser(username=request.form['username'], 
+                                passhash=generate_password_hash(password),
+                                email=request.form["email"], 
+                                confirmed=False, 
+                                role="demo", 
+                                score=0,
+                                last_questions_correct=0,
+                                last_questions_incorrect=0,
+                                current_questions_incorrect=0,
+                                current_questions_correct=0,
+                                active_structure=0 
+                                )
             session.add(new_user)
             session.commit()
 
@@ -287,12 +297,14 @@ def page_not_found(e):
 @app.errorhandler(exc.OperationalError)
 @app.errorhandler(exc.InterfaceError)
 def handle_invalid_sql_request(e):
+    session.rollbal()
     session = return_session()
     print("Session has been rolled-back after error has occured")
     return redirect(request.url)
 
 #@app.errorhandler(AttributeError)
 def handle_invalid_data(e):
+    session.rollbal()
     session = return_session()
     print("Page has been forced reset due to an AttributeError")
     return redirect(request.url)
