@@ -11,6 +11,11 @@ __pycache__/
 __pycache__
 .gitignore
 
+*.gitignore
+
+env/
+
+
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
