@@ -1,9 +1,92 @@
 body {
-    min-height: 100vh;
-    min-width: 100vw;
+    /* min-height: 100vh;
+    min-width: 100vw; */
     background-color: rgb(246, 245, 250);
+    padding: 0;
+    margin: 0;
 }
-.sidebar_logo_image {
+
+.sidebar-image {
     width: 40px;
     height: 40px;
+}
+
+.sidebar {
+    background-color: rgb(255, 255, 255);
+    min-height: 100vh;
+    /* width: 120px; */
+    padding-top: 30px;
+    /* padding-left: 15px; */
+    /* margin-right: 3%; */
+}
+
+.sidebar-div {
+    margin: 0;
+}
+
+.sidebar-div .text {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgb(160, 160, 160)
+}
+
+.sidebar-div .text .active {
+    color: rgb(71, 71, 71)
+}
+
+.sidebar-div a:hover {
+    color: rgb(71, 71, 71);
+}
+
+.sidebar-div img {
+    stroke: rgb(160, 160, 160);
+}
+
+.sidebar-div img .active {
+    stroke: rgb(71, 71, 71)
+}
+
+.content-menu-bar {
+    padding-top: 25px;
+    align: right;
+    /* padding-right: 25px; */
+}
+
+.content-menu-bar h3 {
+    color: rgb(160, 160, 160)
+}
+
+.content-row {
+    margin-top: 50px;
+    height: 170px;
+    padding: 25px;
+    color: white;
+}
+
+.content-row button {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.content-stats {
+    background: linear-gradient(rgb(88, 234, 229), rgb(151,138, 239));
+}
+
+.content-mcat-exam {
+    background: linear-gradient(rgb(231, 115, 233), rgb(133, 104, 243))
+}
+
+.content-mcat-edu {
+    background: linear-gradient(rgb(200, 200, 200), rgb(160,160, 160))
+}
+
+#top-stats-graph {
+    position: absolute;
+    margin: 25px;
+}
+
+#mcat-graph {
+    position: absolute;
+    margin: 25px;
+
 }

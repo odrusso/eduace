@@ -14,7 +14,7 @@ def remove_left_right(s):
 
 
 def decompose_frac(s):
-    """Please don't touch this .... You have been warned!
+    r"""Please don't touch this .... You have been warned!
     Removes \frac latex elements from a string and turns them into infix-happy elements hopefully
     """
     k = []

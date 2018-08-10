@@ -30,7 +30,6 @@ from config import SECRET_KEY, MAIL_SERVER, MAIL_USERNAME, MAIL_PASSWORD, SENTRY
 
 
 application = app = Flask(__name__)
-
 app.config["SECRET_KEY"] = SECRET_KEY
 
 app.config["MAIL_SERVER"] = MAIL_SERVER
@@ -111,43 +110,35 @@ def web_dashboard():
         return render_template("dashboard_fresh.html")
     else:
         course_name = "MCAT"
-        question_structures = current_user.datauser.question_structures.filter_by(name=course_name).all()
-        question_strctures = sorted(question_structures, key=lambda x: x.time_generated)
+        
+        structure_id = current_user.datauser.active_structure
 
-        question_structure_recent = sorted(question_structures, key=lambda x: x.recent_access)[-1]
-        passing_structure_recent = {
-            "id": question_structure_recent.question_structure_id,
-            "name": question_structure_recent.name,
-            "init_time": strftime("%d/%m/%y %H:%M", gmtime(question_structure_recent.time_generated)),
-            "recent_time": strftime("%d/%m/%y %H:%M", gmtime(question_structure_recent.recent_access)),
-            "completeness": question_structure_recent.completion_percent()
-        }
+        correct_questions = current_user.datauser.current_questions_correct
+        correct_questions_improvement = current_user.datauser.current_questions_correct >= current_user.datauser.last_questions_correct
+        if current_user.datauser.current_questions_correct + current_user.datauser.current_questions_incorrect == 0:
+            correct_percent = 0
+        else:
+            correct_percent = (100 * current_user.datauser.current_questions_correct) / (current_user.datauser.current_questions_correct + current_user.datauser.current_questions_incorrect)
+        if correct_percent == 0:
+            correct_percent_improvement = False
+        elif current_user.datauser.last_questions_correct + current_user.datauser.last_questions_incorrect == 0:
+            correct_percent_improvement = True
+        else:
+            correct_percent_improvement = correct_percent > (100 * current_user.datauser.last_questions_correct) / (current_user.datauser.last_questions_correct + current_user.datauser.last_questions_incorrect)
 
-        if passing_structure_recent["recent_time"] == "01/01/70 00:00":
-            passing_structure_recent["recent_time"] = "Never"
+        no_of_questions = len(session.query(DataQuestion).filter(DataQuestion.question_structure_id==64).all())
+        if no_of_questions == 0:
+            module_percent = 0
+        else:
+            module_percent = 100 * session.query(DataQuestionStructure).filter(DataQuestionStructure.question_structure_id==structure_id).first().questions_correct / no_of_questions
 
-        passing_structures = []
-        for structure in question_structures:
-            to_add = {
-                "id": structure.question_structure_id,
-                "name": structure.name,
-                "init_time": strftime("%d/%m/%y %H:%M", gmtime(structure.time_generated)),
-                "recent_time": strftime("%d/%m/%y %H:%M", gmtime(structure.recent_access)),
-                "completeness": structure.completion_percent()
-            }
-            if to_add["recent_time"] == "01/01/70 00:00":
-                to_add["recent_time"] = "Never"
-
-            passing_structures.append(to_add)
-
-        return render_template('dashboard.html', structure_recent=passing_structure_recent, question_structures=passing_structures)
-
-
-@app.route("/pre-quiz-browse")
-@login_required
-def web_pre_quiz_browse():
-    return "None"
-
+        return render_template('dashboard.html', 
+                                correct_questions=correct_questions,
+                                correct_questions_improvement=correct_questions_improvement,
+                                correct_percent="{0:.1f}".format(correct_percent),
+                                correct_percent_improvement=correct_percent_improvement,
+                                module_percent="{0:.1f}".format(module_percent),
+                                structure_recent=structure_id)
 
 @app.route("/quiz/<string:question_structure_number>")
 @login_required
@@ -210,8 +201,15 @@ def evaluate_answer():
                         timer_current=0,
                         correct= False not in correct)
     session.add(answer)
+    
     if answer.correct:
         data_question.correct = 1
+        current_user.datauser.current_questions_correct += 1
+        data_question.structure.questions_correct += 1
+    else:
+        current_user.datauser.current_questions_incorrect += 1
+        data_question.structure.questions_incorrect += 1
+
     session.commit()
 
     return jsonify(result=str(data_question.correct))
@@ -289,13 +287,13 @@ def page_not_found(e):
 @app.errorhandler(exc.OperationalError)
 @app.errorhandler(exc.InterfaceError)
 def handle_invalid_sql_request(e):
+    session = return_session()
     print("Session has been rolled-back after error has occured")
     return redirect(request.url)
 
-
 #@app.errorhandler(AttributeError)
 def handle_invalid_data(e):
-    session.rollback()
+    session = return_session()
     print("Page has been forced reset due to an AttributeError")
     return redirect(request.url)
 

@@ -7,7 +7,7 @@
 from sqlalchemy import create_engine, Column, ForeignKey, INTEGER, String, BLOB, FLOAT, Boolean
 from sqlalchemy.exc import InternalError, StatementError
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from werkzeug.security import generate_password_hash, check_password_hash
 from time import time
 import pickle#
@@ -18,6 +18,13 @@ from config import DB_ENGINE
 
 
 Base = declarative_base()
+
+def return_session():
+    """Returns a database session"""
+    engine = create_engine(DB_ENGINE)
+    Base.metadata.bind = engine
+    session_factory = sessionmaker(bind=engine)
+    return scoped_session(session_factory)
 
 def pull_user(username, password):
     """Returns [True, UserID] if the user exists, and the password is correct,
@@ -65,6 +72,11 @@ class DataUser(Base):
     role = Column(String)
     score = Column(INTEGER)
     confirmed = Column(Boolean)
+    last_questions_correct = Column(INTEGER)
+    last_questions_incorrect = Column(INTEGER)
+    current_questions_incorrect = Column(INTEGER)
+    current_questions_correct = Column(INTEGER)
+    active_structure = Column(INTEGER)
 
     question_structures = relationship("DataQuestionStructure", lazy='dynamic')
 
@@ -89,6 +101,8 @@ class DataQuestionStructure(Base):
     time_completed = Column(FLOAT)
     recent_access = Column(FLOAT)
     current_question = Column(INTEGER)
+    questions_incorrect = Column(INTEGER)
+    questions_correct = Column(INTEGER)
 
     questions = relationship("DataQuestion", lazy='dynamic')
 
@@ -190,13 +204,18 @@ class DataClasses(Base):
 
 def generate(user_id):
 
-    #MATHS_QUESTION_LIST = sorted(["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2", "2.3.1", "2.3.3", "2.3.4", "2.3.5", "3.1.1","3.1.2","3.1.3", "3.1.4","3.2.1","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5","4.2.1", "4.2.2"])
+    # MATHS_QUESTION_LIST = sorted(["1.1.1","1.1.2","1.1.3","1.1.4","1.2.1","1.2.2","1.3.1","1.3.2","1.3.3","1.3.4","2.1.1","2.1.2", "2.3.1", "2.3.3", "2.3.4", "2.3.5", "3.1.1","3.1.2","3.1.3", "3.1.4","3.2.1","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5","4.2.1", "4.2.2"])
 
     # MATHS_QUESTION_LIST = ["4.1.5", "4.1.5", "4.1.5"]
 
-    MATHS_QUESTION_LIST = ["1.1.1"]
+    MATHS_QUESTION_LIST = ["1.1.1", "1.1.2", "1.1.3", "1.1.4"]
 
-    new_question_structure = DataQuestionStructure(user_id=user_id, name="MCAT", time_generated=int(time()), recent_access=0)
+    new_question_structure = DataQuestionStructure(user_id=user_id,
+                                                     name="MCAT", 
+                                                     time_generated=int(time()), 
+                                                     recent_access=0,
+                                                     questions_incorrect=0,
+                                                     questions_correct=0)
 
     session.add(new_question_structure)
 
@@ -204,9 +223,7 @@ def generate(user_id):
 
     st_id = new_question_structure.question_structure_id
 
-    session.query(DataUser).filter(DataUser.user_id == user_id).one().current_structure = st_id
-
-    print(st_id)
+    session.query(DataUser).filter(DataUser.user_id == user_id).one().active_structure = st_id
 
     itt = 0
     for question in MATHS_QUESTION_LIST:
@@ -229,11 +246,11 @@ def generate(user_id):
     session.commit()
 
 
-engine = create_engine(DB_ENGINE)
+#engine = create_engine(DB_ENGINE)
 #engine = create_engine("mysql+pymysql://eduace_db_admin:zg3-Ctg-dgP-2hU@eduace.csdwogwsprlc.ap-southeast-2.rds.amazonaws.com/eduace")
-Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+#Base.metadata.bind = engine
+#DBSession = sessionmaker(bind=engine)
+session = return_session()
 # print(__name__ + ": SQL Session Initialised")
 
 
@@ -244,4 +261,6 @@ if __name__ == "__main__":
     #print(current_class.institute)
     #print(current_class.leader)
     #print(current_class.institute.leader)
-    generate(14)
+    #generate(14)
+    #print(len(session.query(DataQuestion).filter(DataQuestion.question_structure_id==64).all())
+    pass
