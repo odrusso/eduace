@@ -7,7 +7,7 @@
 Main Web App
 
 Python 3.6.5
-Written by Oscar Russo for EduAce NZ
+Written by EduAce NZ
 
 """
 
@@ -126,7 +126,7 @@ def web_dashboard():
         else:
             correct_percent_improvement = correct_percent > (100 * current_user.datauser.last_questions_correct) / (current_user.datauser.last_questions_correct + current_user.datauser.last_questions_incorrect)
 
-        no_of_questions = len(session.query(DataQuestion).filter(DataQuestion.question_structure_id==64).all())
+        no_of_questions = len(session.query(DataQuestion).filter(DataQuestion.question_structure_id==structure_id).all())
         if no_of_questions == 0:
             module_percent = 0
         else:
