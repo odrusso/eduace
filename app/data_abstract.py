@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 from werkzeug.security import generate_password_hash, check_password_hash
 from time import time
-import pickle#
+import pickle
 
 #Internal Imports
 from courses.ncea_level_1.maths import mcat
