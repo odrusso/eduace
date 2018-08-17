@@ -297,7 +297,6 @@ def page_not_found(e):
 @app.errorhandler(exc.OperationalError)
 @app.errorhandler(exc.InterfaceError)
 @app.errorhandler(exc.TimeoutError)
-
 def handle_invalid_sql_request(e):
     session.rollbal()
     session = return_session()
