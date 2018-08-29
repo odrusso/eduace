@@ -45,6 +45,7 @@
                 </div>
                 <div class="col-2">
                     <button class="btn btn-outline-secondary vertical-align" id="evaluate_answer" type="button">Submit</button>
+                    <a href="#" id="dumb">dumb button</a>
                 </div>
             </div>
 
@@ -62,6 +63,12 @@
         var current_question_id = 0
 
         var mq_objects = new Array();
+
+        $(function () {
+            $("#dumb").bind('click', function() {
+                mq_objects[0].latex("\\text{Infinite solutions.}");
+            })
+        })
 
         function deploy_question(question_id) {
             current_question_id = question_id

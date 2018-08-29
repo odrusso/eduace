@@ -236,7 +236,8 @@ def register_user():
             confirm_token = email_serialiser.dumps(request.form["email"], salt="email-confirm")
             confirm_message = Message("Confirm Email", sender="it@eduace.co.nz", recipients=[request.form["email"]])
             confirm_link = url_for("confirm_email", token=confirm_token, _external=True)
-            confirm_message.body = "Confirm: <a>%s</a>" % confirm_link
+            # confirm_message.body = "Confirm: <a>%s</a>" % confirm_link
+            confirm_message.html = render_template("email.html", confirm_link=confirm_link)
 
             mail.send(confirm_message)
 
@@ -275,13 +276,17 @@ def confirm_email(token):
 
 @app.route("/register_success.html")
 def testingbla():
-    return render_template("register_success.html")
+    return
 
 
 @app.route("/_generate_mcat_exam")
 def generate_demo_exam():
     generate(current_user.id)
     return redirect('/dashboard')
+
+@app.route("/emailtest")
+def emailtest():
+    return render_template("email.html", confirm_link="https://www.google.com/")
 
 
 @app.route("/careers")

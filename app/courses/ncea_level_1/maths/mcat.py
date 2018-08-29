@@ -136,6 +136,13 @@ class MathsQuestion:
 
         answer_results = []
 
+        if user_input[0] == r"\text{Infinite Solutions.}" or user_input[0] == r"\text{No Solutions.}":
+            if user_input[0] == self.answer_raw[0]:
+                answer_results.append(True)
+            else:
+                answer_results.append(False)
+
+
         for i in range(len(user_input)):
             # print("Evaluating answer for:")
             # print(user_input)
@@ -702,13 +709,13 @@ class MathsQuestion:
             x = symbols("x")
             a, b, c = self.random_co(1, 15, 3)
             self.question_raw = Eq(factor(a * x + b), a * x - c, evaluate=False)
-            self.answer_raw = [r'\text{No solutions}']
+            self.answer_raw = [r'\text{No solutions.}']
 
         elif self.route == 2:
             x = symbols("x")
             a, b = self.random_co(1, 9, 2)
             self.question_raw = Eq(Add(factor(a * x + a * b), -1 * a * x, evaluate=False), b, evaluate=False)
-            self.answer_raw = [r'\text{Infinite solutions}']
+            self.answer_raw = [r'\text{Infinite solutions.}']
 
         self.answer_aspects = [latex(self.answer_raw[0])]
 
