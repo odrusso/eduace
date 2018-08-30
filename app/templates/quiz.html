@@ -130,7 +130,10 @@
                 <button class="btn btn-outline-dark" id="insert_add"> + </button>
                 <button class="btn btn-outline-dark" id="insert_minus"> - </button>
                 <button class="btn btn-outline-dark" id="insert_mul"> x </button>
-                <button class="btn btn-outline-dark" id="insert_div"> / </button>
+                <button class="btn btn-outline-dark" id="insert_div"> ÷ </button>
+                <button class="btn btn-outline-dark" id="insert_pwr"> □<sup>□</sup> </button>
+                <button class="btn btn-outline-dark" id="insert_surd"> √ </button>
+                <button class="btn btn-outline-dark" id="insert_pi"> π </button>
                 <button class="btn btn-outline-dark" id="insert_no_sol"> No Solutions </button>
                 <button class="btn btn-outline-dark" id="insert_inf_sol"> Infinite Solutions </button>
             </div>
@@ -146,7 +149,7 @@
 
         </div>
 
-        <!-- submit button -->
+        <!-- Submit Button -->
         <br><br>
         <div class="d-flex justify-content-center container">
             <button class="btn btn-outline-secondary vertical-align" id="evaluate_answer" type="button">Submit</button>
@@ -167,9 +170,52 @@
                 mq_objects[0].latex("\\text{Infinite solutions.}");
             })
         })
+
         $(function () {
             $("#insert_no_sol").bind('click', function() {
                 mq_objects[0].latex("\\text{No solutions.}");
+            })
+        })
+
+        $(function () {
+            $("#insert_add").bind('click', function() {
+                mq_objects[0].write("+");
+            })
+        })
+
+        $(function () {
+            $("#insert_minus").bind('click', function() {
+                mq_objects[0].write("-");
+            })
+        })
+
+        $(function () {
+            $("#insert_mul").bind('click', function() {
+                mq_objects[0].cmd("*");
+            })
+        })
+
+        $(function () {
+            $("#insert_div").bind('click', function() {
+                mq_objects[0].cmd("\\frac");
+            })
+        })
+
+        $(function () {
+            $("#insert_pwr").bind('click', function() {
+                mq_objects[0].cmd("^");
+            })
+        })
+
+        $(function () {
+            $("#insert_surd").bind('click', function() {
+                mq_objects[0].cmd("\\sqrt");
+            })
+        })
+
+        $(function () {
+            $("#insert_pi").bind('click', function() {
+                mq_objects[0].write("\\pi");
             })
         })
 

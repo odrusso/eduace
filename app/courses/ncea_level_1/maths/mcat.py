@@ -154,11 +154,12 @@ class MathsQuestion:
                     # ie "x = 14" will return as just "14", or "x = 2*4 = 8" will return as just 8.
                     user_input = user_input.split("=")[-1]
 
+                user_input[i] = user_input[i].replace(r"-\left(", "-1(")
+
+                # print(user_input[i])
 
                 user_answer = user_input[i]
                 processed_sym = parse_latex(user_answer)
-
-
 
                 # print("User input evaluated to %s" % processed_sym)
                 # print("Model answer is")
