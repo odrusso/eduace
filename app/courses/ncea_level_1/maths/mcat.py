@@ -136,41 +136,45 @@ class MathsQuestion:
 
         answer_results = []
 
-        if user_input[0] == r"\text{Infinite Solutions.}" or user_input[0] == r"\text{No Solutions.}":
+        # print(user_input)
+
+        if user_input[0] == "\\text{Infinite solutions.}" or user_input[0] == "\\text{No Solutions.}":
             if user_input[0] == self.answer_raw[0]:
                 answer_results.append(True)
             else:
                 answer_results.append(False)
 
+        else:
+            for i in range(len(user_input)):
+                # print("Evaluating answer for:")
+                # print(user_input)
 
-        for i in range(len(user_input)):
-            # print("Evaluating answer for:")
-            # print(user_input)
-
-            if "=" in user_input:
-                # Ignore equivlences of the subject,
-                # ie "x = 14" will return as just "14", or "x = 2*4 = 8" will return as just 8.
-                user_input = user_input.split("=")[-1]
-
-
-            user_answer = user_input[i]
-            processed_sym = parse_latex(user_answer)
+                if "=" in user_input:
+                    # Ignore equivlences of the subject,
+                    # ie "x = 14" will return as just "14", or "x = 2*4 = 8" will return as just 8.
+                    user_input = user_input.split("=")[-1]
 
 
+                user_answer = user_input[i]
+                processed_sym = parse_latex(user_answer)
 
-            # print("User input evaluated to %s" % processed_sym)
-            # print("Model answer is")
-            # print(self.answer_raw)
-            # print("For itteration %s" % i)
 
-            if processed_sym == self.answer_raw[i]: # direct match
-                # print("Direct match")
-                answer_results.append(True)
-            else:
-                # print("Seems to be false")
-                answer_results.append(False)
 
-        # print("Returning %s" % answer_results)
+                # print("User input evaluated to %s" % processed_sym)
+                # print("Model answer is")
+                # print(self.answer_raw)
+                # print("For itteration %s" % i)
+
+                if processed_sym == self.answer_raw[i]: # direct match
+                    # print("Direct match")
+                    answer_results.append(True)
+                else:
+                    # print("Seems to be false")
+                    answer_results.append(False)
+
+            # print("Returning %s" % answer_results)
+
+        # print(answer_results)
 
         return answer_results
 

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% from "macros.html" import nav_bar_dash, mathquill, katex %}
+
+{% block title %}EduAce Quiz{% endblock %}
+
+{% block imports %}
+    {{ mathquill() }}
+    {{ katex() }}
+{% endblock %}
+
+{% block body %}
+
+    {{ nav_bar_dash() }}
+
+    <div class="row">
+        <div class="col-3 bg-white"  style="height: 100vh; overflow-y: scroll">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                {% for question in sidebar_question_list %}
+                    {%  if question[3] == "unanswered" %}
+                        <a class="nav-link" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
+                    {% else %}
+                        {% if question[3] == "correct" %}
+                            <a class="nav-link bg-success text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
+                        {% else %}
+                            <a class="nav-link bg-danger text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
+                        {% endif %}
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+
+    <div class="col-9">
+        <br><br>
+        <div class="jumbotron">
+
+            <div class="latex_container">
+                <span class="latex_deletable centering">Loading...</span>
+                <br>
+            </div>
+
+            <hr>
+
+            <div class="input-group mb-3">
+                <div  id="answer_container" class="col-10">
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-outline-secondary vertical-align" id="evaluate_answer" type="button">Submit</button>
+                    <a href="#" id="dumb">dumb button</a>
+                </div>
+            </div>
+
+            <br>
+            <br>
+
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js"   ></script>
+
+    <script>
+
+        var current_question_id = 0
+
+        var mq_objects = new Array();
+
+        $(function () {
+            $("#dumb").bind('click', function() {
+                mq_objects[0].latex("\\text{Infinite solutions.}");
+            })
+        })
+
+        function deploy_question(question_id) {
+            current_question_id = question_id
+            $.getJSON('_load_question_json', {
+                question_id: question_id,
+            }, function(data){
+                $(".latex_deletable").remove()
+                var itt;
+                for (itt=0; itt < data.question_latex.length; itt++) {
+                    if (data.question_latex[itt].startsWith("<svg")) {
+                        $(".latex_container").append('<span class="latex_deletable centering question_diagram">' + data.question_latex[itt] + '</span>');
+                    } else {
+                        $(".latex_container").append('<span class="latex_deletable centering question_latex">$$' + data.question_latex[itt] + '$$</span>');
+                    }
+                };
+                $("svg").addClass("img-fluid")
+                itt = 0;
+                $(".answer_deletable").remove()
+                var answer_length = data.answer_length;
+                mq_objects.length = 0;
+                var MQ = MathQuill.getInterface(2);
+                for (itt=0; itt < answer_length; itt++) {
+                    $("#answer_container").append('<span class="form-control answer_deletable" width="200px" id="answer_' + itt + '"></span>')
+                    mq_objects.push(MQ.MathField(document.getElementById('answer_' + itt)));
+                    MQ.MathField(document.getElementById('answer_' + itt)).latex(data.recent_answer[itt])
+                }
+                renderMathInElement(
+                    document.body,
+                    {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        ]
+                    }
+                );
+            });
+            return false
+
+        }
+        deploy_question({{ current_question  }});
+
+        $(function(){
+            $("#evaluate_answer").bind('click', function(){
+                var itt;
+                var entered_latex = new Array();
+                for (itt=0; itt < mq_objects.length; itt++) {
+                    entered_latex.push(MQ.MathField(document.getElementById("answer_" + itt)).latex());
+                }
+                $.getJSON('_evaluate_answer', {
+                    entered_answers: JSON.stringify(entered_latex),
+                    question_id: current_question_id
+                }, function(data) {
+                    alert(data.result);
+                    if(data.result == "True") {
+                        if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
+                            $("#question_sidebar_"+current_question_id).removeClass("bg-danger");
+                        }
+                        $("#question_sidebar_"+current_question_id).addClass("bg-success");
+                        $("#question_sidebar_"+current_question_id).addClass("text-white");
+
+                    } else {
+                        if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
+                            null
+                        }
+                        $("#question_sidebar_"+current_question_id).addClass("bg-danger");
+                        $("#question_sidebar_"+current_question_id).addClass("text-white");
+                    };
+                });
+                return false
+            });
+        });
+
+    </script>
+
+{% endblock %}

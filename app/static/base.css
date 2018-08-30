@@ -7,6 +7,15 @@ body {
     margin: 0;
 }
 
+.katex {
+    font-size: 2.5em !important;
+}
+
+span.mord.text {
+    font-size: 0.75em;
+    letter-spacing: 3px !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
 
 .sidebar-image {
     width: 40px;
@@ -61,11 +70,19 @@ body {
     color: rgb(160, 160, 160)
 }
 
+.content {
+    background-color: white;
+}
 .content-row {
     margin-top: 50px;
     height: 170px;
     padding: 25px;
     color: white;
+}
+
+.question-row {
+    margin-top: 50px;
+    padding: 25px;
 }
 
 .content-row button {
@@ -75,14 +92,30 @@ body {
 
 .content-stats {
     background: linear-gradient(rgb(88, 234, 229), rgb(151,138, 239));
+    color: white;
+}
+
+.content-question {
+    background: linear-gradient(45deg, rgb(88, 234, 229), rgb(151,138, 239));
+    color: white;
+    padding-top: 50px;
+    padding-bottom: 50px;
 }
 
 .content-mcat-exam {
-    background: linear-gradient(rgb(231, 115, 233), rgb(133, 104, 243))
+    background: linear-gradient(rgb(231, 115, 233), rgb(133, 104, 243));
+    color: white;
 }
 
 .content-mcat-edu {
-    background: linear-gradient(rgb(200, 200, 200), rgb(160,160, 160))
+    background: linear-gradient(rgb(200, 200, 200), rgb(160,160, 160));
+    color: white;
+}
+
+.content-register {
+    background: linear-gradient(rgb(231, 115, 233), rgb(133, 104, 243));
+    color: white;
+    padding: 25px;
 }
 
 #top-stats-graph {
@@ -93,5 +126,28 @@ body {
 #mcat-graph {
     position: absolute;
     margin: 25px;
+}
 
+#register-graph {
+    position: absolute;
+    margin: 25px;
+}
+
+#answer_container {
+    width: 100%;
+}
+
+.form-mcat {
+    border: none !important;
+    background-image: linear-gradient(to right, gray 33%, rgba(127,127,127,0) 0%);
+    background-position: bottom;
+    background-size: 16px 1px;
+    background-repeat: repeat-x;
+    width: 100%;
+    font-size: 20pt;
+}
+
+.symbol_input {
+    color: gray;
+    margin-bottom: 30px;
 }

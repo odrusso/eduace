@@ -159,10 +159,12 @@ def web_quiz(question_structure_number):
 
         sidebar_question_list = sorted(sidebar_question_list, key=operator.itemgetter(1))
 
+        valid_questions = [x[0] for x in sidebar_question_list]
+
         current_structure_object.recent_access = time()
         session.commit()
 
-        return render_template("quiz.html", sidebar_question_list=sidebar_question_list, current_question=current_structure_object.current_question)
+        return render_template("quiz.html", valid_questions=valid_questions, sidebar_question_list=sidebar_question_list, current_question=current_structure_object.current_question)
 
 
 @app.route("/quiz/_load_question_json")
@@ -183,7 +185,7 @@ def load_question_json():
 
     recent_answer = data_question_object.get_recent_answer()
 
-    return jsonify(question_latex=question.question_aspects, answer_length=answer_length, recent_answer=recent_answer)
+    return jsonify(question_description=question.question_description, question_latex=question.question_aspects, answer_length=answer_length, recent_answer=recent_answer)
 
 
 @app.route("/quiz/_evaluate_answer")
@@ -233,30 +235,35 @@ def register_user():
 
         else:
 
-            confirm_token = email_serialiser.dumps(request.form["email"], salt="email-confirm")
-            confirm_message = Message("Confirm Email", sender="it@eduace.co.nz", recipients=[request.form["email"]])
-            confirm_link = url_for("confirm_email", token=confirm_token, _external=True)
-            # confirm_message.body = "Confirm: <a>%s</a>" % confirm_link
-            confirm_message.html = render_template("email.html", confirm_link=confirm_link)
+            try:
 
-            mail.send(confirm_message)
+                confirm_token = email_serialiser.dumps(request.form["email"], salt="email-confirm")
+                confirm_message = Message("Confirm Email", sender="it@eduace.co.nz", recipients=[request.form["email"]])
+                confirm_link = url_for("confirm_email", token=confirm_token, _external=True)
+                # confirm_message.body = "Confirm: <a>%s</a>" % confirm_link
+                confirm_message.html = render_template("email.html", confirm_link=confirm_link)
 
-            new_user = DataUser(username=request.form['username'], 
-                                passhash=generate_password_hash(password),
-                                email=request.form["email"], 
-                                confirmed=False, 
-                                role="demo", 
-                                score=0,
-                                last_questions_correct=0,
-                                last_questions_incorrect=0,
-                                current_questions_incorrect=0,
-                                current_questions_correct=0,
-                                active_structure=0 
-                                )
-            session.add(new_user)
-            session.commit()
+                mail.send(confirm_message)
 
-            return render_template("register_success.html")
+                new_user = DataUser(username=request.form['username'],
+                                    passhash=generate_password_hash(password),
+                                    email=request.form["email"],
+                                    confirmed=False,
+                                    role="demo",
+                                    score=0,
+                                    last_questions_correct=0,
+                                    last_questions_incorrect=0,
+                                    current_questions_incorrect=0,
+                                    current_questions_correct=0,
+                                    active_structure=0
+                                    )
+                session.add(new_user)
+                session.commit()
+
+                return render_template("register_success.html")
+            except Exception as e:
+                return render_template("/register.html", error="Invalid email!")
+
     else:
         if not current_user.is_anonymous:
             return redirect('/dashboard')
@@ -286,7 +293,7 @@ def generate_demo_exam():
 
 @app.route("/emailtest")
 def emailtest():
-    return render_template("email.html", confirm_link="https://www.google.com/")
+    return render_template("register_success.html")
 
 
 @app.route("/careers")

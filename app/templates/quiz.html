@@ -6,58 +6,156 @@
 {% block imports %}
     {{ mathquill() }}
     {{ katex() }}
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js"></script>
+    <script src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
+
 {% endblock %}
 
 {% block body %}
 
-    {{ nav_bar_dash() }}
+    <!-- Static Desktop Sidebar -->
+    <div class="col-md-1 sidebar">
 
-    <div class="row">
-        <div class="col-3 bg-white"  style="height: 100vh; overflow-y: scroll">
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                {% for question in sidebar_question_list %}
+        <!-- Logo Row -->
+        <div class="sidebar-div text-center">
+            <img class="sidebar-image" src="{{ url_for('static', filename='logo.png') }}">
+        </div>
+
+        <br><br><br><br>
+
+        <!-- Home Row -->
+        <div class="sidebar-div text-center">
+            <a href="#">
+                <img class="sidebar-image" src="{{ url_for('static', filename='icons/house.svg') }}">
+                <p class="text">Dashboard</p>
+            </a>
+        </div>
+
+        <hr>
+
+        <!-- MCAT Row -->
+        <div class="sidebar-div text-center">
+            <a href="#">
+                <img class="sidebar-image" src="{{ url_for('static', filename='icons/house.svg') }}">
+                <p class="active text">MCAT Exam</p>
+            </a>
+        </div>
+
+        <hr>
+
+        <!-- Example Row -->
+        <div class="sidebar-div text-center">
+            <a href="#">
+                <img class="sidebar-image" src="{{ url_for('static', filename='icons/house.svg') }}">
+                <p class="text">Level 1: <br> Algebra</p>
+            </a>
+        </div>
+
+        <hr>
+
+        <!-- Example Row -->
+        <div class="sidebar-div text-center">
+            <a href="#">
+                <img class="sidebar-image" src="{{ url_for('static', filename='icons/house.svg') }}">
+                <p class="text">Level 1: <br> Chance</p>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- spacer -->
+    <div class="col-md-1"></div>
+
+    <!-- Quiz -->
+    <div id="quiz-content" class="col-md-9">
+
+        <br><br>
+
+        <!-- Question Dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="question-dropdown-button" data-toggle="dropdown"> Dropdown button </button>
+            <div class="dropdown-menu" id="question-dropdown-menu">
+
+                 {% for question in sidebar_question_list %}
                     {%  if question[3] == "unanswered" %}
-                        <a class="nav-link" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
+                        <a class="dropdown-item" id="question_dropdown_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }}, 'left')">{{  question[2] }}</a>
                     {% else %}
                         {% if question[3] == "correct" %}
-                            <a class="nav-link bg-success text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
+                            <a class="text-success dropdown-item" id="question_dropdown_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }}, 'left')">{{  question[2] }}</a>
                         {% else %}
-                            <a class="nav-link bg-danger text-white" id="question_sidebar_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }})">{{  question[2] }}</a>
+                            <a class="text-warning dropdown-item" id="question_dropdown_{{ question[0] }}" href="#" onClick="deploy_question({{ question[0] }}, 'left')">{{  question[2] }}</a>
                         {% endif %}
                     {% endif %}
                     <br>
                 {% endfor %}
+
             </div>
         </div>
-    <div class="col-9">
+
+        <!-- Latex Questions -->
+        <div class="container content-question rounded row question-row">
+
+            <!-- back button -->
+            <div class="col-md-1">
+                <table style="height: 100%">
+                    <tbody>
+                        <td class="align-middle"><button id="previous_question" class="btn btn-outline-light"> < </button></td>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- question content -->
+            <div class="col-md-10 latex_container">
+
+                    <span class="latex_deletable centering">Loading...</span>
+
+            </div>
+
+            <!-- forwards button -->
+            <div class="col-md-1">
+                <table style="height: 100%">
+                    <tbody>
+                        <td class="align-middle"><button id="next_question" class="btn btn-outline-light"> > </button></td>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Answer Entry -->
+        <div class="container content rounded row question-row">
+
+            <!-- Algebra buttons -->
+            <div class="col-md-12 symbol_input">
+                <button class="btn btn-outline-dark" id="insert_add"> + </button>
+                <button class="btn btn-outline-dark" id="insert_minus"> - </button>
+                <button class="btn btn-outline-dark" id="insert_mul"> x </button>
+                <button class="btn btn-outline-dark" id="insert_div"> / </button>
+                <button class="btn btn-outline-dark" id="insert_no_sol"> No Solutions </button>
+                <button class="btn btn-outline-dark" id="insert_inf_sol"> Infinite Solutions </button>
+            </div>
+
+            <!-- question content -->
+            <div class="col-md-12 input-group">
+
+                <div id="answer_container">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- submit button -->
         <br><br>
-        <div class="jumbotron">
-
-            <div class="latex_container">
-                <span class="latex_deletable centering">Loading...</span>
-                <br>
-            </div>
-
-            <hr>
-
-            <div class="input-group mb-3">
-                <div  id="answer_container" class="col-10">
-                </div>
-                <div class="col-2">
-                    <button class="btn btn-outline-secondary vertical-align" id="evaluate_answer" type="button">Submit</button>
-                    <a href="#" id="dumb">dumb button</a>
-                </div>
-            </div>
-
-            <br>
-            <br>
-
+        <div class="d-flex justify-content-center container">
+            <button class="btn btn-outline-secondary vertical-align" id="evaluate_answer" type="button">Submit</button>
         </div>
-    </div>
+        <br><br>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/contrib/auto-render.min.js"   ></script>
-
+    <!-- SCRIPTS -->
+    <!-- Latex Render, Answer-Entry, Question Deployment, Answer Submission -->
     <script>
 
         var current_question_id = 0
@@ -65,16 +163,34 @@
         var mq_objects = new Array();
 
         $(function () {
-            $("#dumb").bind('click', function() {
+            $("#insert_inf_sol").bind('click', function() {
                 mq_objects[0].latex("\\text{Infinite solutions.}");
             })
         })
+        $(function () {
+            $("#insert_no_sol").bind('click', function() {
+                mq_objects[0].latex("\\text{No solutions.}");
+            })
+        })
 
-        function deploy_question(question_id) {
-            current_question_id = question_id
-            $.getJSON('_load_question_json', {
+        function deploy_question(question_id, direction) {
+            if(direction == "left") {
+                $("#quiz-content").animate({left: '-=4000px'});
+                $("#quiz-content").animate({left: '+=8000px'}, 0);
+            } else if (direction == "right") {
+                $("#quiz-content").animate({left: '+=4000px'});
+                $("#quiz-content").animate({left: '-=8000px'}, 0);
+            };
+
+            current_question_id = question_id;
+
+            $.getJSON('/quiz/_load_question_json', {
                 question_id: question_id,
-            }, function(data){
+            }, function(data) {
+                // Rename dropdown box
+                $("#question-dropdown-button").text(data.question_description);
+
+                // Deploy question LaTeX
                 $(".latex_deletable").remove()
                 var itt;
                 for (itt=0; itt < data.question_latex.length; itt++) {
@@ -85,16 +201,8 @@
                     }
                 };
                 $("svg").addClass("img-fluid")
-                itt = 0;
-                $(".answer_deletable").remove()
-                var answer_length = data.answer_length;
-                mq_objects.length = 0;
-                var MQ = MathQuill.getInterface(2);
-                for (itt=0; itt < answer_length; itt++) {
-                    $("#answer_container").append('<span class="form-control answer_deletable" width="200px" id="answer_' + itt + '"></span>')
-                    mq_objects.push(MQ.MathField(document.getElementById('answer_' + itt)));
-                    MQ.MathField(document.getElementById('answer_' + itt)).latex(data.recent_answer[itt])
-                }
+
+                // Render the LaTeX
                 renderMathInElement(
                     document.body,
                     {
@@ -103,11 +211,39 @@
                         ]
                     }
                 );
+
+                // Update left and right pointers
+                $("#previous_question").removeAttr("onClick");
+                if ($.inArray(question_id - 1, {{ valid_questions }}) != -1) {
+                    // alert("we're in left");
+                    $("#previous_question").attr("onClick", "deploy_question(" + String(question_id-1) + ", 'right')")
+                }
+                $("#next_question").removeAttr("onClick");
+                if ($.inArray(question_id + 1, {{ valid_questions }}) != -1) {
+                    // alert("we're in right")
+                    $("#next_question").attr("onClick", "deploy_question(" + String(question_id+1) + ", 'left')")
+                }
+
+                // Animate back to centre after loading
+                $("#quiz-content").animate({left: '0'});
+
+
+                // Deploy answer boxes
+                itt = 0;
+                $(".answer_deletable").remove()
+                var answer_length = data.answer_length;
+                mq_objects.length = 0;
+                var MQ = MathQuill.getInterface(2);
+                for (itt=0; itt < answer_length; itt++) {
+                    $("#answer_container").append('<span class="form-mcat answer_deletable" id="answer_' + itt + '"></span>')
+                    mq_objects.push(MQ.MathField(document.getElementById('answer_' + itt)));
+                    MQ.MathField(document.getElementById('answer_' + itt)).latex(data.recent_answer[itt])
+                }
             });
             return false
 
         }
-        deploy_question({{ current_question  }});
+        deploy_question({{ current_question  }}, 0);
 
         $(function(){
             $("#evaluate_answer").bind('click', function(){
@@ -120,26 +256,42 @@
                     entered_answers: JSON.stringify(entered_latex),
                     question_id: current_question_id
                 }, function(data) {
-                    alert(data.result);
+                    // alert(data.result);
                     if(data.result == "True") {
-                        if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
-                            $("#question_sidebar_"+current_question_id).removeClass("bg-danger");
-                        }
-                        $("#question_sidebar_"+current_question_id).addClass("bg-success");
-                        $("#question_sidebar_"+current_question_id).addClass("text-white");
+                        // alert("into animation");
 
+                        $("body").animate({backgroundColor: 'rgb(48, 166, 74)'}, 'slow');
+                        $("body").animate({backgroundColor: 'rgb(246, 245, 250)'}, 'slow');
+
+                        // alert("animation over");
+
+                        if($("#question_dropdown_"+current_question_id).hasClass("text-warning")) {
+                            $("#question_dropdown_"+current_question_id).removeClass("text-warning");
+                        }
+                        $("#question_dropdown_"+current_question_id).addClass("text-success");
                     } else {
-                        if($("#question_sidebar_"+current_question_id).hasClass("bg-danger")) {
+
+                        $("body").animate({backgroundColor: 'rgb(253, 192, 47)'}, 'slow');
+                        $("body").animate({backgroundColor: 'rgb(246, 245, 250)'}, 'slow');
+
+                        if($("#question_dropdown_"+current_question_id).hasClass("text-warning")) {
                             null
                         }
-                        $("#question_sidebar_"+current_question_id).addClass("bg-danger");
-                        $("#question_sidebar_"+current_question_id).addClass("text-white");
+                        $("#question_dropdown_"+current_question_id).addClass("test-warning");
                     };
                 });
                 return false
             });
         });
 
+        $(function(){
+            $("#previous_question").bind('click', function(){
+
+            });
+        })
+
     </script>
+
+
 
 {% endblock %}

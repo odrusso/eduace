@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}EduAce Login{% endblock %}
+
+{% block body %}
+
+    <a href="/" class="text-white">back...</a>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <div class="card mx-auto" style="width: 36rem;">
+        <div class="card-header text-center h3">Login Here:</div>
+        <div class="card-body">
+            <form method="POST">
+                {% if failure == "unconfirmed"  %} <p class="text text-danger"> Your email address has not been confirmed.</p> <br> {% endif %}
+                {% if failure == "confirmed"  %} <p class="text text-success"> Your email address has been confirmed.</p> <br> {% endif %}
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Username: </span>
+                    </div>
+                    <input class="form-control {% if failure == "username" or failure == "unconfirmed" %}is-invalid{% endif %}" name="username" type="text" required>
+                    {% if failure == "username" %}
+                    <div class="invalid-feedback">
+                        Invalid username.
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" >Password: </span>
+                    </div>
+                    <input class="form-control {% if failure == "password" %}is-invalid{% endif %}  }" type="password" name="password" type="text" required>
+                    {% if failure == "password" %}
+                    <div class="invalid-feedback">
+                        Invalid password.
+                    </div>
+                    {% endif %}
+                </div>
+                <br>
+                <button class="btn">Submit</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
