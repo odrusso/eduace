@@ -5,7 +5,7 @@
 from sympy import *
 from random import randint, shuffle
 import svgwrite
-from latex_to_sympy_internal import parse_latex
+# from latex_to_sympy_internal import parse_latex
 
 
 class Data:
@@ -999,7 +999,7 @@ class MathsQuestion:
     def generate_question_mcat_2_3_3(self):
 
         if self.route is None:
-            self.route == self.random_co(1, 2, 1)[0]
+            self.route = self.random_co(1, 2, 1)[0]
 
         # self.route = 2
 
@@ -1039,7 +1039,7 @@ class MathsQuestion:
 
     def generate_question_mcat_2_3_1(self):
         if self.route is None:
-            self.route == self.random_co(1, 3, 1)[0]
+            self.route = self.random_co(1, 3, 1)[0]
 
         # self.route = 3
 
@@ -1073,7 +1073,7 @@ class MathsQuestion:
 
     def generate_question_mcat_4_2_1(self):
         if self.route is None:
-            self.route == self.random_co(1, 3, 1)[0]
+            self.route = self.random_co(1, 3, 1)[0]
 
         self.route = 3
 
@@ -1129,6 +1129,40 @@ class MathsQuestion:
             self.answer_aspects = ["Find x", latex(self.question_raw[0])]
             self.answer_raw = [b-c]
 
+    def generate_question_mcat_5_2_1(self):
+        if self.route is None:
+            self.route = self.random_co(1, 4, 1)[0]
+
+        # self.route = 4
+
+        if self.route == 1:
+            num_a, num_b = self.random_co(20, 80, 2)
+            cost_a, cost_b = self.random_co(20, 150, 2)
+            TEMPLATE = "A total of %s tickets are sold for an event. Adult tickets cost $%s, and student tickets cost $%s. Total ticket sales were $%s. How many tickets of each type were sold?"
+            self.question_aspects = [TEMPLATE % (num_a + num_b, cost_a, cost_b, cost_a*num_a + cost_b*num_b), "(enter each answer as just a number)"]
+            self.answer_raw = [num_a, num_b]
+
+        elif self.route == 2:
+            TEMPLATE = "%s texts or calls were made by a phone within a month, with texts costing $%s and calls costing $%s. The total bill for the month was $%s. How many calls, and how many texts were made?"
+            num_a, num_b = self.random_co(20, 200, 2)
+            cost_a, cost_b = self.random_co(2, 5, 2)
+            self.question_aspects = [TEMPLATE % (num_a + num_b, cost_a, cost_b, cost_a*num_a + cost_b*num_b), "(enter each answer as just a number)"]
+            self.answer_raw = [num_a, num_b]
+
+        elif self.route == 3:
+            TEMPLATE = "%sm of timber is harvested from a forest. The forest had 2 types of trees, Pine and Redwood. Pine trees grow to %sm and Redwood trees grow to %sm. The total number of trees planted was %s. How many Pine trees, and how many Redwood trees were planted?"
+            num_a, num_b = self.random_co(100, 150, 2)
+            cost_a, cost_b = self.random_co(15, 45, 2)
+            self.question_aspects = [TEMPLATE % (cost_a*num_a + cost_b*num_b, cost_a, cost_b, num_a + num_b), "(enter each answer as just a number)"]
+            self.answer_raw = [num_a, num_b]
+
+        elif self.route == 4:
+            TEMPLATE = "In a special game of rugby, the All Blacks score %s points. A conversion is worth %s points, and a try is worth %s points. The total number of trys or conversion they make is %s. How many tries, and how many conversions did they make?"
+            num_a, num_b = self.random_co(5, 15, 2)
+            cost_a, cost_b = self.random_co(2, 8, 2)
+            self.question_aspects = [TEMPLATE % (cost_a * num_a + cost_b * num_b, cost_a, cost_b, num_a + num_b),
+                                     "(enter each answer as just a number)"]
+            self.answer_raw = [num_a, num_b]
 
 class MathsAnswer:
     def __init__(self, input_raw):
@@ -1199,8 +1233,8 @@ def evaluation_testing():
     print(q.evaluate_answer(latex_input))
 
 if __name__ == "__main__":
-    print(dir(MathsQuestion))
+    #print(dir(MathsQuestion))
     # testing()
-    #testing_repetition('1.1.4')
+    testing_repetition('5.2.1')
     #while True:
     #    print(process_sympy(input()))
