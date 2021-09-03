@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    // path to output directory
+    "sourceMap": true,
+    // allow sourcemap support
+    "strictNullChecks": true,
+    // enable strict null checks as a best practice
+    "module": "ES2020",
+    // specify module code generation
+    "jsx": "react",
+    // use typescript to transpile jsx to js
+    "target": "es5",
+    // specify ECMAScript target version
+    "allowJs": true,
+    // allow a partial TypeScript and JavaScript codebase
+//    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": ["**/*.test.ts", "**/*.test.ts", "node_modules"]
+}
