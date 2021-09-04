@@ -55,7 +55,6 @@ module.exports = {
         ],
     },
     devServer: {
-        // contentBase: './build',
         historyApiFallback: {
             index: '/'
         }
