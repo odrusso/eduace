@@ -1,11 +1,16 @@
-import React from "React"
-import {App} from "../App";
-import {render} from "@testing-library/react";
-import {screen} from "@testing-library/react";
+import {fireEvent, screen} from "@testing-library/react";
+import {renderAppWithRoute} from "./utils";
 
 describe("application tests", () => {
-    it("shows expected header text", async () => {
-        render(<App/>)
-        expect(await screen.findByText("hello world!")).toBeInTheDocument()
+    it("shows question page on question route", async () => {
+        renderAppWithRoute("/question")
+        expect(await screen.findByText(/Question/)).toBeInTheDocument()
+    })
+
+    it("clicking link on home page takes you to question page", async () => {
+        renderAppWithRoute("/")
+        expect(await screen.findByText("Go to question page")).toBeInTheDocument()
+        fireEvent.click(screen.getByText("Go to question page"))
+        expect(await screen.findByText("Question page")).toBeInTheDocument()
     })
 })

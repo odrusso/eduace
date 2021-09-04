@@ -1,13 +1,15 @@
-// eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef,@typescript-eslint/no-var-requires
 const path = require('path');
-// eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef,@typescript-eslint/no-var-requires
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 // eslint-disable-next-line no-undef
 module.exports = {
+    entry: "./src/index.tsx",
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
+        publicPath: '/'
     },
     resolve: {
         extensions: [".jsx", ".js", ".tsx", "ts"],
@@ -53,7 +55,10 @@ module.exports = {
         ],
     },
     devServer: {
-        contentBase: './build',
+        // contentBase: './build',
+        historyApiFallback: {
+            index: '/'
+        }
     },
     plugins: [
         new HtmlWebPackPlugin({
