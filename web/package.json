@@ -100,5 +100,8 @@
     "testMatch": [
       "**/src/**/?(*.)+(spec|test).[jt]s?(x)"
     ]
+  },
+  "msw": {
+    "workerDirectory": "."
   }
 }

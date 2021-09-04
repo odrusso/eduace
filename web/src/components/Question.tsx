@@ -15,25 +15,40 @@ export const Question = (): JSX.Element => {
     ]
 
     const [selectedQuestion, setSelectedQuestion] = useState<QuestionTypeDTO>(listOfQuestions[0])
+    // TODO: Type the API reqs and responses
+    const [selectedQuestionData, setSelectedQuestionData] = useState<any | undefined>()
 
     // TODO: Think about this.
     const seed = "12345"
 
     // Fetch the question every time the selectedQuestion changes
     useEffect(() => {
-        // TODO: Better (centralised) URL construction
-        const url = `/api/v1/questions/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
+        const fetchData = async () => {
+            // TODO: Better (centralised) URL construction
+            const url = `/api/v1/questions/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
 
-        // TODO: Actually fetch from the API
-        console.log(`fetching from URL: ${url}`)
+            // TODO: Actually fetch from the API
+            console.log(`fetching from URL: ${url}`)
+            const fetchResult = await fetch(url)
+            if (fetchResult.status !== 200) {
+                console.error(`Invalid response code ${fetchResult.status}`)
+                return
+            }
+            const questionJson = await fetchResult.json()
+            setSelectedQuestionData(questionJson)
+        }
+
+        fetchData();
     }, [selectedQuestion])
 
     return (
         <div>
             <h1>Question page</h1>
+            <h2>Mode: {process.env.NODE_ENV}</h2>
             <QuestionPicker questions={listOfQuestions} setSelectedQuestion={setSelectedQuestion}/>
             <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion.type} {selectedQuestion.id}</p>
+            <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
         </div>
     )
 }
