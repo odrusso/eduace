@@ -74,6 +74,6 @@ def get_all_questions():
     question_dict = {}
 
     for question_type in QUESTION_MAPPING.keys():
-        question_dict[question_type] = [question for question in QUESTION_MAPPING.get(question_type)]
+        question_dict[question_type] = [question for question in QUESTION_MAPPING.get(question_type).keys()]
 
     return question_dict, 200
