@@ -12,7 +12,7 @@ module.exports = {
         publicPath: '/'
     },
     resolve: {
-        extensions: [".jsx", ".js", ".tsx", "ts"],
+        extensions: [".jsx", ".js", ".tsx", ".ts"],
         modules: [path.join(__dirname, 'src'), 'node_modules'],
         alias: {
             react: path.join(__dirname, 'node_modules', 'react'),
