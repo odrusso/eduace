@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route(API_VERSION + "/question/<question_type>/<question_id>", methods=["GET"])
 def question_router(question_type, question_id):
 
-    seed = request.args.get("seed", time())
+    seed = int(request.args.get("seed", time()))
     question, status = get_question(question_type, question_id, seed)
 
     return question.json, status
