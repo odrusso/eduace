@@ -20,6 +20,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1",
     "@types/jest-axe": "^3.5.2",
     "@types/react": "^17.0.17",
     "@types/react-bootstrap": "^0.32.26",
@@ -100,5 +101,8 @@
     "testMatch": [
       "**/src/**/?(*.)+(spec|test).[jt]s?(x)"
     ]
+  },
+  "msw": {
+    "workerDirectory": "."
   }
 }

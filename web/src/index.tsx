@@ -3,4 +3,10 @@ import {render} from "react-dom";
 import {App} from "./components/App";
 import {BrowserRouter} from "react-router-dom";
 
+// Start the mocking conditionally.
+if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('./mocks/browser').worker.start()
+}
+
 render(<BrowserRouter><App/></BrowserRouter>, document.getElementById("root"))
