@@ -8,9 +8,9 @@ app = Flask(__name__)
 def question_router(question_type, question_id):
 
     seed = request.args.get("seed", time())
-    question = get_question(question_type, question_id, seed)
+    question, status = get_question(question_type, question_id, seed)
 
-    return question.json
+    return question.json, status
 
 
 if __name__ == "__main__":

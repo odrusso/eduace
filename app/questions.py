@@ -57,12 +57,15 @@ QUESTION_MAPPING = {
 
 def get_question(question_type, question_id, seed):
 
-    if QUESTION_MAPPING.get(question_type, None):
-        if QUESTION_MAPPING.get(question_type).get(question_id, None):
-            question = QUESTION_MAPPING.get(question_type).get(question_id)(seed)
+    if question_type := QUESTION_MAPPING.get(question_type, None):
+        if question := question_type.get(question_id, None):
+            question = question(seed)
+            status = 200
         else:
             question = QuestionError()
+            status = 404
     else:
         question = QuestionTypeError()
+        status = 404
 
-    return question
+    return question, status
