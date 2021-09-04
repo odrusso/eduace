@@ -69,3 +69,11 @@ def get_question(question_type, question_id, seed):
         status = 404
 
     return question, status
+
+def get_all_questions():
+    question_dict = {}
+
+    for question_type, question_type_items in QUESTION_MAPPING.items():
+        question_dict[question_type] = list(question_type_items.keys())
+
+    return question_dict, 200
