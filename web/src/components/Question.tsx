@@ -8,6 +8,7 @@ type QuestionTypeDTO = {
 
 export const Question = (): JSX.Element => {
 
+    // TODO: Pull this dynamically from API
     const listOfQuestions: QuestionTypeDTO[] = [
         {type: "mcat", id: "1"},
         {type: "mcat", id: "2"},
