@@ -1,13 +1,25 @@
 from sympy import symbols, latex, Eq
 
-class QuestionError:
+class QuestionError(Exception):
     def __init__(self):
         self.description = "Question not found."
 
+    @property
+    def json(self):
+        return {
+            "description": self.description,
+        }
 
-class QuestionTypeError:
+
+class QuestionTypeError(Exception):
     def __init__(self):
         self.description = "Question type not found."
+
+    @property
+    def json(self):
+        return {
+            "description": self.description,
+        }
 
 
 class Question:
@@ -17,7 +29,7 @@ class Question:
         self.seed = seed
     
     @property
-    def __dict__(self):
+    def json(self):
         return {
             "description": self.description,
             "question": self.question,
