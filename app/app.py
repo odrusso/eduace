@@ -1,10 +1,11 @@
 from flask import Flask, request
+from .config import API_VERSION
 from time import time
 from .questions import get_question
 
 app = Flask(__name__)
 
-@app.route("/question/<question_type>/<question_id>", methods=["GET"])
+@app.route(API_VERSION + "/question/<question_type>/<question_id>", methods=["GET"])
 def question_router(question_type, question_id):
 
     seed = request.args.get("seed", time())
