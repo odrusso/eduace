@@ -68,5 +68,11 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
+# Yucky
+.DS_Store
+
+# no cache
+__pycache__
+
 
 # End of https://www.gitignore.io/api/pycharm
