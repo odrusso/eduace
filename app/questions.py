@@ -73,7 +73,7 @@ def get_question(question_type, question_id, seed):
 def get_all_questions():
     question_dict = {}
 
-    for question_type in QUESTION_MAPPING.keys():
-        question_dict[question_type] = list(QUESTION_MAPPING.get(question_type).keys())
+    for question_type, question_type_items in QUESTION_MAPPING.items():
+        question_dict[question_type] = list(question_type_items.keys())
 
     return question_dict, 200
