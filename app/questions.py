@@ -1,5 +1,6 @@
 from sympy import symbols, latex, Eq
 
+
 class QuestionError(Exception):
     def __init__(self):
         self.description = "Question not found."
@@ -56,7 +57,6 @@ QUESTION_MAPPING = {
 
 
 def get_question(question_type, question_id, seed):
-
     if question_type := QUESTION_MAPPING.get(question_type, None):
         if question := question_type.get(question_id, None):
             question = question(seed)
@@ -70,10 +70,14 @@ def get_question(question_type, question_id, seed):
 
     return question, status
 
+
 def get_all_questions():
-    question_dict = {}
+    question_list = []
 
     for question_type, question_type_items in QUESTION_MAPPING.items():
-        question_dict[question_type] = list(question_type_items.keys())
+        question_list.append({
+            "questionTypeName": question_type,
+            "questionIds": list(question_type_items.keys())
+        })
 
-    return question_dict, 200
+    return question_list, 200
