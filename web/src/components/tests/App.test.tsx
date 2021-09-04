@@ -1,4 +1,4 @@
-import {act, fireEvent, screen} from "@testing-library/react";
+import {screen} from "@testing-library/react";
 import {renderAppWithRoute} from "./utils";
 import userEvent from "@testing-library/user-event";
 
