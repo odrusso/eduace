@@ -1,16 +1,18 @@
-import {fireEvent, screen} from "@testing-library/react";
+import {act, fireEvent, screen} from "@testing-library/react";
 import {renderAppWithRoute} from "./utils";
+import userEvent from "@testing-library/user-event";
 
 describe("application tests", () => {
     it("shows question page on question route", async () => {
         renderAppWithRoute("/question")
-        expect(await screen.findByText(/Question/)).toBeInTheDocument()
+        await screen.findByText(/Question/)
     })
 
     it("clicking link on home page takes you to question page", async () => {
         renderAppWithRoute("/")
-        expect(await screen.findByText("Go to question page")).toBeInTheDocument()
-        fireEvent.click(screen.getByText("Go to question page"))
-        expect(await screen.findByText("Question page")).toBeInTheDocument()
+        await screen.findByText("Go to question page")
+        userEvent.click(screen.getByText("Go to question page"))
+        await screen.findByText("Question page")
+        await screen.findByText(/selected question data:/)
     })
 })

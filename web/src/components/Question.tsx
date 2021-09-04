@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
+import {get} from "../utils";
 
 // TODO Refactor this into a models area
 type QuestionTypeDTO = {
@@ -30,7 +31,7 @@ export const Question = (): JSX.Element => {
 
             // TODO: Actually fetch from the API
             console.log(`fetching from URL: ${url}`)
-            const fetchResult = await fetch(url)
+            const fetchResult = await get(url)
             if (fetchResult.status !== 200) {
                 console.error(`Invalid response code ${fetchResult.status}`)
                 return
