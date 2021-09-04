@@ -1,24 +1,17 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {get} from "../utils";
 
-// TODO Refactor this into a models area
-type QuestionTypeDTO = {
-    type: string,
-    id: string
-}
-
 export const Question = (): JSX.Element => {
 
     // TODO: Pull this dynamically from API
-    const listOfQuestions: QuestionTypeDTO[] = [
+    const listOfQuestions: QuestionRequestDTO[] = [
         {type: "mcat", id: "1"},
         {type: "mcat", id: "2"},
         {type: "mcat", id: "3"},
     ]
 
-    const [selectedQuestion, setSelectedQuestion] = useState<QuestionTypeDTO>(listOfQuestions[0])
-    // TODO: Type the API reqs and responses
-    const [selectedQuestionData, setSelectedQuestionData] = useState<any | undefined>()
+    const [selectedQuestion, setSelectedQuestion] = useState<QuestionRequestDTO>(listOfQuestions[0])
+    const [selectedQuestionData, setSelectedQuestionData] = useState<QuestionResponseDTO | undefined>()
 
     // TODO: Think about this.
     const seed = "12345"
@@ -29,10 +22,9 @@ export const Question = (): JSX.Element => {
             // TODO: Better (centralised) URL construction
             const url = `/api/v1/questions/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
 
-            // TODO: Actually fetch from the API
-            console.log(`fetching from URL: ${url}`)
             const fetchResult = await get(url)
             if (fetchResult.status !== 200) {
+                // TODO: Better error handling
                 console.error(`Invalid response code ${fetchResult.status}`)
                 return
             }
@@ -57,8 +49,8 @@ export const Question = (): JSX.Element => {
 
 // TODO: Refactor the picker into a separate file
 type QuestionPickerProps = {
-    questions: QuestionTypeDTO[],
-    setSelectedQuestion: (q: QuestionTypeDTO) => void
+    questions: QuestionRequestDTO[],
+    setSelectedQuestion: (q: QuestionRequestDTO) => void
 }
 
 const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): JSX.Element => {
