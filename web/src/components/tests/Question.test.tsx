@@ -1,6 +1,8 @@
+import React from "react";
 import {renderAppWithRoute} from "./utils";
-import {screen, waitFor} from "@testing-library/react";
+import {render, screen, waitFor} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {SolutionEntry} from "../Question";
 
 
 describe("question page", () => {
@@ -29,5 +31,10 @@ describe("question page", () => {
         screen.getByText("mcat 1")
         screen.getByText("mcat 2")
         screen.getByText("mcat 3")
+    })
+
+    it("something", async () => {
+        render(<SolutionEntry/>)
+        await screen.findByText("hell on earth")
     })
 })

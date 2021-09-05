@@ -19,6 +19,16 @@ export const handlers = [
         )
     }),
 
+    rest.post('*/api/v1/questions/:questionType/:questionID', (req, res, ctx) => {
+        console.log(req.body)
+        return res(
+            ctx.status(200),
+            ctx.json({
+                result: req.params["questionID"] == "0"
+            } as QuestionAnswerResponseDTO)
+        )
+    }),
+
     rest.get('*/api/v1/questions', (req, res, ctx) => {
         return res(
             ctx.status(200),

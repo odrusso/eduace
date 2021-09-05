@@ -1,6 +1,8 @@
 import katex from "katex";
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {get} from "../utils";
+import {MathfieldComponent} from "./MathliveComponent";
+import {Mathfield, MathfieldElement} from "mathlive";
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
@@ -59,6 +61,7 @@ export const Question = (): JSX.Element => {
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
             <div ref={latexDiv} data-testid={"question-latex"}/>
+            <SolutionEntry/>
         </div>
     )
 }
@@ -93,5 +96,30 @@ const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): 
                 <option key={index} value={index}>{question.type} {question.id}</option>
             )}
         </select>
+    )
+}
+
+export const SolutionEntry = (): JSX.Element => {
+    const [latex, setLatex] = useState("69")
+    const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
+
+    useEffect(() => {
+        if (!mathfield) return
+        mathfield.style.border = "1px solid rgba(0, 0, 0, .3)"
+        mathfield.style.borderRadius = "5px"
+        mathfield.style.boxShadow = "0 0 8px rgba(0, 0, 0, .2)"
+        mathfield.style.padding = "8px"
+    }, [mathfield])
+
+    return (
+        <>
+            <MathfieldComponent
+                latex={latex}
+                onChange={setLatex}
+                mathfieldRef={(mf) => setMathfield(mf)}
+            />
+
+            <p>output: {latex}</p>
+        </>
     )
 }

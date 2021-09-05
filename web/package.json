@@ -52,6 +52,7 @@
     "html-webpack-plugin": "^4.5.1",
     "katex": "^0.13.18",
     "lodash": "^4.17.20",
+    "mathlive": "^0.69.6",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
@@ -93,8 +94,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/mocks/styleMock.js",
+      "\\.(css|less)$": "<rootDir>/src/mocks/styleMock.ts"
     },
     "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [

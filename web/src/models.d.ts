@@ -15,3 +15,12 @@ type QuestionListResponseDTO = {
         questionIds: string[]
     }[]
 }
+
+type QuestionAnswerRequestDTO = {
+    attempt: string,
+    question: string
+}
+
+type QuestionAnswerResponseDTO = {
+    result: boolean
+}
