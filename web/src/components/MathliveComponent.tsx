@@ -7,16 +7,7 @@ import {useEffect, useRef, useState} from "react";
 export type Props = {
     latex: string;
     onChange?: (latex: string) => void;
-
-    /**
-     * The raw options of MathfieldElement.
-     * */
     mathfieldConfig?: Partial<MathfieldConfig>;
-
-    /**
-     * Will run any method with a reference to the MathfieldElemenet,
-     * ideal for settings refs
-     */
     mathfieldRef?: (mathfieldElement: MathfieldElement) => void;
 }
 

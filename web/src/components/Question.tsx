@@ -1,14 +1,26 @@
 import katex from "katex";
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
-import {get} from "../utils";
+import {get, post} from "../utils";
 import {MathfieldComponent} from "./MathliveComponent";
-import {Mathfield, MathfieldElement} from "mathlive";
+import {MathfieldElement} from "mathlive";
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
     const [selectedQuestion, setSelectedQuestion] = useState<QuestionRequestDTO | undefined>()
     const [selectedQuestionData, setSelectedQuestionData] = useState<QuestionResponseDTO | undefined>()
+    const [latex, setLatex] = useState("")
     const latexDiv = useRef<HTMLDivElement>(null)
+
+    const handleSubmit = async () => {
+        // TODO: Disable button while submitting
+        const url = `/api/v1/questions/${selectedQuestion?.type}/${selectedQuestion?.id}`
+        const res = await post(url, {
+            attempt: latex,
+            question: selectedQuestionData!.question
+        } as QuestionAnswerRequestDTO)
+        const resBody = (await res.json()) as QuestionAnswerResponseDTO
+        alert(`correct: ${resBody.result}`)
+    }
 
     // TODO: Think about this.
     const seed = "12345"
@@ -60,19 +72,32 @@ export const Question = (): JSX.Element => {
             <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
-            <div ref={latexDiv} data-testid={"question-latex"}/>
-            <SolutionEntry/>
+            {selectedQuestion && (
+                <>
+                    <div ref={latexDiv} data-testid={"question-latex"}/>
+                    <SolutionEntry latex={latex} setLatex={setLatex}/>
+                    <button onClick={handleSubmit}>Submit</button>
+                </>
+            )}
         </div>
     )
 }
 
-// TODO: Refactor the picker into a separate file
-type QuestionPickerProps = {
+// TODO: Refactor these into a separate files
+type QuestionPickerProps =
+{
     questions: QuestionListResponseDTO,
-    setSelectedQuestion: (q: QuestionRequestDTO) => void
+        setSelectedQuestion
+:
+    (q: QuestionRequestDTO) => void
 }
 
-const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): JSX.Element => {
+const QuestionPicker = (
+{
+    questions, setSelectedQuestion
+}
+: QuestionPickerProps): JSX.Element =>
+{
     const questionToRender = questions.questions
         .filter((it) => it.questionTypeName === "mcat")
         .flatMap((question) => {
@@ -99,8 +124,20 @@ const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): 
     )
 }
 
-export const SolutionEntry = (): JSX.Element => {
-    const [latex, setLatex] = useState("69")
+export type SolutionEntry =
+{
+    latex: string,
+        setLatex
+:
+    (latex: string) => void
+}
+
+export const SolutionEntry = (
+{
+    latex, setLatex
+}
+:SolutionEntry): JSX.Element =>
+{
     const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
 
     useEffect(() => {
