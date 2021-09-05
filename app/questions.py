@@ -72,12 +72,12 @@ def get_question(question_type, question_id, seed):
 
 
 def get_all_questions():
-    question_list = []
+    question_response = {"questions": []}
 
     for question_type, question_type_items in QUESTION_MAPPING.items():
-        question_list.append({
+        question_response["questions"].append({
             "questionTypeName": question_type,
             "questionIds": list(question_type_items.keys())
         })
 
-    return question_list, 200
+    return question_response, 200

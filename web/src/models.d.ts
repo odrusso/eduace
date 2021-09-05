@@ -10,7 +10,7 @@ type QuestionResponseDTO = {
 }
 
 type QuestionListResponseDTO = {
-    questionType: {
+    questions: {
         questionTypeName: string,
         questionIds: string[]
     }[]
