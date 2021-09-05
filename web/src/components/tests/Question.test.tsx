@@ -15,7 +15,7 @@ describe("question page", () => {
         renderAppWithRoute("/question")
         await screen.findByText("selected question:")
         const selectBox = screen.getByText("-- select an option --")
-        userEvent.selectOptions(selectBox.parentElement, ["0"])
+        userEvent.selectOptions(selectBox.parentElement!, ["0"])
         await screen.findByText("selected question: mcat 1")
     })
 
@@ -23,7 +23,7 @@ describe("question page", () => {
         renderAppWithRoute("/question")
         await screen.findByText("selected question:")
         const selectBox = screen.getByText("-- select an option --")
-        expect(selectBox.parentElement.children.length).toBe(4)
+        expect(selectBox.parentElement!.children!.length).toBe(4)
         screen.getByText("mcat 1")
         screen.getByText("mcat 2")
         screen.getByText("mcat 3")
