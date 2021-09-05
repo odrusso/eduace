@@ -1,4 +1,5 @@
 from sympy import symbols, latex, Eq
+from . import maths_service
 
 class QuestionError(Exception):
     def __init__(self):
@@ -41,9 +42,8 @@ class MCATQuestion1(Question):
         super().__init__(seed)
 
         x = symbols("x")
-        ## TODO: Use seed
-        a = 2
-        b = 3
+        a, b = maths_service.integer_coefficients(amount=2, seed=self.seed)
+
         self.description = "Solve a linear equation."
         self.question = latex(Eq(a * x + b, 0))
 
