@@ -25,7 +25,7 @@ class TestApp(unittest.TestCase):
         status = response.status
         data = response.get_json()
 
-        self.assertEqual('403 NOT FOUND', status)
+        self.assertEqual('404 NOT FOUND', status)
         self.assertTrue("Question not found." in data.get("description"))
 
     def test_get_question_type_not_found(self):
