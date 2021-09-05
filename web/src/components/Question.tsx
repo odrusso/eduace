@@ -55,7 +55,6 @@ export const Question = (): JSX.Element => {
             <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
-            <button onClick={() => alert(JSON.stringify(selectedQuestion))}>Show question</button>
         </div>
     )
 }
