@@ -84,20 +84,12 @@ export const Question = (): JSX.Element => {
 }
 
 // TODO: Refactor these into a separate files
-type QuestionPickerProps =
-{
+type QuestionPickerProps = {
     questions: QuestionListResponseDTO,
-        setSelectedQuestion
-:
-    (q: QuestionRequestDTO) => void
+    setSelectedQuestion: (q: QuestionRequestDTO) => void
 }
 
-const QuestionPicker = (
-{
-    questions, setSelectedQuestion
-}
-: QuestionPickerProps): JSX.Element =>
-{
+const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): JSX.Element => {
     const questionToRender = questions.questions
         .filter((it) => it.questionTypeName === "mcat")
         .flatMap((question) => {
@@ -124,20 +116,12 @@ const QuestionPicker = (
     )
 }
 
-export type SolutionEntry =
-{
+export type SolutionEntry = {
     latex: string,
-        setLatex
-:
-    (latex: string) => void
+    setLatex: (latex: string) => void
 }
 
-export const SolutionEntry = (
-{
-    latex, setLatex
-}
-:SolutionEntry): JSX.Element =>
-{
+export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => {
     const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
 
     useEffect(() => {
