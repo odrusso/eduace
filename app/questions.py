@@ -1,4 +1,6 @@
 from sympy import symbols, latex, Eq
+from . import maths_service
+
 
 class QuestionError(Exception):
     def __init__(self):
@@ -41,9 +43,8 @@ class MCATQuestion1(Question):
         super().__init__(seed)
 
         x = symbols("x")
-        ## TODO: Use seed
-        a = 2
-        b = 3
+        a, b = maths_service.integer_coefficients(amount=2, seed=self.seed)
+
         self.description = "Solve a linear equation."
         self.question = latex(Eq(a * x + b, 0))
 
@@ -56,7 +57,6 @@ QUESTION_MAPPING = {
 
 
 def get_question(question_type, question_id, seed):
-
     if question_type := QUESTION_MAPPING.get(question_type, None):
         if question := question_type.get(question_id, None):
             question = question(seed)
@@ -70,10 +70,14 @@ def get_question(question_type, question_id, seed):
 
     return question, status
 
+
 def get_all_questions():
-    question_dict = {}
+    question_response = {"questions": []}
 
     for question_type, question_type_items in QUESTION_MAPPING.items():
-        question_dict[question_type] = list(question_type_items.keys())
+        question_response["questions"].append({
+            "questionTypeName": question_type,
+            "questionIds": list(question_type_items.keys())
+        })
 
-    return question_dict, 200
+    return question_response, 200
