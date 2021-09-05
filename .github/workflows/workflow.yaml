@@ -25,3 +25,6 @@ jobs:
       - name: Build
         working-directory: ./web
         run: npm run build
+
+      - name: Test Backend
+        run: pip install -r requirements.txt && python -m unittest
