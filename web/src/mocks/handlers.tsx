@@ -14,7 +14,7 @@ export const handlers = [
             ctx.status(200),
             ctx.json({
                 description: "Solve a linear equation.",
-                question: "a * x + b = 0"
+                question: `a x + b = ${req.params['questionID']} + \\frac12`
             } as QuestionResponseDTO)
         )
     }),
