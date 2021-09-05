@@ -13,10 +13,21 @@ export const handlers = [
         return res(
             ctx.status(200),
             ctx.json({
-                "name": `${req.params['questionType']} ${req.params['questionID']}`,
-                "description": "Solve a linear equation.",
-                "latex": "a * x + b = 0"
-            })
+                description: "Solve a linear equation.",
+                question: "a * x + b = 0"
+            } as QuestionResponseDTO)
+        )
+    }),
+
+    rest.get('*/api/v1/questions', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({
+                questions: [{
+                    questionTypeName: "mcat",
+                    questionIds: ["1", "2", "3"]
+                }]
+            } as QuestionListResponseDTO)
         )
     })
 ]
