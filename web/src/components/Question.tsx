@@ -1,10 +1,12 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import katex from "katex";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {get} from "../utils";
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
     const [selectedQuestion, setSelectedQuestion] = useState<QuestionRequestDTO | undefined>()
     const [selectedQuestionData, setSelectedQuestionData] = useState<QuestionResponseDTO | undefined>()
+    const latexDiv = useRef<HTMLDivElement>(null)
 
     // TODO: Think about this.
     const seed = "12345"
@@ -38,8 +40,9 @@ export const Question = (): JSX.Element => {
                 console.error(`Invalid response code ${fetchResult.status}`)
                 return
             }
-            const questionJson = await fetchResult.json()
+            const questionJson: QuestionResponseDTO = await fetchResult.json()
             setSelectedQuestionData(questionJson)
+            katex.render(questionJson.question, latexDiv.current!)
         }
 
         fetchData();
@@ -55,6 +58,7 @@ export const Question = (): JSX.Element => {
             <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
+            <div ref={latexDiv} data-testid={"question-latex"}/>
         </div>
     )
 }
@@ -75,7 +79,7 @@ const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): 
                     id: id
                 }
             })
-        } )
+        })
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         if (e.target.value === "off") return
@@ -84,10 +88,10 @@ const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): 
 
     return (
         <select onChange={handleChange} defaultValue={"off"}>
-            <option disabled value={"off"}> -- select an option -- </option>
+            <option disabled value={"off"}> -- select an option --</option>
             {questionToRender.map((question, index) =>
-                    <option key={index} value={index}>{question.type} {question.id}</option>
-                )}
+                <option key={index} value={index}>{question.type} {question.id}</option>
+            )}
         </select>
     )
 }
