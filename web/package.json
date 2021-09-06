@@ -4,7 +4,7 @@
   "main": "index.tsx",
   "scripts": {
     "mock": "webpack serve --mode=development --open --hot --env API_HOST=http://localhost:3000 --env MOCK_API=true",
-    "start": "webpack serve --mode=development --open --hot API_HOST=http://localhost:5000 --env MOCK_API=false",
+    "start": "webpack serve --mode=development --open --hot --env API_HOST=http://localhost:5000 --env MOCK_API=false",
     "build": "webpack --mode=production --env MOCK_API=false",
     "test": "jest --passWithNoTests"
   },

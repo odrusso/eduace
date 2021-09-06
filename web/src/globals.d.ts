@@ -1,6 +1,7 @@
 declare const process: {
     env: {
-        BASE_URL: string,
+        NODE_ENV: string,
+        MOCK_API: string,
         API_HOST: string,
     }
 }

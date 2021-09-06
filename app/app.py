@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS_HEADERS = {"Access-Control-Allow-Origin": "*"}
 
 
-@app.route(API_VERSION + "/questions/<question_type>/<question_id>", methods=["GET"])
+@app.route(API_VERSION + "/question/<question_type>/<question_id>", methods=["GET"])
 def question_router(question_type, question_id):
     seed = int(request.args.get("seed", time()))
     question, status = get_question(question_type, question_id, seed)
