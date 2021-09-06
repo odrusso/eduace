@@ -1,5 +1,6 @@
 import unittest
 from app.app import app
+import json
 
 
 class TestApp(unittest.TestCase):
@@ -45,3 +46,28 @@ class TestApp(unittest.TestCase):
         self.assertEqual('200 OK', status)
         self.assertTrue("questions" in data.keys())
         self.assertTrue(len(data.get("questions")) > 0)
+
+    def test_check_solution_correct(self):
+        body = {"question": "2 x + 3 = 0", "attempt": "x = -\\frac{3}{2}"}
+        response = self.client.post("/api/v1/question/mcat/1", data=json.dumps(body), content_type='application/json')
+
+        status = response.status
+        data = response.get_json()
+
+        self.assertEqual("200 OK", status)
+        self.assertEqual(body.get("question"), data.get("question"))
+        self.assertEqual(body.get("attempt"), data.get("attempt"))
+        self.assertEqual(True, data.get("result"))
+
+    def test_check_solution_incorrect(self):
+        body = {"question": "2 x + 3 = 0", "attempt": "x = 1000"}
+
+        response = self.client.post("/api/v1/question/mcat/1", data=json.dumps(body), content_type='application/json')
+
+        status = response.status
+        data = response.get_json()
+
+        self.assertEqual("200 OK", status)
+        self.assertEqual(body.get("question"), data.get("question"))
+        self.assertEqual(body.get("attempt"), data.get("attempt"))
+        self.assertEqual(False, data.get("result"))
