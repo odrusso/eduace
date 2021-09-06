@@ -25,16 +25,19 @@ class AttemptTypeError(Exception):
 
 
 class Attempt:
-    def __init__(self, question, attempt):
+    def __init__(self, question, attempt, question_type, question_id, independent_var="x"):
+        self.question_type = question_type
+        self.question_id = question_id
         self.question = question
         self.attempt = attempt
-    
+        self.independent_var = independent_var
+
     @property
     def json(self):
         return {
             "question": self.question,
             "attempt": self.attempt,
-            "result": is_correct(self.question, self.attempt),
+            "result": is_correct(self.question, self.attempt, self.question_type, self.question_id, self.independent_var),
         }
 
 
@@ -45,7 +48,7 @@ def check_solution(question_type, question_id, attempt):
 
     if question_type := QUESTION_MAPPING.get(question_type, None):
         if question_type.get(question_id, None):
-            attempt_response = Attempt(question, attempt)
+            attempt_response = Attempt(question, attempt, question_type, question_id)
             status = 200
         else:
             attempt_response = AttemptError()
