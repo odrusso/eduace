@@ -46,7 +46,7 @@ export const Question = (): JSX.Element => {
         if (!selectedQuestion) return
         const fetchData = async () => {
             // TODO: Better (centralised) URL construction
-            const url = `/api/v1/questions/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
+            const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
 
             const fetchResult = await get(url)
             if (fetchResult.status !== 200) {

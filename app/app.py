@@ -5,20 +5,22 @@ from .questions import get_question, get_all_questions
 
 app = Flask(__name__)
 
+CORS_HEADERS = {"Access-Control-Allow-Origin": "*"}
+
+
 @app.route(API_VERSION + "/question/<question_type>/<question_id>", methods=["GET"])
 def question_router(question_type, question_id):
-
     seed = int(request.args.get("seed", time()))
     question, status = get_question(question_type, question_id, seed)
 
-    return question.json, status
+    return question.json, status, CORS_HEADERS
+
 
 @app.route(API_VERSION + "/questions", methods=["GET"])
 def questions():
-    
     question_dict, status = get_all_questions()
 
-    return question_dict, status
+    return question_dict, status, CORS_HEADERS
 
 
 if __name__ == "__main__":
