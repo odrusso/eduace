@@ -1,21 +1,10 @@
 from .solution_service import is_correct
-from .questions import QUESTION_MAPPING
+from .utils import is_question
 
 
 class AttemptError(Exception):
     def __init__(self):
         self.description = "Solution or question not found."
-
-    @property
-    def json(self):
-        return {
-            "description": self.description,
-        }
-
-
-class AttemptTypeError(Exception):
-    def __init__(self):
-        self.description = "Solution or question type not found."
 
     @property
     def json(self):
@@ -43,18 +32,14 @@ class Attempt:
 
 def check_solution(question_type, question_id, attempt):
 
-    question = attempt.get("question")
-    attempt = attempt.get("attempt")
+    if is_question(question_type, question_id):
+        question = attempt.get("question")
+        attempt = attempt.get("attempt")
+        attempt_response = Attempt(question, attempt, question_type, question_id)
+        status = 200
 
-    if question_type := QUESTION_MAPPING.get(question_type, None):
-        if question_type.get(question_id, None):
-            attempt_response = Attempt(question, attempt, question_type, question_id)
-            status = 200
-        else:
-            attempt_response = AttemptError()
-            status = 404
     else:
-        attempt_response = AttemptTypeError()
+        attempt_response = AttemptError()
         status = 404
 
     return attempt_response, status
