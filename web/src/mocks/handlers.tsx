@@ -9,7 +9,7 @@ export const handlers = [
         )
     }),
 
-    rest.get('*/api/v1/questions/:questionType/:questionID', (req, res, ctx) => {
+    rest.get('*/api/v1/question/:questionType/:questionID', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json({

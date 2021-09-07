@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "main": "index.tsx",
   "scripts": {
-    "start": "webpack serve --mode=development --open --hot",
-    "build": "webpack --mode=production",
+    "mock": "webpack serve --mode=development --open --hot --env API_HOST=http://localhost:3000 --env MOCK_API=true",
+    "start": "webpack serve --mode=development --open --hot --env API_HOST=http://localhost:5000 --env MOCK_API=false",
+    "build": "webpack --mode=production --env MOCK_API=false",
     "test": "jest --passWithNoTests"
   },
   "repository": {
