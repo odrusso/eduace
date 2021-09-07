@@ -56,11 +56,18 @@ export const Question = (): JSX.Element => {
             }
             const questionJson: QuestionResponseDTO = await fetchResult.json()
             setSelectedQuestionData(questionJson)
-            katex.render(questionJson.question, latexDiv.current!)
         }
 
         fetchData();
     }, [selectedQuestion])
+
+
+    // Updates the latex
+    useEffect(() => {
+        if (!selectedQuestionData) return
+        if (latexDiv.current === null) return
+        katex.render(selectedQuestionData.question, latexDiv.current!)
+    }, [selectedQuestionData, latexDiv])
 
     if (!questions) return <h1>Loading...</h1>
 
@@ -72,7 +79,7 @@ export const Question = (): JSX.Element => {
             <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
-            {selectedQuestion && (
+            {selectedQuestionData && (
                 <>
                     <div ref={latexDiv} data-testid={"question-latex"}/>
                     <SolutionEntry latex={latex} setLatex={setLatex}/>

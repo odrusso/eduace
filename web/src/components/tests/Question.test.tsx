@@ -11,10 +11,21 @@ describe("question page", () => {
         await screen.findByText("selected question:")
     })
 
+    it("question data is hidden before quesiton selected", async () => {
+        renderAppWithRoute("/question")
+        await screen.findByText("selected question:")
+        expect(screen.queryByTestId("question-latex")).not.toBeInTheDocument()
+        expect(screen.queryByText("Submit")).not.toBeInTheDocument()
+        const selectBox = screen.getByText("-- select an option --")
+        userEvent.selectOptions(selectBox.parentElement!, ["0"])
+        await screen.findByText("selected question: mcat 1")
+        expect(await screen.findByTestId("question-latex")).toBeInTheDocument()
+        expect(screen.getByText("Submit")).toBeInTheDocument()
+    })
+
     it("can select a question and data loads and renders latex", async () => {
         renderAppWithRoute("/question")
         await screen.findByText("selected question:")
-        expect(screen.getByTestId("question-latex").children.length).toBe(0)
         const selectBox = screen.getByText("-- select an option --")
         userEvent.selectOptions(selectBox.parentElement!, ["0"])
         await screen.findByText("selected question: mcat 1")
