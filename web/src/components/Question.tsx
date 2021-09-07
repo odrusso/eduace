@@ -64,6 +64,9 @@ export const Question = (): JSX.Element => {
 
     // Updates the latex
     useEffect(() => {
+        // There can be a race condition where the selectedQuestionData is returned
+        // before the ref is assigned to the DOM element. So we have to have
+        // both as deps here, and be careful about what we do when either of the change
         if (!selectedQuestionData) return
         if (latexDiv.current === null) return
         katex.render(selectedQuestionData.question, latexDiv.current!)
