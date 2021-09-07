@@ -9,6 +9,10 @@ expect.extend(toHaveNoViolations)
 // eslint-disable-next-line no-undef
 window.fetch = require("node-fetch")
 
+// Define env vars for test
+process.env.API_HOST = "http://test-api-path"
+process.env.MOCK_API = "true"
+
 // eslint-disable-next-line no-undef
 beforeAll(() => {
     // Enable the mocking in tests.
