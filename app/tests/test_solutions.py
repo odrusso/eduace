@@ -22,20 +22,21 @@ class SolutionUtilitiesTests(unittest.TestCase):
         self.assertEqual(self.attempt.get("attempt"), response.json.get("attempt"))
         self.assertEqual(True, response.json.get("result"))
 
-    def test_check_solution_invalid_type(self):
-
-        question_type = "batman"
-        question_id = "1"
-
-        response, status = solutions.check_solution(question_type, question_id, self.attempt)
-
-        self.assertEqual(404, status)
-        self.assertIsInstance(response, solutions.AttemptTypeError)
-        self.assertEqual("Solution or question type not found.", response.json.get("description"))
 
     def test_check_solution_invalid_id(self):
 
         question_type = "mcat"
+        question_id = "999"
+
+        response, status = solutions.check_solution(question_type, question_id, self.attempt)
+
+        self.assertEqual(404, status)
+        self.assertIsInstance(response, solutions.AttemptError)
+        self.assertEqual("Solution or question not found.", response.json.get("description"))
+
+    def test_check_solution_invalid_type(self):
+
+        question_type = "batman"
         question_id = "999"
 
         response, status = solutions.check_solution(question_type, question_id, self.attempt)
