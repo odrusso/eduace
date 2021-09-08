@@ -22,7 +22,7 @@ class QuestionUtilitiesTests(unittest.TestCase):
         seed = 123
 
         try:
-            question, status = questions.get_question(question_type, question_id, seed)
+            questions.get_question(question_type, question_id, seed)
             # The above should throw an exception, so we shouldn't meet the following line
             self.assertFalse(True)
         except questions.QuestionNotFound as not_found:
