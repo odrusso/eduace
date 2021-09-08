@@ -41,17 +41,4 @@ describe("question page", () => {
         screen.getByText("mcat 2")
         screen.getByText("mcat 3")
     })
-
-    it.skip("can enter maths and we get a good latex result", async () => {
-        /**
-         * For the life of me, I really can't get this to work.
-         * It might be jsdom which doesn't like the object,
-         * it might be RTL which can't interact with it.
-         * Something about ShadowDOM. I'm stumped :/
-         */
-        // render(<SolutionEntry/>)
-        // const mathFieldRoot = (await screen.findByRole("textbox")) as MathfieldElement
-        // mathFieldRoot.setValue("\\frac{1}{2}")
-        // await screen.findByText("output: \\frac{1}{2}")
-    })
 })

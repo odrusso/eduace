@@ -13,7 +13,7 @@ export const Question = (): JSX.Element => {
 
     const handleSubmit = async () => {
         // TODO: Disable button while submitting
-        const url = `/api/v1/questions/${selectedQuestion?.type}/${selectedQuestion?.id}`
+        const url = `/api/v1/question/${selectedQuestion?.type}/${selectedQuestion?.id}`
         const res = await post(url, {
             attempt: latex,
             question: selectedQuestionData!.question
@@ -134,6 +134,8 @@ export type SolutionEntry = {
 export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => {
     const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
 
+    // TODO: Add a prop to Mathfield component to take in these styles
+    // and maybe any other default HTMLElement props?
     useEffect(() => {
         if (!mathfield) return
         mathfield.style.border = "1px solid rgba(0, 0, 0, .3)"
@@ -143,7 +145,7 @@ export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => 
     }, [mathfield])
 
     return (
-        <>
+        <div>
             <MathfieldComponent
                 latex={latex}
                 onChange={setLatex}
@@ -151,6 +153,6 @@ export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => 
             />
 
             <p>output: {latex}</p>
-        </>
+        </div>
     )
 }

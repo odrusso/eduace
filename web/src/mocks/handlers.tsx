@@ -12,8 +12,7 @@ export const handlers = [
         )
     }),
 
-    rest.post('*/api/v1/questions/:questionType/:questionID', (req, res, ctx) => {
-        console.log(req.body)
+    rest.post('*/api/v1/question/:questionType/:questionID', (req, res, ctx) => {
         return res(
             ctx.status(200),
             ctx.json({
