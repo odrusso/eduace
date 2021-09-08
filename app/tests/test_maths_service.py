@@ -15,7 +15,7 @@ class MathsServiceTests(unittest.TestCase):
         self.assertEqual(expectation, coefficients_1)
         self.assertEqual(expectation, coefficients_2)
         self.assertEqual(3, len(coefficients_1))
-        
+
         for integer in coefficients_1:
             self.assertIsInstance(integer, int)
 
@@ -28,7 +28,7 @@ class MathsServiceTests(unittest.TestCase):
 
         self.assertNotEqual(coefficients_1, coefficients_2)
         self.assertEqual(3, len(coefficients_1))
-        
+
         for integer in coefficients_1:
             self.assertIsInstance(integer, int)
 

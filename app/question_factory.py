@@ -9,7 +9,7 @@ class Question:
         self.question = ""
         self.seed = seed
         self.independent_var = independent_var
-    
+
     @property
     def json(self):
         return {
