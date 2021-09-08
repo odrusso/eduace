@@ -1,5 +1,6 @@
+from sympy import solve, symbols
 from sympy.parsing.latex import parse_latex
-from sympy import symbols, solve
+
 
 def is_correct(question, attempt, question_type, question_id, independent_var="x"):
     ## This method will certainly grow in complexity to handle other

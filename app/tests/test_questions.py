@@ -1,4 +1,5 @@
 import unittest
+
 from app import questions
 
 
@@ -20,10 +21,11 @@ class QuestionUtilitiesTests(unittest.TestCase):
         question_id = "99"
         seed = 123
 
-        question, status = questions.get_question(question_type, question_id, seed)
-
-        self.assertEqual("Question not found.", question.description)
-        self.assertEqual(404, status)
+        try:
+            question, status = questions.get_question(question_type, question_id, seed)
+            self.assertFalse(True)  # We expect the above line to throw an exception, so this code should only be hit if it fails to throw
+        except questions.QuestionNotFound as not_found:
+            self.assertEqual("Question not found.", not_found.json.get("description"))
 
     def test_get_all_questions(self):
 

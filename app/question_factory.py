@@ -1,5 +1,7 @@
-from sympy import symbols, latex, Eq
+from sympy import Eq, latex, symbols
+
 from . import maths_service
+
 
 class Question:
     def __init__(self, seed, independent_var):

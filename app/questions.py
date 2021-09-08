@@ -1,7 +1,8 @@
-from .utils import is_question
 from .question_factory import QUESTION_MAPPING
+from .utils import is_question
 
-class QuestionError(Exception):
+
+class QuestionNotFound(Exception):
     def __init__(self):
         self.description = "Question not found."
 
@@ -18,11 +19,10 @@ def get_question(question_type, question_id, seed):
         question = QUESTION_MAPPING.get(question_type).get(question_id)(seed)
         status = 200
 
-    else:
-        question = QuestionError()
-        status = 404
+        return question, status
 
-    return question, status
+    else:
+        raise QuestionNotFound
 
 
 def get_all_questions():
