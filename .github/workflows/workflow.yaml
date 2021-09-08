@@ -30,4 +30,4 @@ jobs:
         run: pip install -r requirements.txt && python -m unittest
 
       - name: Run Pylint
-        run: pylint-fail-under --rcfile .pylintrc --fail_under 9.99 $(git ls-files --directory app)
+        run: pylint-fail-under --rcfile .pylintrc --fail_under 9.75 $(git ls-files --directory app)
