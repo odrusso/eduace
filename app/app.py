@@ -1,35 +1,45 @@
-from flask import Flask, request
-from .config import API_VERSION
 from time import time
-from .questions import get_question, get_all_questions
+from flask import Flask, request
+
+from .config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG
+from .questions import QuestionNotFound, get_all_questions, get_question
 from .solutions import check_solution
+
 
 app = Flask(__name__)
 
-CORS_HEADERS = {"Access-Control-Allow-Origin": "*"}
 
+@app.after_request
+def apply_caching(response):
+    response.headers["Access-Control-Allow-Origin"] = CORS_ALLOWED_ORIGINS
 
-@app.route(API_VERSION + "/question/<question_type>/<question_id>", methods=["GET"])
+    return response
+
+@app.get(API_VERSION + "/question/<question_type>/<question_id>")
 def question_router(question_type, question_id):
     seed = int(request.args.get("seed", time()))
     question, status = get_question(question_type, question_id, seed)
 
-    return question.json, status, CORS_HEADERS
+    return question.json, status
 
-
-@app.route(API_VERSION + "/question/<question_type>/<question_id>", methods=["POST"])
+@app.post(API_VERSION + "/question/<question_type>/<question_id>")
 def get_solution(question_type, question_id):
-
-    attempt = request.get_json(force=True)
+    attempt = request.get_json()
     attempt_response, status = check_solution(question_type, question_id, attempt)
 
     return attempt_response.json, status
 
-@app.route(API_VERSION + "/questions", methods=["GET"])
+@app.get(API_VERSION + "/questions")
 def questions():
     question_dict, status = get_all_questions()
 
-    return question_dict, status, CORS_HEADERS
+    return question_dict, status
+
+@app.errorhandler(QuestionNotFound)
+def question_not_found(error):
+
+    return error.json, 404
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=DEBUG)
