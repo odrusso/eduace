@@ -19,10 +19,11 @@ def get_question(question_type, question_id, seed):
         question = QUESTION_MAPPING.get(question_type).get(question_id)(seed)
         status = 200
 
-        return question, status
-
     else:
         raise QuestionNotFound
+
+    return question, status
+
 
 
 def get_all_questions():
