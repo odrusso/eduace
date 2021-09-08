@@ -2,13 +2,6 @@
 import {rest} from "msw";
 
 export const handlers = [
-    rest.post('*', (req, res, ctx) => {
-        console.error(`No mock setup for ${req.url}`)
-        return res(
-            ctx.status(500)
-        )
-    }),
-
     rest.get('*/api/v1/question/:questionType/:questionID', (req, res, ctx) => {
         return res(
             ctx.status(200),
@@ -16,6 +9,15 @@ export const handlers = [
                 description: "Solve a linear equation.",
                 question: `a x + b = ${req.params['questionID']} + \\frac12`
             } as QuestionResponseDTO)
+        )
+    }),
+
+    rest.post('*/api/v1/question/:questionType/:questionID', (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json({
+                result: req.params["questionID"] == "1",
+            } as QuestionAnswerResponseDTO)
         )
     }),
 

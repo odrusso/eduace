@@ -1,12 +1,26 @@
 import katex from "katex";
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
-import {get} from "../utils";
+import {get, post} from "../utils";
+import {MathfieldComponent} from "./MathliveComponent";
+import {MathfieldElement} from "mathlive";
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
     const [selectedQuestion, setSelectedQuestion] = useState<QuestionRequestDTO | undefined>()
     const [selectedQuestionData, setSelectedQuestionData] = useState<QuestionResponseDTO | undefined>()
+    const [latex, setLatex] = useState("")
     const latexDiv = useRef<HTMLDivElement>(null)
+
+    const handleSubmit = async () => {
+        // TODO: Disable button while submitting
+        const url = `/api/v1/question/${selectedQuestion?.type}/${selectedQuestion?.id}`
+        const res = await post(url, {
+            attempt: latex,
+            question: selectedQuestionData!.question
+        } as QuestionAnswerRequestDTO)
+        const resBody = (await res.json()) as QuestionAnswerResponseDTO
+        alert(`correct: ${resBody.result}`)
+    }
 
     // TODO: Think about this.
     const seed = "12345"
@@ -42,11 +56,21 @@ export const Question = (): JSX.Element => {
             }
             const questionJson: QuestionResponseDTO = await fetchResult.json()
             setSelectedQuestionData(questionJson)
-            katex.render(questionJson.question, latexDiv.current!)
         }
 
         fetchData();
     }, [selectedQuestion])
+
+
+    // Updates the latex
+    useEffect(() => {
+        // There can be a race condition where the selectedQuestionData is returned
+        // before the ref is assigned to the DOM element. So we have to have
+        // both as deps here, and be careful about what we do when either of the change
+        if (!selectedQuestionData) return
+        if (latexDiv.current === null) return
+        katex.render(selectedQuestionData.question, latexDiv.current!)
+    }, [selectedQuestionData, latexDiv])
 
     if (!questions) return <h1>Loading...</h1>
 
@@ -58,12 +82,18 @@ export const Question = (): JSX.Element => {
             <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
-            <div ref={latexDiv} data-testid={"question-latex"}/>
+            {selectedQuestionData && (
+                <>
+                    <div ref={latexDiv} data-testid={"question-latex"}/>
+                    <SolutionEntry latex={latex} setLatex={setLatex}/>
+                    <button onClick={handleSubmit}>Submit</button>
+                </>
+            )}
         </div>
     )
 }
 
-// TODO: Refactor the picker into a separate file
+// TODO: Refactor these into a separate files
 type QuestionPickerProps = {
     questions: QuestionListResponseDTO,
     setSelectedQuestion: (q: QuestionRequestDTO) => void
@@ -93,5 +123,36 @@ const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): 
                 <option key={index} value={index}>{question.type} {question.id}</option>
             )}
         </select>
+    )
+}
+
+export type SolutionEntry = {
+    latex: string,
+    setLatex: (latex: string) => void
+}
+
+export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => {
+    const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
+
+    // TODO: Add a prop to Mathfield component to take in these styles
+    // and maybe any other default HTMLElement props?
+    useEffect(() => {
+        if (!mathfield) return
+        mathfield.style.border = "1px solid rgba(0, 0, 0, .3)"
+        mathfield.style.borderRadius = "5px"
+        mathfield.style.boxShadow = "0 0 8px rgba(0, 0, 0, .2)"
+        mathfield.style.padding = "8px"
+    }, [mathfield])
+
+    return (
+        <div>
+            <MathfieldComponent
+                latex={latex}
+                onChange={setLatex}
+                mathfieldRef={(mf) => setMathfield(mf)}
+            />
+
+            <p>output: {latex}</p>
+        </div>
     )
 }

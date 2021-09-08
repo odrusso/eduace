@@ -42,7 +42,7 @@ module.exports = (env) => {
                     ],
                 },
                 {
-                    test: /\.ttf$/,
+                    test: /\.(ttf|woff2)$/,
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
