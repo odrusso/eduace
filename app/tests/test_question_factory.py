@@ -1,3 +1,4 @@
+# pylint: disable=C0103
 import unittest
 from app import question_factory
 

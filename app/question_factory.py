@@ -1,3 +1,4 @@
+# pylint: disable=C0103
 from sympy import Eq, latex, symbols
 
 from . import maths_service
