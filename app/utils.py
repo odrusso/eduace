@@ -1,6 +1,6 @@
-
 from . import questions
 from .question_factory import QUESTION_MAPPING
+
 
 def is_question(question_type, question_id):
 

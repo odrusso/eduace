@@ -1,5 +1,6 @@
-from time import time
 import random
+from time import time
+
 
 def integer_coefficients(amount=1, number_range=[1, 10], seed=time()):
 

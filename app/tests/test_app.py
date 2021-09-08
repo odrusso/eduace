@@ -1,6 +1,7 @@
-import unittest
-from app.app import app
 import json
+import unittest
+
+from app.app import app
 
 
 class TestApp(unittest.TestCase):
