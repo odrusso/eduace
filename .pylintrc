@@ -1,0 +1,11 @@
+[MAIN]
+disable=too-few-public-methods,
+    super-init-not-called,
+    too-many-arguments,
+    cyclic-import, # Python won't run if the cyclic import is actually an issue
+    redundant-unittest-assert,
+    missing-function-docstring,
+    missing-class-docstring,
+    missing-module-docstring,
+    consider-iterating-dictionary,
+    invalid-name
