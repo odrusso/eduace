@@ -23,7 +23,8 @@ class QuestionUtilitiesTests(unittest.TestCase):
 
         try:
             question, status = questions.get_question(question_type, question_id, seed)
-            self.assertFalse(True)  # We expect the above line to throw an exception, so this code should only be hit if it fails to throw
+            # The above should throw an exception, so we shouldn't meet the following line
+            self.assertFalse(True)
         except questions.QuestionNotFound as not_found:
             self.assertEqual("Question not found.", not_found.json.get("description"))
 
@@ -35,4 +36,6 @@ class QuestionUtilitiesTests(unittest.TestCase):
         self.assertEqual(200, status)
 
         for question_type in questions.QUESTION_MAPPING.keys():
-            self.assertTrue(question_type in [question.get("questionTypeName") for question in response.get("questions")])
+            all_questions = response.get("questions")
+            question_types = [question.get("questionTypeName") for question in all_questions]
+            self.assertTrue(question_type in question_types)

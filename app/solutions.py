@@ -26,7 +26,11 @@ class Attempt:
         return {
             "question": self.question,
             "attempt": self.attempt,
-            "result": is_correct(self.question, self.attempt, self.question_type, self.question_id, self.independent_var),
+            "result": is_correct(self.question,
+                                 self.attempt,
+                                 self.question_type,
+                                 self.question_id,
+                                 self.independent_var),
         }
 
 
