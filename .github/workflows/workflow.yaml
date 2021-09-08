@@ -28,3 +28,6 @@ jobs:
 
       - name: Test Backend
         run: pip install -r requirements.txt && python -m unittest
+
+      - name: Run Pylint
+        run: pylint app/**/*.py
