@@ -4,6 +4,7 @@ from .utils import is_question
 
 class AttemptError(Exception):
     def __init__(self):
+        super().__init__(self)
         self.description = "Solution or question not found."
 
     @property
@@ -26,7 +27,11 @@ class Attempt:
         return {
             "question": self.question,
             "attempt": self.attempt,
-            "result": is_correct(self.question, self.attempt, self.question_type, self.question_id, self.independent_var),
+            "result": is_correct(self.question,
+                                 self.attempt,
+                                 self.question_type,
+                                 self.question_id,
+                                 self.independent_var),
         }
 
 

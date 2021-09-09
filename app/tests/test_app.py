@@ -50,7 +50,9 @@ class TestApp(unittest.TestCase):
 
     def test_check_solution_correct(self):
         body = {"question": "2 x + 3 = 0", "attempt": "x = -\\frac{3}{2}"}
-        response = self.client.post("/api/v1/question/mcat/1", data=json.dumps(body), content_type='application/json')
+        response = self.client.post("/api/v1/question/mcat/1",
+                                    data=json.dumps(body),
+                                    content_type='application/json')
 
         status = response.status
         data = response.get_json()
@@ -63,7 +65,9 @@ class TestApp(unittest.TestCase):
     def test_check_solution_incorrect(self):
         body = {"question": "2 x + 3 = 0", "attempt": "x = 1000"}
 
-        response = self.client.post("/api/v1/question/mcat/1", data=json.dumps(body), content_type='application/json')
+        response = self.client.post("/api/v1/question/mcat/1",
+                                    data=json.dumps(body),
+                                    content_type='application/json')
 
         status = response.status
         data = response.get_json()

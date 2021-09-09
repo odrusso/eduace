@@ -1,3 +1,4 @@
+# pylint: disable=C0103
 from sympy import Eq, latex, symbols
 
 from . import maths_service
@@ -9,7 +10,7 @@ class Question:
         self.question = ""
         self.seed = seed
         self.independent_var = independent_var
-    
+
     @property
     def json(self):
         return {

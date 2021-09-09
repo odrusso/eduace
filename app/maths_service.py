@@ -2,7 +2,7 @@ import random
 from time import time
 
 
-def integer_coefficients(amount=1, number_range=[1, 10], seed=time()):
+def integer_coefficients(amount=1, number_range=(1, 10), seed=time()):
 
     random.seed(a=seed)
     ints = []

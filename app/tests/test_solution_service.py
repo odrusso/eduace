@@ -16,7 +16,7 @@ class SolutionServiceTests(unittest.TestCase):
 
         self.assertTrue(result)
 
-    def test_is_correct_correct(self):
+    def test_is_correct_incorrect(self):
 
         question = "2 x + 3 = 0"
         attempt = "x = 1000"
