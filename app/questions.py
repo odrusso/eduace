@@ -4,6 +4,7 @@ from .utils import is_question
 
 class QuestionNotFound(Exception):
     def __init__(self):
+        super().__init__(self)
         self.description = "Question not found."
 
     @property

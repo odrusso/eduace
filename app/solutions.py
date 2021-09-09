@@ -4,6 +4,7 @@ from .utils import is_question
 
 class AttemptError(Exception):
     def __init__(self):
+        super().__init__(self)
         self.description = "Solution or question not found."
 
     @property

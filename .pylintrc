@@ -1,6 +1,5 @@
 [MAIN]
 disable=too-few-public-methods,
-    super-init-not-called,
     too-many-arguments,
     missing-function-docstring,
     missing-class-docstring,
