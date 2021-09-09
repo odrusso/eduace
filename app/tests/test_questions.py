@@ -21,12 +21,16 @@ class QuestionUtilitiesTests(unittest.TestCase):
         question_id = "99"
         seed = 123
 
+        question = None
+        status = None
+
         try:
-            questions.get_question(question_type, question_id, seed)
-            # The above should throw an exception, so we shouldn't meet the following line
-            self.assertFalse(True)
+            question, status = questions.get_question(question_type, question_id, seed)
         except questions.QuestionNotFound as not_found:
             self.assertEqual("Question not found.", not_found.json.get("description"))
+
+        self.assertIsNone(question)
+        self.assertIsNone(status)
 
     def test_get_all_questions(self):
 
@@ -35,7 +39,10 @@ class QuestionUtilitiesTests(unittest.TestCase):
         self.assertTrue("questions" in response.keys())
         self.assertEqual(200, status)
 
-        for question_type in questions.QUESTION_MAPPING.keys():
-            all_questions = response.get("questions")
+        all_questions = response.get("questions")
+
+        self.assertTrue(len(all_questions) > 0)
+
+        for question_type in questions.QUESTION_MAPPING.keys(): # pylint: disable=consider-iterating-dictionary
             question_types = [question.get("questionTypeName") for question in all_questions]
             self.assertTrue(question_type in question_types)
