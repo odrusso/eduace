@@ -5,3 +5,5 @@ declare const process: {
         API_HOST: string,
     }
 }
+
+declare module "*.png"
