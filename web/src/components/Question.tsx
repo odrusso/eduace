@@ -3,6 +3,7 @@ import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {get, post} from "../utils";
 import {MathfieldComponent} from "./MathliveComponent";
 import {MathfieldElement} from "mathlive";
+import "./Question.scss"
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
@@ -69,22 +70,22 @@ export const Question = (): JSX.Element => {
         // both as deps here, and be careful about what we do when either of the change
         if (!selectedQuestionData) return
         if (latexDiv.current === null) return
-        katex.render(selectedQuestionData.question, latexDiv.current!)
+        katex.render(selectedQuestionData.question, latexDiv.current!, {displayMode: true})
     }, [selectedQuestionData, latexDiv])
 
-    if (!questions) return <h1>Loading...</h1>
+    if (!questions) return <div className={"eduace-question-container"}><h1>Loading...</h1></div>
 
     return (
-        <div>
+        <div className={"eduace-question-container"}>
             <h1>Question page</h1>
-            <h2>Mode: {process.env.NODE_ENV}</h2>
             <QuestionPicker questions={questions} setSelectedQuestion={setSelectedQuestion}/>
-            <p>current seed: {seed}</p>
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
             {selectedQuestionData && (
                 <>
-                    <div ref={latexDiv} data-testid={"question-latex"}/>
+                    <div className={"eduace-question-display"}>
+                        <div ref={latexDiv} data-testid={"question-latex"}/>
+                    </div>
                     <SolutionEntry latex={latex} setLatex={setLatex}/>
                     <button onClick={handleSubmit}>Submit</button>
                 </>

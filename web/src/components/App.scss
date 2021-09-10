@@ -1,0 +1,18 @@
+html {
+  background-color: rgb(245, 246, 250);
+}
+
+body {
+  margin: 0
+}
+
+.eduace-app-container {
+  display: grid;
+  grid-template-columns: repeat(10, 10%);
+  min-height: 100vh;
+}
+
+.eduace-app-sidebar {
+  background-color: white;
+  grid-column: 1 / 2;
+}
