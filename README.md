@@ -1,5 +1,17 @@
 ![Image](https://github.com/odrusso/eduace/blob/master/docs/resources/logo_small.png)
 
-![Python3.5](https://img.shields.io/badge/python-3.6-brightgreen.svg) ![SymPy1.1.1](https://img.shields.io/badge/SymPy-1.1.1-brightgreen.svg) ![Flask](https://img.shields.io/badge/flask-na-red.svg) ![AngularJS](https://img.shields.io/badge/angularjs-na-red.svg)
+![Build](https://github.com/odrusso/eduace/actions/workflows/workflow.yaml/badge.svg)
 
-Eduace NZ development, repository, and documentation
+## Getting started
+### Frontend
+`cd web && npm i` - setup the prereqs    
+`cd web && npm run mock` - to start the React app with a MSW mock API  
+`cd web && npm run start` - to start the React app pointing at a real API  
+
+### Backend
+`cd ..` - get back to root directory  
+`export FLASK_ENV='development'` - set up required environment variables. You may wish to set these in your `.(zsh|bash)rc` file.  
+`export FLASK_APP='app/app.py'`  
+`export FLASK_DEBUG='True'`  
+`pip install -r requirements.txt` - install Python reqs, you may like to contain the dependencies in a virtualenv  
+`flask run` - start the backend development server  
