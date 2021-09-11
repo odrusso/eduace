@@ -1,18 +1,6 @@
+from .errors import HttpError
 from .solution_service import is_correct
 from .utils import is_question
-
-
-class AttemptError(Exception):
-    def __init__(self):
-        super().__init__(self)
-        self.description = "Solution or question not found."
-
-    @property
-    def json(self):
-        return {
-            "description": self.description,
-        }
-
 
 class Attempt:
     def __init__(self, question, attempt, question_type, question_id, independent_var="x"):
@@ -44,7 +32,7 @@ def check_solution(question_type, question_id, attempt):
         status = 200
 
     else:
-        attempt_response = AttemptError()
-        status = 404
+        raise HttpError(description="Question not found.",
+                        status=404)
 
     return attempt_response, status
