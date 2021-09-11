@@ -7,14 +7,31 @@ import logo from '../public/logo.png';
 
 export const App = (): JSX.Element => {
     return (
-        <div className={"eduace-app-container"}>
-            <Sidebar/>
+        <EduacePage>
             <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/question" component={Question}/>
             </Switch>
+        </EduacePage>
+    )
+}
+
+type EduacePageProps = React.InputHTMLAttributes<HTMLDivElement>;
+
+export const EduacePage = ({children}: EduacePageProps): JSX.Element => {
+    return (
+        <div className={'eduace-app-container'}>
+            <Sidebar/>
+            <div className={'eduace-content-container'}>
+                <Header/>
+                {children}
+            </div>
         </div>
     )
+}
+
+export const Header = (): JSX.Element => {
+    return <div>Eduace</div>
 }
 
 export const Sidebar = (): JSX.Element => {
