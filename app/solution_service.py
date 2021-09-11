@@ -11,9 +11,15 @@ def is_correct(question, attempt, question_type, question_id, independent_var="x
 
     var = symbols(independent_var)
 
+    parsed_question = parse_latex(question)
+    parsed_attempt = parse_latex(attempt)
+
+    if parsed_question == parsed_attempt:
+        return False
+
     try:
-        question_expr = solve(parse_latex(question), var)
-        attempt_expr = solve(parse_latex(attempt), var)
+        question_expr = solve(parsed_question, var)
+        attempt_expr = solve(parsed_attempt, var)
 
     except LaTeXParsingError as parsing_error:
         raise HttpError(description="Error parsing LaTeX input.",
