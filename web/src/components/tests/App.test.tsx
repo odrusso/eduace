@@ -12,7 +12,6 @@ describe("application tests", () => {
         renderAppWithRoute("/")
         await screen.findByText("Go to question page")
         userEvent.click(screen.getByText("Go to question page"))
-        await screen.findByText("Question page")
-        await screen.findByText(/selected question data:/)
+        await screen.findByText("Question")
     })
 })
