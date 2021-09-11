@@ -12,6 +12,8 @@ export const Question = (): JSX.Element => {
     const [selectedQuestionData, setSelectedQuestionData] = useState<QuestionResponseDTO | undefined>()
     const [latex, setLatex] = useState("")
     const latexDiv = useRef<HTMLDivElement>(null)
+    const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
+
 
     const handleSubmit = async () => {
         // TODO: Disable button while submitting
@@ -76,23 +78,32 @@ export const Question = (): JSX.Element => {
 
     if (!questions) return <div className={"eduace-question-container"}><h1>Loading...</h1></div>
 
+    const buttonDisabled = mathfield?.getValue().includes("placeholder") ?? false
+
     return (
         <div className={"eduace-question-container"}>
-            <h1>Question page</h1>
             <QuestionPicker
                 questions={questions}
                 selectedQuestion={selectedQuestion}
                 setSelectedQuestion={setSelectedQuestion}
             />
-            <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
-            <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
             {selectedQuestionData && (
                 <>
                     <div className={"eduace-question-display"}>
                         <div ref={latexDiv} data-testid={"question-latex"}/>
                     </div>
-                    <SolutionEntry latex={latex} setLatex={setLatex}/>
-                    <Button onClick={handleSubmit} variant="contained" disableElevation={true}>
+                    <SolutionEntry
+                        latex={latex}
+                        setLatex={setLatex}
+                        mathfield={mathfield}
+                        setMathfield={setMathfield}
+                    />
+                    <Button
+                        onClick={handleSubmit}
+                        variant={"contained"}
+                        disableElevation={true}
+                        disabled={buttonDisabled}
+                    >
                         Submit
                     </Button>
                 </>
@@ -148,20 +159,21 @@ const QuestionPicker = ({questions, selectedQuestion, setSelectedQuestion}: Ques
 
 export type SolutionEntry = {
     latex: string,
-    setLatex: (latex: string) => void
+    setLatex: (latex: string) => void,
+    mathfield?: MathfieldElement
+    setMathfield: (v: MathfieldElement) => void
 }
 
-export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => {
-    const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
-
+export const SolutionEntry = ({latex, setLatex, mathfield, setMathfield}: SolutionEntry): JSX.Element => {
     // TODO: Add a prop to Mathfield component to take in these styles
     // and maybe any other default HTMLElement props?
     useEffect(() => {
         if (!mathfield) return
         mathfield.style.border = "1px solid rgba(0, 0, 0, .3)"
-        mathfield.style.borderRadius = "5px"
-        mathfield.style.boxShadow = "0 0 8px rgba(0, 0, 0, .2)"
-        mathfield.style.padding = "8px"
+        mathfield.style.borderRadius = "1em"
+        mathfield.style.padding = "1.5em"
+        mathfield.style.backgroundColor = "white"
+        mathfield.style.marginBottom = "2em"
     }, [mathfield])
 
     return (
@@ -171,8 +183,6 @@ export const SolutionEntry = ({latex, setLatex}: SolutionEntry): JSX.Element => 
                 onChange={setLatex}
                 mathfieldRef={(mf) => setMathfield(mf)}
             />
-
-            <p>output: {latex}</p>
         </div>
     )
 }
