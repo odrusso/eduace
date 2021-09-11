@@ -24,3 +24,12 @@ class SolutionServiceTests(unittest.TestCase):
         result = solution_service.is_correct(question, attempt, 'mcat', '1')
 
         self.assertFalse(result)
+
+    def test_is_correct_repeat_question(self):
+
+        question = "2 x + 3 = 0"
+        attempt = "2 x + 3 = 0"
+
+        result = solution_service.is_correct(question, attempt, 'mcat', '1')
+
+        self.assertFalse(result)
