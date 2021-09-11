@@ -1,17 +1,6 @@
+from .errors import HttpError
 from .question_factory import QUESTION_MAPPING
 from .utils import is_question
-
-
-class QuestionNotFound(Exception):
-    def __init__(self):
-        super().__init__(self)
-        self.description = "Question not found."
-
-    @property
-    def json(self):
-        return {
-            "description": self.description,
-        }
 
 
 def get_question(question_type, question_id, seed):
@@ -21,7 +10,8 @@ def get_question(question_type, question_id, seed):
         status = 200
 
     else:
-        raise QuestionNotFound
+        raise HttpError(description="Question not found.",
+                        status=404)
 
     return question, status
 
