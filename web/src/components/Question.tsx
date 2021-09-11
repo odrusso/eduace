@@ -4,7 +4,8 @@ import {get, post} from "../utils";
 import {MathfieldComponent} from "./MathliveComponent";
 import {MathfieldElement} from "mathlive";
 import "./Question.scss"
-import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {Button, FormControl, InputLabel, MenuItem, Select, Snackbar} from "@material-ui/core";
+import {Alert} from "@material-ui/lab";
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
@@ -13,6 +14,8 @@ export const Question = (): JSX.Element => {
     const [latex, setLatex] = useState("")
     const latexDiv = useRef<HTMLDivElement>(null)
     const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
+    const [modalOpen, setModalOpen] = useState<boolean>(false)
+    const [modalStatus, setModalStatus] = useState<boolean>(false);
 
 
     const handleSubmit = async () => {
@@ -23,7 +26,8 @@ export const Question = (): JSX.Element => {
             question: selectedQuestionData!.question
         } as QuestionAnswerRequestDTO)
         const resBody = (await res.json()) as QuestionAnswerResponseDTO
-        alert(`correct: ${resBody.result}`)
+        setModalStatus(resBody.result)
+        setModalOpen(true);
     }
 
     // TODO: Think about this.
@@ -64,7 +68,6 @@ export const Question = (): JSX.Element => {
 
         fetchData();
     }, [selectedQuestion])
-
 
     // Updates the latex
     useEffect(() => {
@@ -108,6 +111,11 @@ export const Question = (): JSX.Element => {
                     </Button>
                 </>
             )}
+            <Snackbar open={modalOpen} autoHideDuration={2000} onClose={() => setModalOpen(false)}>
+                <Alert onClose={() => setModalOpen(false)} severity={modalStatus ? "success" : "warning"}>
+                    {modalStatus ? "Correct!" : "Incorrect - try again"}
+                </Alert>
+            </Snackbar>
         </div>
     )
 }
