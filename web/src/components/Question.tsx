@@ -3,6 +3,8 @@ import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {get, post} from "../utils";
 import {MathfieldComponent} from "./MathliveComponent";
 import {MathfieldElement} from "mathlive";
+import "./Question.scss"
+import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
@@ -69,24 +71,30 @@ export const Question = (): JSX.Element => {
         // both as deps here, and be careful about what we do when either of the change
         if (!selectedQuestionData) return
         if (latexDiv.current === null) return
-        katex.render(selectedQuestionData.question, latexDiv.current!)
+        katex.render(selectedQuestionData.question, latexDiv.current!, {displayMode: true})
     }, [selectedQuestionData, latexDiv])
 
-    if (!questions) return <h1>Loading...</h1>
+    if (!questions) return <div className={"eduace-question-container"}><h1>Loading...</h1></div>
 
     return (
-        <div>
+        <div className={"eduace-question-container"}>
             <h1>Question page</h1>
-            <h2>Mode: {process.env.NODE_ENV}</h2>
-            <QuestionPicker questions={questions} setSelectedQuestion={setSelectedQuestion}/>
-            <p>current seed: {seed}</p>
+            <QuestionPicker
+                questions={questions}
+                selectedQuestion={selectedQuestion}
+                setSelectedQuestion={setSelectedQuestion}
+            />
             <p>selected question: {selectedQuestion?.type} {selectedQuestion?.id}</p>
             <p>selected question data: {JSON.stringify(selectedQuestionData)}</p>
             {selectedQuestionData && (
                 <>
-                    <div ref={latexDiv} data-testid={"question-latex"}/>
+                    <div className={"eduace-question-display"}>
+                        <div ref={latexDiv} data-testid={"question-latex"}/>
+                    </div>
                     <SolutionEntry latex={latex} setLatex={setLatex}/>
-                    <button onClick={handleSubmit}>Submit</button>
+                    <Button onClick={handleSubmit} variant="contained" disableElevation={true}>
+                        Submit
+                    </Button>
                 </>
             )}
         </div>
@@ -96,10 +104,13 @@ export const Question = (): JSX.Element => {
 // TODO: Refactor these into a separate files
 type QuestionPickerProps = {
     questions: QuestionListResponseDTO,
+    selectedQuestion?: QuestionRequestDTO,
     setSelectedQuestion: (q: QuestionRequestDTO) => void
 }
 
-const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): JSX.Element => {
+const QuestionPicker = ({questions, selectedQuestion, setSelectedQuestion}: QuestionPickerProps): JSX.Element => {
+    const [index, setIndex] = useState<string>("")
+
     const questionToRender = questions.questions
         .filter((it) => it.questionTypeName === "mcat")
         .flatMap((question) => {
@@ -114,15 +125,24 @@ const QuestionPicker = ({questions, setSelectedQuestion}: QuestionPickerProps): 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         if (e.target.value === "off") return
         setSelectedQuestion(questionToRender[Number(e.target.value)])
+        setIndex(e.target.value)
     }
 
     return (
-        <select onChange={handleChange} defaultValue={"off"}>
-            <option disabled value={"off"}> -- select an option --</option>
-            {questionToRender.map((question, index) =>
-                <option key={index} value={index}>{question.type} {question.id}</option>
-            )}
-        </select>
+        <FormControl variant="outlined">
+            <InputLabel id="eduace-question-selector-label">Question</InputLabel>
+            <Select
+                onChange={handleChange}
+                labelId={'eduace-question-selector-label'}
+                style={{minWidth: '12em'}}
+                label={'question'}
+                value={index}
+            >
+                {questionToRender.map((question, index) =>
+                    <MenuItem key={index} value={index}>{question.type} {question.id}</MenuItem>
+                )}
+            </Select>
+        </FormControl>
     )
 }
 

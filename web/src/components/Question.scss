@@ -1,0 +1,16 @@
+$gradient-1: rgb(126, 230, 229);
+$gradient-2: rgb(147, 138, 235);
+$gradient: linear-gradient(60deg, $gradient-1, $gradient-2);
+
+.eduace-question-display {
+  background-image: $gradient;
+  border-radius: 1em;
+  padding: 4em;
+  margin-bottom: 2em;
+  min-height: 6em;
+  color: white;
+}
+
+.katex {
+  font-size: 2em !important;
+}

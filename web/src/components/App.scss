@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap');
+
+$base-font: 'Open Sans', sans-serif;
+
+$bg-color: rgb(245, 246, 250);
+$eduace-gray: rgb(160, 160, 160);
+
+html {
+  background-color: $bg-color;
+  font-family: $base-font;
+}
+
+body {
+  margin: 0
+}
+
+.eduace-app-container {
+  display: grid;
+  grid-template-columns: repeat(10, 10%);
+  min-height: 100vh;
+}
+
+.eduace-content-container {
+  grid-column: 3 / 10;
+}
+
+.eduace-app-sidebar {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  grid-column: 1 / 2;
+}
+
+.eduace-sidebar-logo {
+  margin-top: 3em;
+  width: 3em;
+  height: 3em;
+  background-color: $bg-color;
+  border-color: $bg-color;
+  border-width: 0.5em;
+  border-style: solid;
+  border-radius: 100%
+}
+
+.eduace-header-container {
+  margin-top: 1em;
+  padding-top: 1em;
+  display: flex;
+  justify-content: flex-end;
+  color: $eduace-gray;
+  height: 4em;
+}
+
+.eduace-header-text {
+  font-weight: lighter;
+  letter-spacing: 0.3em;
+  font-size: x-large;
+}
