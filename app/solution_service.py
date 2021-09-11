@@ -15,8 +15,8 @@ def is_correct(question, attempt, question_type, question_id, independent_var="x
         question_expr = solve(parse_latex(question), var)
         attempt_expr = solve(parse_latex(attempt), var)
 
-    except LaTeXParsingError:
+    except LaTeXParsingError as parsing_error:
         raise HttpError(description="Error parsing LaTeX input.",
-                        status=400)
+                        status=400) from parsing_error
 
     return question_expr == attempt_expr
