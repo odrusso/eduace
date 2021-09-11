@@ -1,5 +1,7 @@
+$bg-color: rgb(245, 246, 250);
+
 html {
-  background-color: rgb(245, 246, 250);
+  background-color: $bg-color;
 }
 
 body {
@@ -12,7 +14,24 @@ body {
   min-height: 100vh;
 }
 
+.eduace-content-container {
+    grid-column: 3 / 10;
+}
+
 .eduace-app-sidebar {
+  display: flex;
+  justify-content: center;
   background-color: white;
   grid-column: 1 / 2;
+}
+
+.eduace-sidebar-logo {
+  margin-top: 3em;
+  width: 5em;
+  height: 5em;
+  background-color: $bg-color;
+  border-color: $bg-color;
+  border-width: 0.5em;
+  border-style: solid;
+  border-radius: 100%
 }
