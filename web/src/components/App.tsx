@@ -31,7 +31,11 @@ export const EduacePage = ({children}: EduacePageProps): JSX.Element => {
 }
 
 export const Header = (): JSX.Element => {
-    return <div>Eduace</div>
+    return (
+        <div className={'eduace-header-container'}>
+            <h1>EDUACE</h1>
+        </div>
+    )
 }
 
 export const Sidebar = (): JSX.Element => {
