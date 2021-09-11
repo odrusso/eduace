@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 describe("application tests", () => {
     it("shows question page on question route", async () => {
         renderAppWithRoute("/question")
-        await screen.findByText(/Question/)
+        await screen.findByText("Question")
     })
 
     it("clicking link on home page takes you to question page", async () => {

@@ -21,7 +21,7 @@ body {
 }
 
 .eduace-content-container {
-    grid-column: 3 / 10;
+  grid-column: 3 / 10;
 }
 
 .eduace-app-sidebar {
@@ -44,11 +44,15 @@ body {
 
 .eduace-header-container {
   margin-top: 1em;
-  float: right;
+  padding-top: 1em;
+  display: flex;
+  justify-content: flex-end;
   color: $eduace-gray;
+  height: 4em;
 }
 
-.eduace-header-container h1 {
-    font-weight: lighter;
-    letter-spacing: 0.3em;
+.eduace-header-text {
+  font-weight: lighter;
+  letter-spacing: 0.3em;
+  font-size: x-large;
 }

@@ -33,7 +33,7 @@ export const EduacePage = ({children}: EduacePageProps): JSX.Element => {
 export const Header = (): JSX.Element => {
     return (
         <div className={'eduace-header-container'}>
-            <h1>EDUACE</h1>
+            <div className={'eduace-header-text'}>EDUACE</div>
         </div>
     )
 }
