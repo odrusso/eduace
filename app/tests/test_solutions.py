@@ -38,7 +38,7 @@ class SolutionUtilitiesTests(unittest.TestCase):
 
         self.assertEqual(404, status)
         self.assertIsInstance(response, HttpError)
-        self.assertEqual("Question not found.", response.json.get("description"))
+        self.assertEqual("Question mcat 999 not found.", response.json.get("description"))
 
     def test_check_solution_invalid_type(self):
 
@@ -54,4 +54,4 @@ class SolutionUtilitiesTests(unittest.TestCase):
 
         self.assertEqual(404, status)
         self.assertIsInstance(response, HttpError)
-        self.assertEqual("Question not found.", response.json.get("description"))
+        self.assertEqual("Question batman 999 not found.", response.json.get("description"))

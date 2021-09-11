@@ -32,7 +32,7 @@ def check_solution(question_type, question_id, attempt):
         status = 200
 
     else:
-        raise HttpError(description="Question not found.",
+        raise HttpError(description=f"Question {question_type} {question_id} not found.",
                         status=404)
 
     return attempt_response, status
