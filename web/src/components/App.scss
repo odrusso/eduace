@@ -25,10 +25,13 @@ body {
 }
 
 .eduace-app-sidebar {
-  display: flex;
-  justify-content: center;
   background-color: white;
   grid-column: 1 / 2;
+}
+
+.eduace-sidebar-logo-container {
+  display: flex;
+  justify-content: center;
 }
 
 .eduace-sidebar-logo {
@@ -55,4 +58,8 @@ body {
   font-weight: lighter;
   letter-spacing: 0.3em;
   font-size: x-large;
+}
+
+.eduace-sidebar-navigation ul {
+  list-style: none;
 }

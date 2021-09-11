@@ -41,7 +41,15 @@ export const Header = (): JSX.Element => {
 export const Sidebar = (): JSX.Element => {
     return (
         <div className={"eduace-app-sidebar"}>
-            <img src={logo} alt={"eduace logo"} className={"eduace-sidebar-logo"}/>
+            <div className={"eduace-sidebar-logo-container"}>
+                <img src={logo} alt={"eduace logo"} className={"eduace-sidebar-logo"}/>
+            </div>
+            <div className={"eduace-sidebar-navigation"}>
+                <ul>
+                    <li>Test</li>
+                    <li>Test 2</li>
+                </ul>
+            </div>
         </div>
     )
 }
