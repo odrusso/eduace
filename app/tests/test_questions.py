@@ -1,6 +1,7 @@
 import unittest
 
 from app import questions
+from app.errors import HttpError
 
 
 class QuestionUtilitiesTests(unittest.TestCase):
@@ -26,7 +27,7 @@ class QuestionUtilitiesTests(unittest.TestCase):
 
         try:
             question, status = questions.get_question(question_type, question_id, seed)
-        except questions.QuestionNotFound as not_found:
+        except HttpError as not_found:
             self.assertEqual("Question not found.", not_found.json.get("description"))
 
         self.assertIsNone(question)
