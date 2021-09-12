@@ -1,6 +1,6 @@
 import katex from "katex";
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
-import {get, post} from "../utils";
+import {get, post, getRandomInteger} from "../utils";
 import {MathfieldComponent} from "./MathliveComponent";
 import {MathfieldElement} from "mathlive";
 import "./Question.scss"
@@ -11,15 +11,15 @@ export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
     const [selectedQuestion, setSelectedQuestion] = useState<QuestionRequestDTO | undefined>()
     const [selectedQuestionData, setSelectedQuestionData] = useState<QuestionResponseDTO | undefined>()
-    const [latex, setLatex] = useState("")
+    const [latex, setLatex] = useState<string>("")
     const latexDiv = useRef<HTMLDivElement>(null)
     const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
     const [modalOpen, setModalOpen] = useState<boolean>(false)
     const [modalStatus, setModalStatus] = useState<boolean>(false);
+    const [seed, setSeed] = useState<number>(getRandomInteger())
 
 
     const handleSubmit = async () => {
-        // TODO: Disable button while submitting
         const url = `/api/v1/question/${selectedQuestion?.type}/${selectedQuestion?.id}`
         const res = await post(url, {
             attempt: latex,
@@ -30,8 +30,26 @@ export const Question = (): JSX.Element => {
         setModalOpen(true);
     }
 
-    // TODO: Think about this.
-    const seed = "12345"
+
+    const fetchQuestion = async (selectedQuestion, clear = false) => {
+        setSeed(getRandomInteger())
+
+        const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
+
+        const fetchResult = await get(url)
+        if (fetchResult.status !== 200) {
+            console.error(`Invalid response code ${fetchResult.status}`)
+            return
+        }
+        const questionJson: QuestionResponseDTO = await fetchResult.json()
+        setSelectedQuestionData(questionJson)
+
+        if (clear) {
+            setLatex("")
+            setModalStatus(false)
+        }
+    }
+
 
     // Run only on initial render
     useEffect(() => {
@@ -52,21 +70,7 @@ export const Question = (): JSX.Element => {
     // Fetch the question every time the selectedQuestion changes
     useEffect(() => {
         if (!selectedQuestion) return
-        const fetchData = async () => {
-            // TODO: Better (centralised) URL construction
-            const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
-
-            const fetchResult = await get(url)
-            if (fetchResult.status !== 200) {
-                // TODO: Better error handling
-                console.error(`Invalid response code ${fetchResult.status}`)
-                return
-            }
-            const questionJson: QuestionResponseDTO = await fetchResult.json()
-            setSelectedQuestionData(questionJson)
-        }
-
-        fetchData();
+        fetchQuestion(selectedQuestion)
     }, [selectedQuestion])
 
     // Updates the latex
@@ -105,9 +109,17 @@ export const Question = (): JSX.Element => {
                         onClick={handleSubmit}
                         variant={"contained"}
                         disableElevation={true}
-                        disabled={buttonDisabled}
+                        disabled={buttonDisabled || modalStatus}
                     >
                         Submit
+                    </Button>
+                    <Button
+                        onClick={() => {fetchQuestion(selectedQuestion, true)}}
+                        variant={"contained"}
+                        disableElevation={true}
+                        disabled={!modalStatus}
+                    >
+                        Another!
                     </Button>
                 </>
             )}
