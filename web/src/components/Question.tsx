@@ -99,21 +99,25 @@ export const Question = (): JSX.Element => {
                         mathfield={mathfield}
                         setMathfield={setMathfield}
                     />
-                    <Button
-                        onClick={handleSubmit}
-                        variant={"contained"}
-                        disableElevation={true}
-                        disabled={buttonDisabled}
-                    >
-                        Submit
-                    </Button>
-                    <Button
-                        onClick={() => {setSeed(getRandomInteger())}}
-                        variant={"contained"}
-                        disableElevation={true}
-                    >
-                        Another!
-                    </Button>
+                    <div className={"eduace-button-submit"}>
+                        <Button
+                            onClick={handleSubmit}
+                            variant={"contained"}
+                            disableElevation={true}
+                            disabled={buttonDisabled}
+                        >
+                            Submit
+                        </Button>
+                    </div>
+                    <div className={"eduace-button-regen"}>
+                        <Button
+                            onClick={() => {setSeed(getRandomInteger())}}
+                            variant={"contained"}
+                            disableElevation={true}
+                        >
+                            Another!
+                        </Button>
+                    </div>
                 </>
             )}
             <Snackbar open={modalOpen} autoHideDuration={2000} onClose={() => setModalOpen(false)}>
