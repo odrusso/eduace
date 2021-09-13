@@ -10,3 +10,7 @@ export const post = (url: string, body: unknown): Promise<Response> => {
         body: JSON.stringify(body)
     })
 }
+
+export const getRandomInteger = (): number => {
+    return Math.floor(Math.random() * 10000000)
+}
