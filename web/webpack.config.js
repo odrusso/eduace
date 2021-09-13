@@ -27,36 +27,11 @@ module.exports = (env) => {
                     test: /\.(js|jsx|ts|tsx)$/,
                     exclude: /node_modules/,
                     use: {
-                        loader: 'ts-loader',
+                        loader: 'swc-loader',
                     },
                 },
                 {
-                    test: /\.css$/,
-                    use: [
-                        {
-                            loader: 'style-loader',
-                        },
-                        {
-                            loader: 'css-loader',
-                        },
-                    ],
-                },
-                {
-                    test: /\.(ttf|woff2)$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: 'fonts/'
-                    }
-                },
-                {
-                    enforce: "pre",
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: "source-map-loader"
-                },
-                {
-                    test: /\.s[ac]ss$/i,
+                    test: /\.(css|scss|sass)$/,
                     use: [
                         // Creates `style` nodes from JS strings
                         "style-loader",
@@ -67,7 +42,7 @@ module.exports = (env) => {
                     ],
                 },
                 {
-                    test: /\.(png|jpg|jpeg|gif)$/i,
+                    test: /\.(png|jpg|jpeg|gif|ttf|woff2)$/i,
                     type: "asset/resource",
                 },
             ],
@@ -85,6 +60,5 @@ module.exports = (env) => {
             new webpack.DefinePlugin({'process.env.API_HOST': JSON.stringify(env.API_HOST)}),
             new webpack.DefinePlugin({'process.env.MOCK_API': JSON.stringify(env.MOCK_API)}),
         ],
-        devtool: "source-map"
     }
 };
