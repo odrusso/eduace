@@ -30,27 +30,6 @@ export const Question = (): JSX.Element => {
         setModalOpen(true);
     }
 
-
-    const fetchQuestion = async (selectedQuestion, clear = false) => {
-        setSeed(getRandomInteger())
-
-        const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
-
-        const fetchResult = await get(url)
-        if (fetchResult.status !== 200) {
-            console.error(`Invalid response code ${fetchResult.status}`)
-            return
-        }
-        const questionJson: QuestionResponseDTO = await fetchResult.json()
-        setSelectedQuestionData(questionJson)
-
-        if (clear) {
-            setLatex("")
-            setModalStatus(false)
-        }
-    }
-
-
     // Run only on initial render
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -70,8 +49,23 @@ export const Question = (): JSX.Element => {
     // Fetch the question every time the selectedQuestion changes
     useEffect(() => {
         if (!selectedQuestion) return
+
+        const fetchQuestion = async (selectedQuestion) => {
+            const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
+    
+            const fetchResult = await get(url)
+            if (fetchResult.status !== 200) {
+                console.error(`Invalid response code ${fetchResult.status}`)
+                return
+            }
+            const questionJson: QuestionResponseDTO = await fetchResult.json()
+            setSelectedQuestionData(questionJson)
+    
+            setLatex("")
+        }
+
         fetchQuestion(selectedQuestion)
-    }, [selectedQuestion])
+    }, [selectedQuestion, seed])
 
     // Updates the latex
     useEffect(() => {
@@ -109,15 +103,14 @@ export const Question = (): JSX.Element => {
                         onClick={handleSubmit}
                         variant={"contained"}
                         disableElevation={true}
-                        disabled={buttonDisabled || modalStatus}
+                        disabled={buttonDisabled}
                     >
                         Submit
                     </Button>
                     <Button
-                        onClick={() => {fetchQuestion(selectedQuestion, true)}}
+                        onClick={() => {setSeed(getRandomInteger())}}
                         variant={"contained"}
                         disableElevation={true}
-                        disabled={!modalStatus}
                     >
                         Another!
                     </Button>
