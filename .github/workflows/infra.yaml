@@ -1,0 +1,24 @@
+name: InfraCI
+on: [ push, pull_request ]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        working-directory: ./infra
+        run: npm i
+
+      - name: Test CDK
+        working-directory: ./infra
+        run: npm run test
+
+      - name: Build CDK
+        working-directory: ./infra
+        run: npm run build
