@@ -1,13 +1,12 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
+import {expect as expectCDK, matchTemplate, MatchStyle, haveResource} from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import * as Infra from '../lib/infra-stack';
+import * as Infra from '../lib/eduace-web-app';
 
-test('Empty Stack', () => {
+test('Smoke test', () => {
     const app = new cdk.App();
-    // WHEN
-    const stack = new Infra.InfraStack(app, 'MyTestStack');
-    // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT));
+    const stack = new Infra.EduaceWebApp(app, 'MyTestStack');
+    // We want to make sure that we're synthesising something
+    expectCDK(stack).to(haveResource("AWS::S3::Bucket"))
+    expectCDK(stack).to(haveResource("AWS::ApiGateway::Method"))
+    expectCDK(stack).to(haveResource("AWS::Lambda::Function"))
 });

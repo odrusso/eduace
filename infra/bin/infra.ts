@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
-import {EduaceWebApp} from '../lib/infra-stack';
+import {EduaceWebApp} from '../lib/eduace-web-app';
+import {App} from "@aws-cdk/core";
 
-const app = new cdk.App();
+const app = new App();
 new EduaceWebApp(app, 'InfraStack', {
   env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
 });

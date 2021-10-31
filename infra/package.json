@@ -23,6 +23,7 @@
   "dependencies": {
     "@aws-cdk/aws-apigateway": "^1.130.0",
     "@aws-cdk/aws-lambda": "^1.130.0",
+    "@aws-cdk/aws-lambda-python": "^1.130.0",
     "@aws-cdk/aws-s3": "^1.130.0",
     "@aws-cdk/core": "1.130.0",
     "source-map-support": "^0.5.16"
