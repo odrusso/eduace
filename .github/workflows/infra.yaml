@@ -1,5 +1,8 @@
 name: InfraCI
-on: [ push, pull_request ]
+on:
+  push:
+    paths:
+      - "infra/**/*"
 jobs:
   run:
     runs-on: ubuntu-latest
