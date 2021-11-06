@@ -22,3 +22,16 @@ jobs:
       - name: Build CDK
         working-directory: ./infra
         run: npm run build
+
+      - name: Deploy CDK
+        uses: youyo/aws-cdk-github-actions@v2
+#        if: github.ref == 'refs/heads/master'
+        with:
+          working_dir: 'infra'
+          cdk_subcommand: 'deploy'
+          cdk_args: '--require-approval never'
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'ap-southeast-2'
