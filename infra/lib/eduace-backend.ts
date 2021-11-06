@@ -18,7 +18,8 @@ export class EduaceBackend extends Construct {
         const lambdaFunction = new LambdaFunction(this, "EduaceBackendLambdaFunction", {
             runtime: Runtime.PYTHON_3_9,
             // Code may not exist at infra build time
-            code: Code.fromBucket(sourceCodeBucket, "build.zip"),
+            // code: Code.fromBucket(sourceCodeBucket, "build.zip"),
+            code: Code.fromInline("def main(): print 'Hello world!'"),
             // Name of the method that we call in the Python code
             handler: "main", // TODO: Check this in the code!
             environment: {
