@@ -11,7 +11,7 @@ export class EduaceBackend extends Construct {
         const sourceCodeBucket = new Bucket(this, "EduaceBackendLambdaStore")
 
         new CfnOutput(this, "EduaceBackendLambdaStoreARNOutput", {
-            exportName: "ARN for API source code",
+            exportName: "S3BackendCodeBucketArn",
             value: sourceCodeBucket.bucketArn
         })
 
