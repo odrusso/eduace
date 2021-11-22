@@ -33,7 +33,7 @@ jobs:
           folder: ./web/build
           bucket: ${{ secrets.FRONTEND_S3_BUCKET }}
           bucket-region: ap-southeast-2
-          dist-id: ${{ secrets.CLOUDFRONT_DEPLOYMENT_ID }} EGCMBVUN0OYSF
+          dist-id: ${{ secrets.CLOUDFRONT_DEPLOYMENT_ID }}
           invalidation: /*
           delete-removed: true   # We want to remove everything else form the s3 bucket
 
