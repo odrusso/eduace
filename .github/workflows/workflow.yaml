@@ -26,14 +26,17 @@ jobs:
         working-directory: ./web
         run: npm run build
 
-      - name: Deploy Frontend
-        uses: reggionick/s3-deploy@v3
-#        if: github.ref == 'refs/heads/master'
+      - name: Deploy frontend assets to S3
+        uses: jakejarvis/s3-sync-action@master
+        #        if: github.ref == 'refs/heads/master'
         with:
-          folder: ./web/build
-          bucket: ${{ secrets.FRONTEND_S3_BUCKET }}
-          bucket-region: ap-southeast-2
-          delete-removed: true   # We want to remove everything else form the s3 bucket
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.FRONTEND_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "ap-southeast-2"
+          SOURCE_DIR: './web/build'
 
       # Invalidate Cloudfront (this action)
       - name: Invalidate CloudFront
