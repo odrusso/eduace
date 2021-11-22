@@ -35,6 +35,7 @@ jobs:
           bucket-region: ap-southeast-2
           dist-id: ${{ secrets.CLOUDFRONT_DEPLOYMENT_ID }} EGCMBVUN0OYSF
           invalidation: /*
+          delete-removed: true   # We want to remove everything else form the s3 bucket
 
       - name: Test Backend
         run: pip install -r requirements.txt && python -m unittest
