@@ -12,7 +12,8 @@ module.exports = (env) => {
         output: {
             path: path.resolve(__dirname, 'build'),
             filename: 'bundle.js',
-            publicPath: '/'
+            publicPath: '/',
+            clean: true
         },
         resolve: {
             extensions: [".jsx", ".js", ".tsx", ".ts"],
