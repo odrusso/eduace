@@ -26,18 +26,18 @@ jobs:
         working-directory: ./web
         run: npm run build
 
+      - name: Deploy Frontend
+        uses: reggionick/s3-deploy@v3
+#        if: github.ref == 'refs/heads/master'
+        with:
+          folder: ./web/build
+          bucket: ${{ secrets.FRONTEND_S3_BUCKET }}
+          bucket-region: ap-southeast-2
+          dist-id: ${{ secrets.CLOUDFRONT_DEPLOYMENT_ID }} EGCMBVUN0OYSF
+          invalidation: /*
+
       - name: Test Backend
         run: pip install -r requirements.txt && python -m unittest
 
       - name: Run Pylint
         run: pylint-fail-under --rcfile .pylintrc --fail_under 9.75 $(git ls-files --directory app)
-
-      - name: Deploy Frontend
-        uses: reggionick/s3-deploy@v3
-#        if: github.ref == 'refs/heads/master'
-        with:
-          folder: ./web/dist
-          bucket: ${{ secrets.FRONTEND_S3_BUCKET }}
-          bucket-region: ap-southeast-2
-          dist-id: ${{ secrets.CLOUDFRONT_DEPLOYMENT_ID }} EGCMBVUN0OYSF
-          invalidation: /*
