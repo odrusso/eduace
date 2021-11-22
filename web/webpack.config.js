@@ -4,6 +4,7 @@ const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
 const webpack = require('webpack');
+const EncodingPlugin = require("webpack-encoding-plugin");
 
 // eslint-disable-next-line no-undef
 module.exports = (env) => {
@@ -85,6 +86,7 @@ module.exports = (env) => {
             }),
             new webpack.DefinePlugin({'process.env.API_HOST': JSON.stringify(env.API_HOST)}),
             new webpack.DefinePlugin({'process.env.MOCK_API': JSON.stringify(env.MOCK_API)}),
+            new EncodingPlugin({encoding: 'iso-8859-1'})
         ],
         devtool: "source-map"
     }
