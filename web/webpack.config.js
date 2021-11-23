@@ -5,6 +5,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
 const webpack = require('webpack');
 const EncodingPlugin = require("webpack-encoding-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 // eslint-disable-next-line no-undef
 module.exports = (env) => {
@@ -88,6 +89,19 @@ module.exports = (env) => {
             new webpack.DefinePlugin({'process.env.MOCK_API': JSON.stringify(env.MOCK_API)}),
             new EncodingPlugin({encoding: 'iso-8859-1'})
         ],
-        devtool: "source-map"
+        devtool: "source-map",
+        optimization: {
+            minimize: true,
+            minimizer: [new TerserPlugin({
+                terserOptions: {
+                    output: {
+                        // Turned on because emoji and regex is not minified properly using default
+                        // https://github.com/facebook/create-react-app/issues/2488
+                        ascii_only: true,
+                    },
+                },
+            }),
+            ],
+        },
     }
 };
