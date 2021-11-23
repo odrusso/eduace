@@ -29,7 +29,7 @@ module.exports = (env) => {
                     test: /\.(js|jsx|ts|tsx)$/,
                     exclude: /node_modules/,
                     use: {
-                        loader: 'ts-loader',
+                        loader: 'babel-loader',
                     },
                 },
                 {
