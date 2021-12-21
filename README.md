@@ -11,7 +11,7 @@
 ### Backend
 `cd ..` - get back to root directory  
 `export FLASK_ENV='development'` - set up required environment variables. You may wish to set these in your `.(zsh|bash)rc` file.  
-`export FLASK_APP='app/app.py'`  
+`export FLASK_APP='api'`  
 `export FLASK_DEBUG='True'`  
 `pip install -r requirements.txt` - install Python reqs, you may like to contain the dependencies in a virtualenv  
 `flask run` - start the backend development server  
