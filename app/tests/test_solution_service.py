@@ -1,6 +1,6 @@
 import unittest
 
-from app import solution_service
+from app.api.services import solution_service
 
 
 class SolutionServiceTests(unittest.TestCase):

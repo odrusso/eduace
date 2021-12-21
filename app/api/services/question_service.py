@@ -1,6 +1,11 @@
-from .errors import HttpError
-from .question_factory import QUESTION_MAPPING
-from .utils import is_question
+from app.api.helpers.errors import HttpError
+from app.api.models.questions_mcat import MCATQuestion1
+
+QUESTION_MAPPING = {
+    'mcat': {
+        '1': MCATQuestion1,
+    },
+}
 
 
 def get_question(question_type, question_id, seed):
@@ -27,3 +32,11 @@ def get_all_questions():
         })
 
     return question_response, 200
+
+
+def is_question(question_type, question_id):
+
+    valid_type = QUESTION_MAPPING.get(question_type, False)
+
+    return valid_type.get(question_id, False) if valid_type else False
+
