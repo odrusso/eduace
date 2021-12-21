@@ -9,9 +9,14 @@
 `cd web && npm run start` - to start the React app pointing at a real API  
 
 ### Backend
+#### Using Flask dev-server
 `cd ..` - get back to root directory  
 `export FLASK_ENV='development'` - set up required environment variables. You may wish to set these in your `.(zsh|bash)rc` file.  
 `export FLASK_APP='api'`  
 `export FLASK_DEBUG='True'`  
 `pip install -r requirements.txt` - install Python reqs, you may like to contain the dependencies in a virtualenv  
 `flask run` - start the backend development server  
+
+#### Using Docker
+`docker build -t eduace-api:latest .` - build the image
+`docker container run -p 5000:5000 eduace-api` - run the image
