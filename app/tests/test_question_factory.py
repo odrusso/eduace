@@ -1,13 +1,14 @@
 # pylint: disable=C0103
 import unittest
-from app import question_factory
+
+import app.api.models.questions_mcat
 
 
 class QuestionsTests(unittest.TestCase):
 
     def test_MCAT_Question_1(self):
         seed = 123
-        question = question_factory.MCATQuestion1(seed)
+        question = app.api.models.questions_mcat.MCATQuestion1(seed)
 
         self.assertEqual("Solve a linear equation.", question.description)
         self.assertEqual("5 x + 7 = 0", question.question)

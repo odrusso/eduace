@@ -1,6 +1,6 @@
 import unittest
 
-from app import maths_service
+from app.api.services import maths_service
 
 
 class MathsServiceTests(unittest.TestCase):

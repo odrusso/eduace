@@ -1,11 +1,10 @@
 from time import time
 from flask import Flask, request
 
-from .config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG
-from .errors import HttpError
-from .questions import get_all_questions, get_question
-from .solutions import check_solution
-
+from app.api.helpers.config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG
+from app.api.helpers.errors import HttpError
+from app.api.services.question_service import get_all_questions, get_question
+from app.api.services.solution_service import check_solution
 
 app = Flask(__name__)
 

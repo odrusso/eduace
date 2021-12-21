@@ -1,7 +1,7 @@
 import unittest
 
-from app import solutions
-from app.errors import HttpError
+import app.api.services.solution_service
+from app.api.helpers.errors import HttpError
 
 
 class SolutionUtilitiesTests(unittest.TestCase):
@@ -17,7 +17,9 @@ class SolutionUtilitiesTests(unittest.TestCase):
         question_type = "mcat"
         question_id = "1"
 
-        response, status = solutions.check_solution(question_type, question_id, self.attempt)
+        response, status = app.api.services.solution_service.check_solution(question_type,
+                                                                            question_id,
+                                                                            self.attempt)
 
         self.assertEqual(200, status)
         self.assertEqual(self.attempt.get("question"), response.json.get("question"))
@@ -30,7 +32,9 @@ class SolutionUtilitiesTests(unittest.TestCase):
         question_id = "999"
 
         try:
-            response, status = solutions.check_solution(question_type, question_id, self.attempt)
+            response, status = app.api.services.solution_service.check_solution(question_type,
+                                                                                question_id,
+                                                                                self.attempt)
 
         except HttpError as error:
             response = error
@@ -46,7 +50,9 @@ class SolutionUtilitiesTests(unittest.TestCase):
         question_id = "999"
 
         try:
-            response, status = solutions.check_solution(question_type, question_id, self.attempt)
+            response, status = app.api.services.solution_service.check_solution(question_type,
+                                                                                question_id,
+                                                                                self.attempt)
 
         except HttpError as error:
             response = error
