@@ -9,8 +9,8 @@ class MCATQuestion1(Question):
         super().__init__(seed, independent_var)
 
         var = symbols(self.independent_var)
-        a, b = maths_service.integer_coefficients(amount=2, seed=self.seed)
+        var_a, var_b = maths_service.integer_coefficients(amount=2, seed=self.seed)
 
         self.description = "Solve a linear equation."
-        self.question = latex(Eq(a * var + b, 0))
+        self.question = latex(Eq(var_a * var + var_b, 0))
         self.independent_var = independent_var

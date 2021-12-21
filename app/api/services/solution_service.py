@@ -15,12 +15,12 @@ def check_solution(question_type, question_id, attempt):
     question = attempt.get("question")
     question_attempt = attempt.get("attempt")
     independent_var = attempt.get("independent_var", "x")
-    is_attempt_correct = is_correct(question, question_attempt, question_type, question_id, independent_var)
+    is_attempt_correct = is_correct(question, question_attempt, independent_var)
 
     return AttemptResponse(question, question_attempt, is_attempt_correct), 200
 
 
-def is_correct(question, attempt, question_type, question_id, independent_var="x"):
+def is_correct(question, attempt, independent_var="x"):
     # This method will certainly grow in complexity to handle other problem types
     # Could use question_type and question_id to help with knowing how to handle the solving
 

@@ -21,7 +21,6 @@ def get_question(question_type, question_id, seed):
     return question, status
 
 
-
 def get_all_questions():
     question_response = {"questions": []}
 
@@ -39,4 +38,3 @@ def is_question(question_type, question_id):
     valid_type = QUESTION_MAPPING.get(question_type, False)
 
     return valid_type.get(question_id, False) if valid_type else False
-
