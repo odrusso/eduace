@@ -1,5 +1,8 @@
 name: BackendCI
-on: [ pull_request ]
+on:
+  push:
+    paths:
+      - "app/**/*"
 jobs:
   run:
     runs-on: ubuntu-latest

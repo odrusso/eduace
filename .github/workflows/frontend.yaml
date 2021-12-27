@@ -1,5 +1,8 @@
 name: FrontendCI
-on: [ pull_request ]
+on:
+  push:
+    paths:
+      - "web/**/*"
 jobs:
   run:
     runs-on: ubuntu-latest
