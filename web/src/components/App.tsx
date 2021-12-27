@@ -3,7 +3,7 @@ import {Route, Switch} from "react-router-dom";
 import {Question} from "./Question";
 import {Home} from "./Home";
 import "./App.scss"
-import logo from '../public/logo.png';
+import logo from '../../public/logo.png';
 import {Link} from "react-router-dom";
 
 export const App = (): JSX.Element => {
