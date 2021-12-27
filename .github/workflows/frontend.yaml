@@ -1,13 +1,13 @@
-name: CI
-on: [ push ]
+name: FrontendCI
+on:
+  push:
+    paths:
+      - "web/**/*"
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -18,7 +18,7 @@ jobs:
         working-directory: ./web
         run: npm i
 
-      - name: Test Frontend
+      - name: Test
         working-directory: ./web
         run: npx tsc && npm run test
 
@@ -26,7 +26,7 @@ jobs:
         working-directory: ./web
         run: npm run build
 
-      - name: Deploy frontend assets to S3
+      - name: Deploy
         uses: jakejarvis/s3-sync-action@master
         if: github.ref == 'refs/heads/master'
         with:
@@ -38,7 +38,6 @@ jobs:
           AWS_REGION: "ap-southeast-2"
           SOURCE_DIR: './web/build'
 
-      # Invalidate Cloudfront (this action)
       - name: Invalidate CloudFront
         uses: chetan/invalidate-cloudfront-action@master
         if: github.ref == 'refs/heads/master'
@@ -48,9 +47,3 @@ jobs:
           AWS_REGION: "ap-southeast-2"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Test Backend
-        run: pip install -r './app/requirements.txt' && python -m unittest
-
-      - name: Run Pylint
-        run: pylint-fail-under --rcfile .pylintrc --fail_under 9.75 $(git ls-files '*.py')

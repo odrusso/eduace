@@ -1,0 +1,23 @@
+name: BackendCI
+on:
+  push:
+    paths:
+      - "app/**/*"
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install requirements
+        run: pip install -r './app/requirements.txt'
+
+      - name: Test
+        run: python -m unittest
+
+      - name: Lint
+        run: pylint-fail-under --rcfile .pylintrc --fail_under 9.75 $(git ls-files '*.py')
