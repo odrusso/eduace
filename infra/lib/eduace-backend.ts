@@ -8,31 +8,7 @@ export class EduaceBackend extends Construct {
     constructor(scope: Construct, id: string) {
         super(scope, id);
 
-        const sourceCodeBucket = new Bucket(this, "EduaceBackendLambdaStore")
+        // It's unclear what we actually want here.
 
-        new CfnOutput(this, "EduaceBackendLambdaStoreARNOutput", {
-            exportName: "S3BackendCodeBucketArn",
-            value: sourceCodeBucket.bucketArn
-        })
-
-        const lambdaFunction = new LambdaFunction(this, "EduaceBackendLambdaFunction", {
-            runtime: Runtime.PYTHON_3_9,
-            // Code may not exist at infra build time
-            code: Code.fromBucket(sourceCodeBucket, "build.zip"),
-            // Name of the method that we call in the Python code
-            handler: "main", // TODO: Check this in the code!
-            environment: {
-                FLASK_DEBUG: "false"
-            }
-        })
-
-        sourceCodeBucket.grantRead(lambdaFunction) // This might not be necessary
-
-        // Using the LambdaRestApi means that all API requests are piped to the lambda function
-        const apiGateway = new LambdaRestApi(this, "EduaceBackendAPIGateway", {
-            handler: lambdaFunction,
-            restApiName: "EduaceBackendAPIGateway",
-            description: "API Gateway for Eduace API"
-        })
     }
 }
