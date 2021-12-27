@@ -8,7 +8,6 @@ test('Smoke test', () => {
     const stack = new Infra.EduaceWebApp(app, 'MyTestStack', {env: mockEnv});
     // We want to make sure that we're synthesising something
     expectCDK(stack).to(haveResource("AWS::S3::Bucket"))
-    expectCDK(stack).to(haveResource("AWS::ApiGateway::Method"))
-    expectCDK(stack).to(haveResource("AWS::Lambda::Function"))
     expectCDK(stack).to(haveResource("AWS::CloudFront::Distribution"))
+    expectCDK(stack).notTo(haveResource("AWS::ApiGateway::Method"))
 });
