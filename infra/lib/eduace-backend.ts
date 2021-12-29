@@ -135,7 +135,7 @@ export class EduaceBackend extends Construct {
             value: ecsService.serviceArn
         })
 
-        const hostedZone = HostedZone.fromLookup(this, "EduaceZone", {
+        const hostedZone = HostedZone.fromLookup(this, "EduaceAPIZone", {
             domainName: domainName
         })
 
