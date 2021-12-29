@@ -20,6 +20,7 @@ import {Effect, Policy, PolicyStatement, Role, ServicePrincipal} from "@aws-cdk/
 import {Repository} from "@aws-cdk/aws-ecr";
 import {ARecord, HostedZone, RecordTarget} from "@aws-cdk/aws-route53";
 import {LoadBalancerTarget} from "@aws-cdk/aws-route53-targets";
+import {DnsValidatedCertificate} from "@aws-cdk/aws-certificatemanager";
 
 export class EduaceBackend extends Construct {
     constructor(scope: Construct, id: string, domainName: string) {
@@ -27,6 +28,10 @@ export class EduaceBackend extends Construct {
 
         const defaultVpc = Vpc.fromLookup(this, 'VPC', {
             isDefault: true
+        })
+
+        const hostedZone = HostedZone.fromLookup(this, "EduaceAPIZone", {
+            domainName: domainName
         })
 
         const cluster = new Cluster(this, "EduaceAPICluster", {
@@ -52,12 +57,28 @@ export class EduaceBackend extends Construct {
             protocol: Protocol.HTTP
         })
 
+        const tlsCertificate = new DnsValidatedCertificate(this, "EduaceAPICertificate", {
+            domainName: `api.${domainName}`,
+            hostedZone: hostedZone,
+            region: "us-east-1", // Cloudfront only checks this region for certificates.
+        })
+
         const targetGroupListener = loadBalancer.addListener("HttpListener", {
             open: true,
             port: 80,
         })
 
+        const targetGroupHttpsListener = loadBalancer.addListener("HttpsListener", {
+            open: true,
+            port: 443,
+            certificates: [tlsCertificate]
+        })
+
         targetGroupListener.addTargetGroups("HttpListenerTarget", {
+            targetGroups: [targetGroup]
+        })
+
+        targetGroupHttpsListener.addTargetGroups("HttpsListenerTarget", {
             targetGroups: [targetGroup]
         })
 
@@ -70,6 +91,12 @@ export class EduaceBackend extends Construct {
             Peer.anyIpv4(),
             Port.tcp(80),
             "Allow http traffic"
+        )
+
+        loadBalancerSecurityGroup.addIngressRule(
+            Peer.anyIpv4(),
+            Port.tcp(443),
+            "Allow https traffic"
         )
 
         loadBalancer.addSecurityGroup(loadBalancerSecurityGroup)
@@ -135,10 +162,6 @@ export class EduaceBackend extends Construct {
         new CfnOutput(this, "EduaceAPIServiceOutput", {
             exportName: "EduaceAPIServiceARN",
             value: ecsService.serviceArn
-        })
-
-        const hostedZone = HostedZone.fromLookup(this, "EduaceAPIZone", {
-            domainName: domainName
         })
 
         new ARecord(this, "EduaceBackendARecord", {
