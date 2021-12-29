@@ -50,21 +50,7 @@ export class EduaceFrontend extends Construct {
             region: "us-east-1", // Cloudfront only checks this region for certificates.
         })
 
-        const viewerTlsCertificate = ViewerCertificate.fromAcmCertificate({
-            certificateArn: tlsCertificate.certificateArn,
-            env: {
-                region: Aws.REGION,
-                account: Aws.ACCOUNT_ID
-            },
-            node: this.node,
-            stack: scope,
-            metricDaysToExpiry: (props) => {
-                return new Metric({
-                    namespace: "TLS Viewer Certificate Validity",
-                    metricName: "TLS Viewer Certificate Expired",
-                })
-            }
-        }, {
+        const viewerTlsCertificate = ViewerCertificate.fromAcmCertificate(tlsCertificate, {
             sslMethod: SSLMethod.SNI,
             securityPolicy: SecurityPolicyProtocol.TLS_V1_1_2016,
             aliases: [domainName]
