@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy CDK
         uses: youyo/aws-cdk-github-actions@v2
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'deploy')
         with:
           working_dir: 'infra'
           cdk_subcommand: 'deploy'
