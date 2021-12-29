@@ -19,7 +19,7 @@ import {
 import {Effect, Policy, PolicyStatement, Role, ServicePrincipal} from "@aws-cdk/aws-iam";
 import {Repository} from "@aws-cdk/aws-ecr";
 import {ARecord, HostedZone, RecordTarget} from "@aws-cdk/aws-route53";
-import {CloudFrontTarget} from "@aws-cdk/aws-route53-targets";
+import {LoadBalancerTarget} from "@aws-cdk/aws-route53-targets";
 
 export class EduaceBackend extends Construct {
     constructor(scope: Construct, id: string, domainName: string) {
@@ -141,7 +141,7 @@ export class EduaceBackend extends Construct {
 
         new ARecord(this, "EduaceBackendARecord", {
             recordName: domainName,
-            target: RecordTarget.fromAlias(new CloudFrontTarget(loadBalancer)),
+            target: RecordTarget.fromAlias(new LoadBalancerTarget(loadBalancer)),
             zone: hostedZone
         })
 
