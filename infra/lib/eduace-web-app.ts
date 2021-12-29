@@ -6,7 +6,7 @@ export class EduaceWebApp extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    new EduaceBackend(this, "EduaceBackend")
+    new EduaceBackend(this, "EduaceBackend", "api.eduace.net")
     new EduaceFrontend(this, "EduaceFrontend", "eduace.net")
   }
 }
