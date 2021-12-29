@@ -18,9 +18,11 @@ import {
 } from "@aws-cdk/aws-elasticloadbalancingv2";
 import {Effect, Policy, PolicyStatement, Role, ServicePrincipal} from "@aws-cdk/aws-iam";
 import {Repository} from "@aws-cdk/aws-ecr";
+import {ARecord, HostedZone, RecordTarget} from "@aws-cdk/aws-route53";
+import {LoadBalancerTarget} from "@aws-cdk/aws-route53-targets";
 
 export class EduaceBackend extends Construct {
-    constructor(scope: Construct, id: string) {
+    constructor(scope: Construct, id: string, domainName: string) {
         super(scope, id);
 
         const defaultVpc = Vpc.fromLookup(this, 'VPC', {
@@ -131,6 +133,16 @@ export class EduaceBackend extends Construct {
         new CfnOutput(this, "EduaceAPIServiceOutput", {
             exportName: "EduaceAPIServiceARN",
             value: ecsService.serviceArn
+        })
+
+        const hostedZone = HostedZone.fromLookup(this, "EduaceAPIZone", {
+            domainName: domainName
+        })
+
+        new ARecord(this, "EduaceBackendARecord", {
+            recordName: "api",
+            target: RecordTarget.fromAlias(new LoadBalancerTarget(loadBalancer)),
+            zone: hostedZone
         })
 
     }
