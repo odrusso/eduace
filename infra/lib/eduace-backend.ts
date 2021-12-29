@@ -16,7 +16,7 @@ import {
     Protocol,
     TargetType
 } from "@aws-cdk/aws-elasticloadbalancingv2";
-import {Role, ServicePrincipal} from "@aws-cdk/aws-iam";
+import {Effect, Policy, PolicyStatement, Role, ServicePrincipal} from "@aws-cdk/aws-iam";
 import {Repository} from "@aws-cdk/aws-ecr";
 
 export class EduaceBackend extends Construct {
@@ -80,6 +80,20 @@ export class EduaceBackend extends Construct {
             description: "Role assumed by API task"
         })
 
+        taskRole.attachInlinePolicy(
+            new Policy(this, "EduaceAPITaskECRFetchPolicy", {
+                statements: [
+                    // TODO: Tighten this up, a lot.
+                    // We should have enough context here to allow only pulling from the specific repo we want
+                    new PolicyStatement({
+                        effect: Effect.ALLOW,
+                        actions: ["ECR:*"],
+                        resources: ["*"]
+                    })
+                ]
+            })
+        )
+
         const taskDefinition = new TaskDefinition(this, "EduaceAPITaskDef", {
             compatibility: Compatibility.FARGATE,
             family: "task",
@@ -102,7 +116,7 @@ export class EduaceBackend extends Construct {
             desiredCount: 1, // not very highly available, but hey, it's cheap
             taskDefinition: taskDefinition,
             securityGroups: [loadBalancerSecurityGroup],
-            assignPublicIp: false
+            assignPublicIp: true // we need this to be able to reach ECR
         })
 
         ecsService.attachToApplicationTargetGroup(targetGroup)
