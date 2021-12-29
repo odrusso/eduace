@@ -74,6 +74,8 @@ export class EduaceBackend extends Construct {
 
         loadBalancer.addSecurityGroup(loadBalancerSecurityGroup)
 
+        // TODO Make this public, because you get 100x more for free.
+        // It's not like the code is closed source
         const containerRegistry = new Repository(this, "EduaceAPIContainerRepository")
 
         const taskRole = new Role(this, "EduaceAPITaskRole", {

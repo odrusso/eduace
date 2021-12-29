@@ -1,7 +1,7 @@
 from time import time
 from flask import Flask, request
 
-from app.api.helpers.config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG
+from app.api.helpers.config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG, PORT
 from app.api.helpers.errors import HttpError
 from app.api.services.question_service import get_all_questions, get_question
 from app.api.services.solution_service import check_solution
@@ -41,4 +41,4 @@ def handle_http_error(error):
     return error.json, error.json.get("status", 500)
 
 if __name__ == "__main__":
-    app.run(debug=DEBUG)
+    app.run(debug=DEBUG, port=PORT)

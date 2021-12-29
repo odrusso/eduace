@@ -19,4 +19,4 @@
 
 #### Using Docker
 `docker build -t eduace-api:latest .` - build the image
-`docker container run -p [port-you-want-in-localhost]:5000 eduace-api` - run the image
+`docker container run -p [port-you-want-in-localhost]:80 eduace-api` - run the image
