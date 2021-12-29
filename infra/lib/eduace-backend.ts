@@ -1,4 +1,4 @@
-import {CfnOutput, Construct} from "@aws-cdk/core";
+import {Aws, CfnOutput, Construct} from "@aws-cdk/core";
 import {Peer, Port, SecurityGroup, Vpc} from "@aws-cdk/aws-ec2";
 import {
     Cluster,
@@ -60,7 +60,7 @@ export class EduaceBackend extends Construct {
         const tlsCertificate = new DnsValidatedCertificate(this, "EduaceAPICertificate", {
             domainName: `api.${domainName}`,
             hostedZone: hostedZone,
-            region: "us-east-1", // Cloudfront only checks this region for certificates.
+            region: Aws.REGION
         })
 
         const targetGroupListener = loadBalancer.addListener("HttpListener", {
@@ -169,6 +169,5 @@ export class EduaceBackend extends Construct {
             target: RecordTarget.fromAlias(new LoadBalancerTarget(loadBalancer)),
             zone: hostedZone
         })
-
     }
 }
