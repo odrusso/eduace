@@ -140,7 +140,7 @@ export class EduaceBackend extends Construct {
         })
 
         new ARecord(this, "EduaceBackendARecord", {
-            recordName: domainName,
+            recordName: "api",
             target: RecordTarget.fromAlias(new LoadBalancerTarget(loadBalancer)),
             zone: hostedZone
         })
