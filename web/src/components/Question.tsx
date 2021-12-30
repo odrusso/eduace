@@ -4,8 +4,11 @@ import {get, post, getRandomInteger} from "../utils";
 import {MathfieldComponent} from "./MathliveComponent";
 import {MathfieldElement} from "mathlive";
 import "./Question.scss"
-import {Button, FormControl, InputLabel, MenuItem, Select, Snackbar} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
+import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
+import JSConfetti from "js-confetti";
+
+const happyEmojis = ['✅', '✅', '📚', '✖', '️➕', '➗']
+const sadEmojis = ['❌', '❌', '😨', '🤔']
 
 export const Question = (): JSX.Element => {
     const [questions, setQuestions] = useState<QuestionListResponseDTO | undefined>()
@@ -14,9 +17,8 @@ export const Question = (): JSX.Element => {
     const [latex, setLatex] = useState<string>("")
     const latexDiv = useRef<HTMLDivElement>(null)
     const [mathfield, setMathfield] = useState<MathfieldElement | undefined>()
-    const [modalOpen, setModalOpen] = useState<boolean>(false)
-    const [modalStatus, setModalStatus] = useState<boolean>(false);
     const [seed, setSeed] = useState<number>(getRandomInteger())
+    const [confetti] = useState(new JSConfetti())
 
 
     const handleSubmit = async () => {
@@ -26,8 +28,9 @@ export const Question = (): JSX.Element => {
             question: selectedQuestionData!.question
         } as QuestionAnswerRequestDTO)
         const resBody = (await res.json()) as QuestionAnswerResponseDTO
-        setModalStatus(resBody.result)
-        setModalOpen(true);
+        confetti.addConfetti({
+            emojis: resBody.result ? happyEmojis : sadEmojis
+        })
     }
 
     // Run only on initial render
@@ -52,7 +55,7 @@ export const Question = (): JSX.Element => {
 
         const fetchQuestion = async (selectedQuestion) => {
             const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
-    
+
             const fetchResult = await get(url)
             if (fetchResult.status !== 200) {
                 console.error(`Invalid response code ${fetchResult.status}`)
@@ -60,7 +63,7 @@ export const Question = (): JSX.Element => {
             }
             const questionJson: QuestionResponseDTO = await fetchResult.json()
             setSelectedQuestionData(questionJson)
-    
+
             setLatex("")
         }
 
@@ -111,7 +114,9 @@ export const Question = (): JSX.Element => {
                     </div>
                     <div className={"eduace-button-regen"}>
                         <Button
-                            onClick={() => {setSeed(getRandomInteger())}}
+                            onClick={() => {
+                                setSeed(getRandomInteger())
+                            }}
                             variant={"contained"}
                             disableElevation={true}
                         >
@@ -120,11 +125,6 @@ export const Question = (): JSX.Element => {
                     </div>
                 </>
             )}
-            <Snackbar open={modalOpen} autoHideDuration={2000} onClose={() => setModalOpen(false)}>
-                <Alert onClose={() => setModalOpen(false)} severity={modalStatus ? "success" : "warning"}>
-                    {modalStatus ? "Correct!" : "Incorrect - try again"}
-                </Alert>
-            </Snackbar>
         </div>
     )
 }
