@@ -1,6 +1,9 @@
 ![Image](https://github.com/odrusso/eduace/blob/master/docs/resources/logo_small.png)
 
-![Build](https://github.com/odrusso/eduace/actions/workflows/workflow.yaml/badge.svg)
+![Build](https://github.com/odrusso/eduace/actions/workflows/backend.yaml/badge.svg)
+![Build](https://github.com/odrusso/eduace/actions/workflows/frontend.yaml/badge.svg)
+![Build](https://github.com/odrusso/eduace/actions/workflows/infra.yaml/badge.svg)
+
 
 ## Getting started
 ### Frontend
