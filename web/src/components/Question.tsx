@@ -23,7 +23,8 @@ export const Question = (): JSX.Element => {
         const url = `/api/v1/question/${selectedQuestion?.type}/${selectedQuestion?.id}`
         const res = await post(url, {
             attempt: latex,
-            question: selectedQuestionData!.question
+            question: selectedQuestionData!.question,
+            seed: seed
         } as QuestionAnswerRequestDTO)
         const resBody = (await res.json()) as QuestionAnswerResponseDTO
         setModalStatus(resBody.result)
@@ -52,7 +53,7 @@ export const Question = (): JSX.Element => {
 
         const fetchQuestion = async (selectedQuestion) => {
             const url = `/api/v1/question/${selectedQuestion.type}/${selectedQuestion.id}?seed=${seed}`
-    
+
             const fetchResult = await get(url)
             if (fetchResult.status !== 200) {
                 console.error(`Invalid response code ${fetchResult.status}`)
@@ -60,7 +61,7 @@ export const Question = (): JSX.Element => {
             }
             const questionJson: QuestionResponseDTO = await fetchResult.json()
             setSelectedQuestionData(questionJson)
-    
+
             setLatex("")
         }
 

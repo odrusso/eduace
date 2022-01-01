@@ -17,7 +17,6 @@ class TestApp(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual('200 OK', status)
-        self.assertTrue("description" in data.keys())
         self.assertTrue("question" in data.keys())
 
     def test_get_question_not_found(self):
@@ -27,7 +26,7 @@ class TestApp(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual('404 NOT FOUND', status)
-        self.assertTrue("Question not found." in data.get("description"))
+        self.assertIsNone(data)
 
     def test_get_question_type_not_found(self):
         response = self.client.get("/api/v1/question/bob/1?seed=123")
@@ -36,7 +35,7 @@ class TestApp(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual('404 NOT FOUND', status)
-        self.assertTrue("Question not found." in data.get("description"))
+        self.assertIsNone(data)
 
     def test_get_all_questions(self):
         response = self.client.get("/api/v1/questions")
@@ -49,7 +48,7 @@ class TestApp(unittest.TestCase):
         self.assertTrue(len(data.get("questions")) > 0)
 
     def test_check_solution_correct(self):
-        body = {"question": "2 x + 3 = 0", "attempt": "x = -\\frac{3}{2}"}
+        body = {"attempt": "x = -\\frac{1}{2}", "seed": 1}
         response = self.client.post("/api/v1/question/mcat/1",
                                     data=json.dumps(body),
                                     content_type='application/json')
@@ -58,8 +57,6 @@ class TestApp(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual("200 OK", status)
-        self.assertEqual(body.get("question"), data.get("question"))
-        self.assertEqual(body.get("attempt"), data.get("attempt"))
         self.assertEqual(True, data.get("result"))
 
     def test_check_solution_incorrect(self):
@@ -73,6 +70,4 @@ class TestApp(unittest.TestCase):
         data = response.get_json()
 
         self.assertEqual("200 OK", status)
-        self.assertEqual(body.get("question"), data.get("question"))
-        self.assertEqual(body.get("attempt"), data.get("attempt"))
         self.assertEqual(False, data.get("result"))

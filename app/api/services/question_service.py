@@ -1,4 +1,3 @@
-from app.api.helpers.errors import HttpError
 from app.api.models.questions_mcat import MCATQuestion1
 
 QUESTION_MAPPING = {
@@ -10,15 +9,12 @@ QUESTION_MAPPING = {
 
 def get_question(question_type, question_id, seed):
 
-    if is_question(question_type, question_id):
-        question = QUESTION_MAPPING.get(question_type).get(question_id)(seed)
-        status = 200
+    return QUESTION_MAPPING.get(question_type).get(question_id)(seed)
 
-    else:
-        raise HttpError(description="Question not found.",
-                        status=404)
 
-    return question, status
+def get_question_latex(question_type, question_id, seed):
+
+    return get_question(question_type, question_id, seed).question
 
 
 def get_all_questions():
@@ -30,7 +26,7 @@ def get_all_questions():
             "questionIds": list(question_type_items.keys())
         })
 
-    return question_response, 200
+    return question_response
 
 
 def is_question(question_type, question_id):

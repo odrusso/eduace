@@ -3,34 +3,35 @@ import unittest
 from app.api.services import solution_service
 
 
-class SolutionServiceTests(unittest.TestCase):
+class SolutionUtilitiesTests(unittest.TestCase):
+    def test_check_solution_valid(self):
 
-    # The following tests will need to be improved as is_correct
-    # grows in complexity
+        question_type = "mcat"
+        question_id = "1"
 
-    def test_is_correct_correct(self):
+        response = solution_service.check_solution(question_type, question_id,
+                                                   "x = - \\frac{1}{2}", 1)
 
-        question = "2 x + 3 = 0"
-        attempt = "x = -\\frac{3}{2}"
+        self.assertEqual(True, response)
 
-        result = solution_service.is_correct(question, attempt)
+    def test_check_solution_not_simplified_enough(self):
 
-        self.assertTrue(result)
+        question_type = "mcat"
+        question_id = "1"
 
-    def test_is_correct_incorrect(self):
+        response = solution_service.check_solution(question_type, question_id,
+                                                   "x = - \\frac{5}{10}", 1)
 
-        question = "2 x + 3 = 0"
-        attempt = "x = 1000"
+        # self.assertTrue(response)
+        # this may not be the behaviour that we want.
+        self.assertTrue(response)
 
-        result = solution_service.is_correct(question, attempt)
+    def test_check_solution_invalid(self):
 
-        self.assertFalse(result)
+        question_type = "mcat"
+        question_id = "1"
 
-    def test_is_correct_repeat_question(self):
+        response = solution_service.check_solution(question_type, question_id,
+                                                   "x = - \\frac{2}{2}", 1)
 
-        question = "2 x + 3 = 0"
-        attempt = "2 x + 3 = 0"
-
-        result = solution_service.is_correct(question, attempt)
-
-        self.assertFalse(result)
+        self.assertFalse(response)
