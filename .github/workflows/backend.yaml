@@ -48,3 +48,7 @@ jobs:
       - name: Redeploy API Service
         if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/deploy-api')
         run: aws ecs update-service --cluster ${{ secrets.API_ECS_CLUSTER_ARN }} --service ${{ secrets.API_ECS_SERVICE_NAME }} --force-new-deployment
+
+      - name: Wait for deployment
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/deploy-api')
+        run: aws ecs services-stable --cluster ${{ secrets.API_ECS_CLUSTER_ARN }} --service ${{ secrets.API_ECS_SERVICE_NAME }}
