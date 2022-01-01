@@ -42,7 +42,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.API_ECR_REPOSITORY }}
         working-directory: app
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest . --build-arg GIT_HASH_VERSION=${{ github.sha }}
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Redeploy API Service
