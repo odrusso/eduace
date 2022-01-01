@@ -52,3 +52,7 @@ jobs:
       - name: Wait for deployment
         if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/deploy-api')
         run: aws ecs services-stable --cluster ${{ secrets.API_ECS_CLUSTER_ARN }} --service ${{ secrets.API_ECS_SERVICE_NAME }}
+
+      - name: Verify deployment version
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/deploy-api')
+        run: bash ./verify-api-deploy.sh
