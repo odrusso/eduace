@@ -12,3 +12,6 @@ class Question:
             "question": self.question,
             "independent_var": self.independent_var,
         }
+
+    def validate_attempt(self):
+        return
