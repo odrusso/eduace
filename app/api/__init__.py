@@ -1,5 +1,5 @@
 from time import time
-from flask import Flask, request
+from flask import Flask, request, abort
 
 from app.api.helpers.config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG, PORT
 from app.api.helpers.errors import HttpError
@@ -15,37 +15,42 @@ def apply_caching(response):
 
     return response
 
+
 @app.get(API_VERSION + "/question/<question_type>/<question_id>")
-def question_router(question_type, question_id):
+def controller_get_question(question_type, question_id):
     seed = int(request.args.get("seed", time()))
 
     if not is_question(question_type, question_id):
-        return None, 404
+        abort(404)
 
     question = get_question_latex(question_type, question_id, seed)
 
-    return question, 200
+    return {'question': question, 'seed': seed}, 200
+
 
 @app.post(API_VERSION + "/question/<question_type>/<question_id>")
-def get_solution(question_type, question_id):
+def controller_validate_question_solution(question_type, question_id):
     attempt = request.get_json(force=True)
     seed = attempt.get("seed")
+    attempt_latex = attempt.get("attempt")
 
     if not is_question(question_type, question_id):
-        return None, 404
-    attempt_response, status = check_solution(question_type, question_id, attempt, seed)
+        abort(404)
 
-    return attempt_response.json, 200
+    attempt_response = check_solution(question_type, question_id, attempt_latex, seed)
+
+    return {'result': attempt_response}, 200
+
 
 @app.get(API_VERSION + "/questions")
-def questions():
-
+def controller_get_all_questions():
     return get_all_questions(), 200
+
 
 @app.errorhandler(HttpError)
 def handle_http_error(error):
-
     return error.json, error.json.get("status", 500)
+
 
 if __name__ == "__main__":
     app.run(debug=DEBUG, port=PORT)

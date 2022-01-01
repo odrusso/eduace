@@ -13,5 +13,5 @@ class Question:
             "independent_var": self.independent_var,
         }
 
-    def validate_attempt(self):
-        return
+    def validate_attempt(self, attempt_latex_string):
+        raise NotImplementedError

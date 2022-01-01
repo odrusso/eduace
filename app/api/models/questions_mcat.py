@@ -1,5 +1,5 @@
-from sympy import symbols, latex, Eq
-from sympy.parsing.latex import LaTeXParsingError, parse_latex
+from sympy import symbols, latex, Eq, Integer
+from sympy.parsing.latex import parse_latex
 
 from app.api.models.question import Question
 from app.api.services import maths_service
@@ -18,4 +18,5 @@ class MCATQuestion1(Question):
 
     def validate_attempt(self, attempt_latex_string):
         parsed_attempt = parse_latex(attempt_latex_string)
-        return parsed_attempt.rhs == - self.var_b / self.var_a
+        expected_solution = - Integer(self.var_b) / Integer(self.var_a)
+        return parsed_attempt.rhs.equals(expected_solution)

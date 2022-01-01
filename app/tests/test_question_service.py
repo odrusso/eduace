@@ -1,7 +1,6 @@
 import unittest
 
 from app.api.services import question_service
-from app.api.helpers.errors import HttpError
 
 
 class QuestionUtilitiesTests(unittest.TestCase):
@@ -11,34 +10,30 @@ class QuestionUtilitiesTests(unittest.TestCase):
         question_id = "1"
         seed = 123
 
-        question, status = question_service.get_question(question_type, question_id, seed)
+        question = question_service.get_question(question_type, question_id, seed)
 
         self.assertEqual("Solve a linear equation.", question.description)
         self.assertEqual("5 x + 7 = 0", question.question)
-        self.assertEqual(200, status)
 
-    def test_get_question_failure(self):
+    def test_get_questions_throws_error_with_nonexistant_input(self):
         question_type = "mcat"
         question_id = "99"
         seed = 123
 
         question = None
-        status = None
 
         try:
-            question, status = question_service.get_question(question_type, question_id, seed)
-        except HttpError as not_found:
-            self.assertEqual("Question not found.", not_found.json.get("description"))
+            question = question_service.get_question(question_type, question_id, seed)
+        except Exception as exception: # pylint: disable=W0703
+            self.assertIsInstance(exception, TypeError)
 
         self.assertIsNone(question)
-        self.assertIsNone(status)
 
     def test_get_all_questions(self):
 
-        response, status = question_service.get_all_questions()
+        response = question_service.get_all_questions()
 
         self.assertTrue("questions" in response.keys())
-        self.assertEqual(200, status)
 
         all_questions = response.get("questions")
 
