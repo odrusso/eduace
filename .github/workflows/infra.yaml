@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - "infra/**/*"
+      - ".github/workflows/infra.yaml"
 jobs:
   run:
     runs-on: ubuntu-latest

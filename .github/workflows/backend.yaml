@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - "app/**/*"
+      - ".github/workflows/backend.yaml"
 jobs:
   run:
     runs-on: ubuntu-latest
