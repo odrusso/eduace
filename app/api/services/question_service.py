@@ -1,9 +1,10 @@
-from app.api.models.questions_mcat import MCATQuestion1, MCATQuestion2
+from app.api.models.questions_mcat import MCATQuestion1, MCATQuestion2, MCATQuestion3
 
 QUESTION_MAPPING = {
     'mcat': {
         '1': MCATQuestion1,
-        '2': MCATQuestion2
+        '2': MCATQuestion2,
+        '3': MCATQuestion3
     },
 }
 

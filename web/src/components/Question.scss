@@ -1,3 +1,5 @@
+@import 'App';
+
 $gradient-1: rgb(126, 230, 229);
 $gradient-2: rgb(147, 138, 235);
 $gradient: linear-gradient(60deg, $gradient-1, $gradient-2);
@@ -15,6 +17,18 @@ $gradient: linear-gradient(60deg, $gradient-1, $gradient-2);
 .eduace-button-submit {
   float: left;
   margin-right: 1em;
+}
+
+.eduace-submit-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.eduace-submit-buttons button {
+  border-radius: 0 !important;
+  color: $eduace-darkgray;
+  letter-spacing: 0.2em;
 }
 
 .katex {

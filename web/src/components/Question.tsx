@@ -103,26 +103,28 @@ export const Question = (): JSX.Element => {
                         mathfield={mathfield}
                         setMathfield={setMathfield}
                     />
-                    <div className={"eduace-button-submit"}>
-                        <Button
-                            onClick={handleSubmit}
-                            variant={"contained"}
-                            disableElevation={true}
-                            disabled={buttonDisabled}
-                        >
-                            Submit
-                        </Button>
-                    </div>
-                    <div className={"eduace-button-regen"}>
-                        <Button
-                            onClick={() => {
-                                setSeed(getRandomInteger())
-                            }}
-                            variant={"contained"}
-                            disableElevation={true}
-                        >
-                            Another!
-                        </Button>
+                    <div className={"eduace-submit-buttons"}>
+                        <div className={"eduace-button-submit"}>
+                            <Button
+                                onClick={handleSubmit}
+                                variant={"outlined"}
+                                disableElevation={true}
+                                disabled={buttonDisabled}
+                            >
+                                Submit
+                            </Button>
+                        </div>
+                        <div className={"eduace-button-regen"}>
+                            <Button
+                                onClick={() => {
+                                    setSeed(getRandomInteger())
+                                }}
+                                variant={"outlined"}
+                                disableElevation={true}
+                            >
+                                Another!
+                            </Button>
+                        </div>
                     </div>
                 </>
             )}
