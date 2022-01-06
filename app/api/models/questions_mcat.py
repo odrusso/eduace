@@ -1,4 +1,4 @@
-from sympy import symbols, latex, Eq, Integer
+from sympy import symbols, latex, Eq, Integer, Pow, simplify
 from sympy.parsing.latex import parse_latex
 
 from app.api.models.question import Question
@@ -44,4 +44,30 @@ class MCATQuestion2(Question):
     def validate_attempt(self, attempt_latex_string):
         parsed_attempt = parse_latex(attempt_latex_string)
         expected_solution = ((self.co1 + self.co3) * self.letter_var) + (self.co2 + self.co4)
+        return parsed_attempt.equals(expected_solution)
+
+
+class MCATQuestion3(Question):
+    def __init__(self, seed, independent_var="x"):
+        super().__init__(seed, independent_var)
+        self.description = "Powers of powers."
+
+        letter_a = symbols("a")
+        letter_b = symbols("b")
+
+        co1, = maths_service.positive_integer_coefficients(amount=1, number_range=(1, 5), seed=self.seed)
+        power1, power2 = maths_service.positive_integer_coefficients(amount=2,
+                                                                     number_range=(1, 3),
+                                                                     seed=self.seed)
+        power3, = maths_service.positive_integer_coefficients(amount=1,
+                                                              number_range=(2, 3),
+                                                              seed=self.seed)
+
+        self.question_raw = Pow(co1 * (letter_a ** power1) * (letter_b ** power2), power3, evaluate=False)
+
+        self.question = latex(self.question_raw)
+
+    def validate_attempt(self, attempt_latex_string):
+        parsed_attempt = parse_latex(attempt_latex_string)
+        expected_solution = simplify(self.question_raw)
         return parsed_attempt.equals(expected_solution)
