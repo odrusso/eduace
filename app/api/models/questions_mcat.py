@@ -1,4 +1,4 @@
-from sympy import symbols, latex, Eq, Integer
+from sympy import symbols, latex, Eq, Integer, Add
 from sympy.parsing.latex import parse_latex
 
 from app.api.models.question import Question
@@ -19,4 +19,21 @@ class MCATQuestion1(Question):
     def validate_attempt(self, attempt_latex_string):
         parsed_attempt = parse_latex(attempt_latex_string)
         expected_solution = - Integer(self.var_b) / Integer(self.var_a)
+        return parsed_attempt.rhs.equals(expected_solution)
+
+
+class MCATQuestion2(Question):
+    def __init__(self, seed, independent_var="x"):
+        super().__init__(seed, independent_var)
+
+        self.description = "Adding like terms."
+
+        self.letter_var = symbols("a")
+        self.co1, self.co2, self.co3, self.co4 = maths_service.integer_coefficients(amount=4, seed=self.seed)
+
+        self.question = latex(Add(self.letter_var * self.co1 + self.co2, self.letter_var * self.co3 + self.co4, evaluate=False))
+
+    def validate_attempt(self, attempt_latex_string):
+        parsed_attempt = parse_latex(attempt_latex_string)
+        expected_solution = ((self.co1 + self.co3) * self.letter_var) + (self.co2 + self.co4)
         return parsed_attempt.rhs.equals(expected_solution)

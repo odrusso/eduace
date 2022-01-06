@@ -15,3 +15,10 @@ class QuestionsTests(unittest.TestCase):
         self.assertEqual(seed, question.seed)
         self.assertTrue("description" in question.json.keys())
         self.assertTrue("question" in question.json.keys())
+
+    def test_MCAT_Question_2(self):
+        seed = 123
+        question = app.api.models.questions_mcat.MCATQuestion2(seed)
+
+        self.assertEqual("Adding like terms.", question.description)
+        question.validate_attempt("a")
