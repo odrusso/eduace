@@ -1,7 +1,7 @@
 from time import time
 from flask import Flask, request, abort
 
-from app.api.helpers.config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG, PORT
+from app.api.helpers.config import API_VERSION, CORS_ALLOWED_ORIGINS, DEBUG, PORT, GIT_HASH
 from app.api.helpers.errors import HttpError
 from app.api.services.question_service import get_all_questions, get_question_latex, is_question
 from app.api.services.solution_service import check_solution
@@ -14,6 +14,11 @@ def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = CORS_ALLOWED_ORIGINS
 
     return response
+
+
+@app.get("/api/version")
+def controller_api_version():
+    return GIT_HASH
 
 
 @app.get(API_VERSION + "/question/<question_type>/<question_id>")
