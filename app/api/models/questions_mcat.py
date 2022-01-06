@@ -1,4 +1,4 @@
-from sympy import symbols, latex, Eq, Integer, Add, Mul
+from sympy import symbols, latex, Eq, Integer
 from sympy.parsing.latex import parse_latex
 
 from app.api.models.question import Question
