@@ -11,8 +11,9 @@ type QuestionResponseDTO = {
 
 type QuestionListResponseDTO = {
     questions: {
-        questionTypeName: string,
-        questionIds: string[]
+        id: string
+        typeName: string,
+        description: string
     }[]
 }
 

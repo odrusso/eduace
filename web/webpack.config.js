@@ -75,7 +75,7 @@ module.exports = (env, argv) => {
         },
         devServer: {
             historyApiFallback: {
-                index: '/'
+                index: '/index.html'
             }
         },
         plugins: [

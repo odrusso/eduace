@@ -5,7 +5,7 @@
   "scripts": {
     "mock": "webpack serve --mode=development --open --hot --env API_HOST=http://localhost:3000 --env MOCK_API=true",
     "mock:prod": "webpack serve --mode=production --open --hot --env API_HOST=http://localhost:3000 --env MOCK_API=true",
-    "start": "webpack serve --mode=development --open --hot --env API_HOST=http://localhost:5000 --env MOCK_API=false",
+    "start": "webpack serve --mode=development --open --hot --env API_HOST=http://127.0.0.1:5000 --env MOCK_API=false",
     "build": "webpack --mode=production --env MOCK_API=false && cp index.html build/index.html",
     "build:prod": "webpack --mode=production --env MOCK_API=false --env API_HOST=https://api.eduace.net && cp index.html build/index.html",
     "test": "jest --passWithNoTests"

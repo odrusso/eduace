@@ -6,13 +6,14 @@ from app.api.services import maths_service
 
 
 class MCATQuestion1(Question):
+    description = "Solve a linear equation."
+
     def __init__(self, seed, independent_var="x"):
         super().__init__(seed, independent_var)
 
         var = symbols(self.independent_var)
         self.var_a, self.var_b = maths_service.integer_coefficients(amount=2, seed=self.seed)
 
-        self.description = "Solve a linear equation."
         self.question = latex(Eq(self.var_a * var + self.var_b, 0))
         self.independent_var = independent_var
 
@@ -23,10 +24,10 @@ class MCATQuestion1(Question):
 
 
 class MCATQuestion2(Question):
+    description = "Adding like terms."
+
     def __init__(self, seed, independent_var="x"):
         super().__init__(seed, independent_var)
-
-        self.description = "Adding like terms."
 
         self.letter_var = symbols("a")
         self.co1, self.co2, self.co3, self.co4 = maths_service.integer_coefficients(amount=4, seed=self.seed)
@@ -48,9 +49,10 @@ class MCATQuestion2(Question):
 
 
 class MCATQuestion3(Question):
+    description = "Powers of powers."
+
     def __init__(self, seed, independent_var="x"):
         super().__init__(seed, independent_var)
-        self.description = "Powers of powers."
 
         letter_a = symbols("a")
         letter_b = symbols("b")

@@ -49,7 +49,9 @@ def controller_validate_question_solution(question_type, question_id):
 
 @app.get(API_VERSION + "/questions")
 def controller_get_all_questions():
-    return get_all_questions(), 200
+    return {
+        "questions": get_all_questions()
+    }, 200
 
 
 @app.errorhandler(HttpError)

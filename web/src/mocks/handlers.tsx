@@ -25,10 +25,17 @@ export const handlers = [
         return res(
             ctx.status(200),
             ctx.json({
-                questions: [{
-                    questionTypeName: "mcat",
-                    questionIds: ["1", "2", "3"]
-                }]
+                questions: [
+                    {
+                        id: "1",
+                        typeName: "mcat",
+                        description: "solve a linear system."
+                    }, {
+                        id: "2",
+                        typeName: "mcat",
+                        description: "solve a non linear system."
+                    }
+                ]
             } as QuestionListResponseDTO)
         )
     })
