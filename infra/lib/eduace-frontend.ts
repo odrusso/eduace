@@ -70,7 +70,7 @@ export class EduaceFrontend extends Construct {
                 }]
             }],
             errorConfigurations: [{
-                errorCode: 404,
+                errorCode: 403,
                 errorCachingMinTtl: 0,
                 responseCode: 200,
                 responsePagePath: "/index.html"
