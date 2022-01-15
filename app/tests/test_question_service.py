@@ -33,12 +33,9 @@ class QuestionUtilitiesTests(unittest.TestCase):
 
         response = question_service.get_all_questions()
 
-        self.assertTrue("questions" in response.keys())
+        self.assertTrue(len(response) > 0)
 
-        all_questions = response.get("questions")
+        sample_question = response[0]
 
-        self.assertTrue(len(all_questions) > 0)
-
-        for question_type in question_service.QUESTION_MAPPING.keys(): # pylint: disable=consider-iterating-dictionary
-            question_types = [question.get("questionTypeName") for question in all_questions]
-            self.assertTrue(question_type in question_types)
+        self.assertTrue(sample_question["typeName"] in question_service.QUESTION_MAPPING.keys())
+        self.assertTrue(sample_question["id"] in question_service.QUESTION_MAPPING[sample_question["typeName"]].keys())

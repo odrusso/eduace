@@ -142,20 +142,17 @@ type QuestionPickerProps = {
 const QuestionPicker = ({questions, selectedQuestion, setSelectedQuestion}: QuestionPickerProps): JSX.Element => {
     const [index, setIndex] = useState<string>("")
 
-    const questionToRender = questions.questions
-        .filter((it) => it.questionTypeName === "mcat")
-        .flatMap((question) => {
-            return question.questionIds.map((id): QuestionRequestDTO => {
-                return {
-                    type: question.questionTypeName,
-                    id: id
-                }
-            })
-        })
-
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         if (e.target.value === "off") return
-        setSelectedQuestion(questionToRender[Number(e.target.value)])
+
+        const newQuestion = questions.questions[Number(e.target.value)]
+
+        setSelectedQuestion({
+            type: newQuestion!.typeName,
+            id: newQuestion!.id,
+            seed: undefined
+        })
+
         setIndex(e.target.value)
     }
 
@@ -169,8 +166,9 @@ const QuestionPicker = ({questions, selectedQuestion, setSelectedQuestion}: Ques
                 label={'question'}
                 value={index}
             >
-                {questionToRender.map((question, index) =>
-                    <MenuItem key={index} value={index}>{question.type} {question.id}</MenuItem>
+                {questions.questions.map((question, index) =>
+                    <MenuItem key={index}
+                              value={index}>{question.typeName} {question.id} - {question.description}</MenuItem>
                 )}
             </Select>
         </FormControl>

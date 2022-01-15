@@ -1,6 +1,7 @@
 class Question:
+    description = ""
+
     def __init__(self, seed, independent_var):
-        self.description = ""
         self.question = ""
         self.seed = seed
         self.independent_var = independent_var

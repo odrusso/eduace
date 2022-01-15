@@ -20,15 +20,19 @@ def get_question_latex(question_type, question_id, seed):
 
 
 def get_all_questions():
-    question_response = {"questions": []}
+    all_questions = []
 
-    for question_type, question_type_items in QUESTION_MAPPING.items():
-        question_response["questions"].append({
-            "questionTypeName": question_type,
-            "questionIds": list(question_type_items.keys())
-        })
+    mcat_questions = QUESTION_MAPPING["mcat"]
+    for question_id, question_object in mcat_questions.items():
+        all_questions.append(
+                {
+                    "id": question_id,
+                    "typeName": "mcat",
+                    "description": question_object.description
+                }
+        )
 
-    return question_response
+    return all_questions
 
 
 def is_question(question_type, question_id):
