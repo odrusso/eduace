@@ -68,6 +68,12 @@ export class EduaceFrontend extends Construct {
                     compress: true,
                     allowedMethods: CloudFrontAllowedMethods.GET_HEAD_OPTIONS
                 }]
+            }],
+            errorConfigurations: [{
+                errorCode: 404,
+                errorCachingMinTtl: 0,
+                responseCode: 200,
+                responsePagePath: "index.html"
             }]
         });
 
